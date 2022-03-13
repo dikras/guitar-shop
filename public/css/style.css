@@ -2258,6 +2258,8 @@ button,
   border-radius: 2px;
   background: inherit;
 
+  z-index: 10;
+
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;

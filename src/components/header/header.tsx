@@ -1,4 +1,40 @@
+import { getGuitars } from '../../store/guitars-reducer/selectors';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { Link } from 'react-router-dom';
+import { AppRoute, NUMBER_TO_ROUND } from '../../const';
+
 function Header(): JSX.Element {
+  const guitars = useSelector(getGuitars);
+  const guitarsNameId = guitars.map((guitar) => ({
+    guitarName: guitar.name,
+    guitarId: guitar.id,
+  }));
+  const [ word, setWord ] = useState('');
+  const [ isFocus, setIsFocus ] = useState(false);
+
+  const refElement = useRef(null);
+
+  const searchedGuitars = guitarsNameId.filter((guitar) => guitar.guitarName.includes(word));
+
+  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setWord(evt.currentTarget.value);
+  };
+
+  const handleFocusIn = () => setIsFocus(true);
+
+  const handleFocusOut = (evt: MouseEvent) => {
+    if (evt.target !== refElement.current) {
+      setIsFocus(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleFocusOut);
+    return () => document.removeEventListener('click', handleFocusOut);
+  });
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper"><a className="header__logo logo"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></a>
@@ -19,16 +55,26 @@ function Header(): JSX.Element {
                 <use xlinkHref="#icon-search"></use>
               </svg><span className="visually-hidden">Начать поиск</span>
             </button>
-            <input className="form-search__input" id="search" type="text" autoComplete="off" placeholder="что вы ищите?" />
+            <input
+              className="form-search__input"
+              id="search" type="text"
+              autoComplete="off"
+              placeholder="что вы ищите?"
+              onChange={handleInputChange}
+              onFocus={handleFocusIn}
+              ref={refElement}
+            />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
-          <ul className="form-search__select-list hidden">
-            <li className="form-search__select-item" tabIndex={0}>Четстер Plus</li>
-            <li className="form-search__select-item" tabIndex={0}>Четстер UX</li>
-            <li className="form-search__select-item" tabIndex={0}>Четстер UX2</li>
-            <li className="form-search__select-item" tabIndex={0}>Четстер UX3</li>
-            <li className="form-search__select-item" tabIndex={0}>Четстер UX4</li>
-            <li className="form-search__select-item" tabIndex={0}>Четстер UX5</li>
+          <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`}>
+            {searchedGuitars.map((guitar) => {
+              const keyValue = nanoid(NUMBER_TO_ROUND);
+              return (
+                <li key={keyValue} className="form-search__select-item">
+                  <Link to={`${AppRoute.Guitar}/${guitar.guitarId}`} className="form-search__select-item" tabIndex={0}>{guitar.guitarName}</Link>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <a className="header__cart-link" href="#" aria-label="Корзина">

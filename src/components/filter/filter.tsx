@@ -1,9 +1,13 @@
 import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { GuitarType } from '../../const';
 import { changeGuitarType } from '../../store/action';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
+  const [ isAcousticChecked, setIsAcousticChecked ] = useState(false);
+  const [ isElectricChecked, setIsElectricChecked ] = useState(false);
+  const [ isUkuleleChecked, setIsUkuleleChecked ] = useState(false);
 
   return (
     <form className="catalog-filter">
@@ -29,7 +33,15 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="acoustic"
             name="acoustic"
-            onChange={() => dispatch(changeGuitarType(GuitarType.Acoustic))}
+            onChange={() => {
+              setIsAcousticChecked(!isAcousticChecked);
+              if (!isAcousticChecked) {
+                dispatch(changeGuitarType(GuitarType.Acoustic));
+              } else {
+                dispatch(changeGuitarType(GuitarType.Default));
+              }
+            }}
+            checked={isAcousticChecked}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
         </div>
@@ -39,7 +51,15 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
-            onChange={() => dispatch(changeGuitarType(GuitarType.Electric))}
+            onChange={() => {
+              setIsElectricChecked(!isElectricChecked);
+              if (!isElectricChecked) {
+                dispatch(changeGuitarType(GuitarType.Electric));
+              } else {
+                dispatch(changeGuitarType(GuitarType.Default));
+              }
+            }}
+            checked={isElectricChecked}
           />
           <label htmlFor="electric">Электрогитары</label>
         </div>
@@ -49,7 +69,15 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="ukulele"
             name="ukulele"
-            onChange={() => dispatch(changeGuitarType(GuitarType.Ukulele))}
+            onChange={() => {
+              setIsUkuleleChecked(!isUkuleleChecked);
+              if (!isUkuleleChecked) {
+                dispatch(changeGuitarType(GuitarType.Ukulele));
+              } else {
+                dispatch(changeGuitarType(GuitarType.Default));
+              }
+            }}
+            checked={isUkuleleChecked}
           />
           <label htmlFor="ukulele">Укулеле</label>
         </div>

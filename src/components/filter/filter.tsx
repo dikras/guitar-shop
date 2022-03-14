@@ -1,4 +1,10 @@
+import { useDispatch } from 'react-redux';
+import { GuitarType } from '../../const';
+import { changeGuitarType } from '../../store/action';
+
 function Filter(): JSX.Element {
+  const dispatch = useDispatch();
+
   return (
     <form className="catalog-filter">
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
@@ -18,15 +24,33 @@ function Filter(): JSX.Element {
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Тип гитар</legend>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="acoustic" name="acoustic" />
+          <input
+            className="visually-hidden"
+            type="checkbox"
+            id="acoustic"
+            name="acoustic"
+            onChange={() => dispatch(changeGuitarType(GuitarType.Acoustic))}
+          />
           <label htmlFor="acoustic">Акустические гитары</label>
         </div>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="electric" name="electric" />
+          <input
+            className="visually-hidden"
+            type="checkbox"
+            id="electric"
+            name="electric"
+            onChange={() => dispatch(changeGuitarType(GuitarType.Electric))}
+          />
           <label htmlFor="electric">Электрогитары</label>
         </div>
         <div className="form-checkbox catalog-filter__block-item">
-          <input className="visually-hidden" type="checkbox" id="ukulele" name="ukulele" />
+          <input
+            className="visually-hidden"
+            type="checkbox"
+            id="ukulele"
+            name="ukulele"
+            onChange={() => dispatch(changeGuitarType(GuitarType.Ukulele))}
+          />
           <label htmlFor="ukulele">Укулеле</label>
         </div>
       </fieldset>

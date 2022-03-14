@@ -30,6 +30,26 @@ export enum SortingRanking {
   HighToLow = 'HighToLow',
 }
 
+export enum GuitarType {
+  Default = 'default',
+  Acoustic = 'acoustic',
+  Electric = 'electric',
+  Ukulele = 'ukulele',
+}
+
+export enum StringCount {
+  Default = 0,
+  FourStrings = 4,
+  SixStrings = 6,
+  SevenStrings = 7,
+  TwelveStrings = 12,
+}
+
+export const PriceRange = {
+  Min: 1000,
+  Max: 30000,
+};
+
 export const IMG_URL_BEGIN_INDEX = 4;
 
 export const NUMBER_TO_ROUND = 6;

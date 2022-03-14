@@ -18,6 +18,18 @@ export const GuitarImageSize = {
   },
 };
 
+export enum SortingType {
+  Default = 'Default',
+  ByPrice = 'ByPrice',
+  ByPopularity = 'ByPopularity',
+}
+
+export enum SortingRanking {
+  Default = 'Default',
+  LowToHigh = 'LowToHigh',
+  HighToLow = 'HighToLow',
+}
+
 export const IMG_URL_BEGIN_INDEX = 4;
 
 export const NUMBER_TO_ROUND = 6;

@@ -18,16 +18,20 @@ export const GuitarImageSize = {
   },
 };
 
-export enum SortingType {
-  Default = 'Default',
-  ByPrice = 'ByPrice',
-  ByPopularity = 'ByPopularity',
+export enum QueryParamName {
+  SortingType ='_sort',
+  SortingOrder = '_order',
 }
 
-export enum SortingRanking {
-  Default = 'Default',
-  LowToHigh = 'LowToHigh',
-  HighToLow = 'HighToLow',
+export enum SortingType {
+  Default = 'default',
+  ByPrice = 'price',
+  ByRating = 'rating',
+}
+
+export enum SortingOrder {
+  LowToHigh = 'asc',
+  HighToLow = 'desc',
 }
 
 export enum GuitarType {

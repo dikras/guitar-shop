@@ -1,17 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentSortType, getCurrentSortRanking } from '../../store/app-reducer/selectors';
-import { changeSortingType, changeSortingRanking } from '../../store/action';
-import { SortingType, SortingRanking } from '../../const';
+import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { changeSortingType, changeSortingOrder } from '../../store/action';
+import { SortingType, SortingOrder } from '../../const';
 
 function Sort(): JSX.Element {
   const currentSortType = useSelector(getCurrentSortType);
-  const currentSortRanking = useSelector(getCurrentSortRanking);
+  const currentSortOrder = useSelector(getCurrentSortOrder);
 
   const isSortTypeByPrice = currentSortType === SortingType.ByPrice;
-  const isSortTypeByPopularity = currentSortType === SortingType.ByPopularity;
+  const isSortTypeByRating = currentSortType === SortingType.ByRating;
 
-  const isSortRankingLowToHigh = currentSortRanking === SortingRanking.LowToHigh;
-  const isSortRankingHighToLow = currentSortRanking === SortingRanking.HighToLow;
+  const isSortOrderLowToHigh = currentSortOrder === SortingOrder.LowToHigh;
+  const isSortOrderHighToLow = currentSortOrder === SortingOrder.HighToLow;
 
   const dispatch = useDispatch();
 
@@ -27,33 +27,33 @@ function Sort(): JSX.Element {
         >по цене
         </button>
         <button
-          className={`catalog-sort__type-button ${isSortTypeByPopularity ? 'catalog-sort__type-button--active' : ''}`}
+          className={`catalog-sort__type-button ${isSortTypeByRating ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
-          onClick={() => dispatch(changeSortingType(SortingType.ByPopularity))}
+          onClick={() => dispatch(changeSortingType(SortingType.ByRating))}
         >по популярности
         </button>
       </div>
       <div className="catalog-sort__order">
         <button
-          className={`catalog-sort__order-button catalog-sort__order-button--up ${isSortRankingLowToHigh ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--up ${isSortOrderLowToHigh ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По возрастанию"
           tabIndex={-1}
           onClick={() => {
             if (currentSortType === SortingType.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
             }
-            dispatch(changeSortingRanking(SortingRanking.LowToHigh));
+            dispatch(changeSortingOrder(SortingOrder.LowToHigh));
           }}
         >
         </button>
         <button
-          className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortRankingHighToLow ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortOrderHighToLow ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
           onClick={() => {
             if (currentSortType === SortingType.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
             }
-            dispatch(changeSortingRanking(SortingRanking.HighToLow));
+            dispatch(changeSortingOrder(SortingOrder.HighToLow));
           }}
         >
         </button>

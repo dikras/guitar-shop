@@ -1,11 +1,11 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { AppProcess } from '../../types/state';
-import { SortingType, SortingRanking, GuitarType, StringCount } from '../../const';
-import { changeSortingType, changeSortingRanking, changeGuitarType, changeStringCount } from '../action';
+import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
+import { changeSortingType, changeSortingOrder, changeGuitarType, changeStringCount } from '../action';
 
 const initialState: AppProcess = {
   currentSortingType: SortingType.Default,
-  currentSortingRanking: SortingRanking.Default,
+  currentSortingOrder: SortingOrder.LowToHigh,
   currentGuitarType: GuitarType.Default,
   currentStringCount: StringCount.Default,
 };
@@ -15,8 +15,8 @@ const appReducer = createReducer(initialState, (builder) => {
     .addCase(changeSortingType, (state, action) => {
       state.currentSortingType = action.payload;
     })
-    .addCase(changeSortingRanking, (state, action) => {
-      state.currentSortingRanking = action.payload;
+    .addCase(changeSortingOrder, (state, action) => {
+      state.currentSortingOrder = action.payload;
     })
     .addCase(changeGuitarType, (state, action) => {
       state.currentGuitarType = action.payload;

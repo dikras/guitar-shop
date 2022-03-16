@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 export const fetchGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.get<Guitar[]>('/guitars?type=electric&type=initial');
+      const {data} = await api.get<Guitar[]>(APIRoute.Guitars);
       dispatch(loadGuitars(data));
     } catch {
       toast.warn(WarningMessage.FetchFail);

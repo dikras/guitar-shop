@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { getCurrentSortType, getCurrentSortOrder } from '../../store/sort-reducer/selectors';
 import { changeSortingType, changeSortingOrder } from '../../store/action';
 import { SortingType, SortingOrder } from '../../const';
 

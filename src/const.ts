@@ -18,10 +18,17 @@ export const GuitarImageSize = {
   },
 };
 
+export const INITIAL_URL_FILTER = '/guitars?';
+
+export enum FilterTypeQueryParam {
+  Acoustic = 'type=acoustic&',
+  Electric = 'type=electric&',
+  Ukulele = 'type=ukulele&',
+}
+
 export enum QueryParamName {
   SortingType ='_sort',
   SortingOrder = '_order',
-  FilterType = 'type',
   FilterString = 'stringCount',
   StartPrice = 'price_gte',
   EndPrice = 'price_lte'
@@ -41,7 +48,6 @@ export enum SortingOrder {
 
 export enum GuitarType {
   Default = 'default',
-  Initial='initial',
   Acoustic = 'acoustic',
   Electric = 'electric',
   Ukulele = 'ukulele',
@@ -55,11 +61,6 @@ export enum StringCount {
   SevenStrings = 7,
   TwelveStrings = 12,
 }
-
-export const PriceRange = {
-  Min: 1000,
-  Max: 30000,
-};
 
 export const IMG_URL_BEGIN_INDEX = 4;
 

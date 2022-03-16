@@ -1,4 +1,4 @@
-import { SortingType, SortingOrder, GuitarType, StringCount } from '../const';
+import { SortingType, SortingOrder, GuitarType } from '../const';
 import { Guitar } from './guitar';
 import { RootState } from '../store/root-reducer';
 
@@ -7,10 +7,17 @@ export type GuitarsData = {
 };
 
 export type AppProcess = {
+  currentGuitarType: GuitarType,
+};
+
+export type SortProcess = {
   currentSortingType: SortingType,
   currentSortingOrder: SortingOrder,
+};
+
+export type FilterProcess = {
   currentGuitarType: GuitarType,
-  currentStringCount: StringCount,
+  currentUrlFilter: string,
 };
 
 export type State = RootState;

@@ -1,7 +1,7 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
 import { Guitar } from '../types/guitar';
-import { SortingType, SortingOrder, GuitarType, StringCount } from '../const';
+import { SortingType, SortingOrder, GuitarType, FilterTypeQueryParam } from '../const';
 
 export const loadGuitars = createAction(
   ActionType.LoadGuitars,
@@ -31,9 +31,16 @@ export const changeGuitarType = createAction(
   }),
 );
 
-export const changeStringCount = createAction(
-  ActionType.ChangeStringCount,
-  (stringCount: StringCount) => ({
-    payload: stringCount,
+export const addFilterAction = createAction(
+  ActionType.AddFilterAction,
+  (filterAction: FilterTypeQueryParam) => ({
+    payload: filterAction,
+  }),
+);
+
+export const removeFilterAction = createAction(
+  ActionType.RemoveFilterAction,
+  (filterAction: FilterTypeQueryParam) => ({
+    payload: filterAction,
   }),
 );

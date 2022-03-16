@@ -9,4 +9,3 @@ export type Guitar = {
   rating: number;
   price: number;
 };
-

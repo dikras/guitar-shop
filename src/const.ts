@@ -21,6 +21,10 @@ export const GuitarImageSize = {
 export enum QueryParamName {
   SortingType ='_sort',
   SortingOrder = '_order',
+  FilterType = 'type',
+  FilterString = 'stringCount',
+  StartPrice = 'price_gte',
+  EndPrice = 'price_lte'
 }
 
 export enum SortingType {
@@ -30,12 +34,14 @@ export enum SortingType {
 }
 
 export enum SortingOrder {
+  Default = 'default',
   LowToHigh = 'asc',
   HighToLow = 'desc',
 }
 
 export enum GuitarType {
   Default = 'default',
+  Initial='initial',
   Acoustic = 'acoustic',
   Electric = 'electric',
   Ukulele = 'ukulele',
@@ -43,6 +49,7 @@ export enum GuitarType {
 
 export enum StringCount {
   Default = 0,
+  Initial = 1,
   FourStrings = 4,
   SixStrings = 6,
   SevenStrings = 7,

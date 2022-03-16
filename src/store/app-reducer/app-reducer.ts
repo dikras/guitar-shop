@@ -5,7 +5,7 @@ import { changeSortingType, changeSortingOrder, changeGuitarType, changeStringCo
 
 const initialState: AppProcess = {
   currentSortingType: SortingType.Default,
-  currentSortingOrder: SortingOrder.LowToHigh,
+  currentSortingOrder: SortingOrder.Default,
   currentGuitarType: GuitarType.Default,
   currentStringCount: StringCount.Default,
 };

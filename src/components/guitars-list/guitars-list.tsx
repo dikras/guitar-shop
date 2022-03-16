@@ -3,8 +3,9 @@ import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { loadSortedGuitars } from '../../store/api-action';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { fetchGuitarsAction, loadSortedGuitars, loadGuitarsByType, loadGuitarsByStringCount } from '../../store/api-action';
+import { getCurrentSortType, getCurrentSortOrder, getCurrentGuitarType, getCurrentStringCount } from '../../store/app-reducer/selectors';
+import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -12,9 +13,25 @@ function GuitarsList(): JSX.Element {
 
   const currentSortingType = useSelector(getCurrentSortType);
   const currentSortingOrder = useSelector(getCurrentSortOrder);
+  const currentGuitarType = useSelector(getCurrentGuitarType);
+  const currentStringCount = useSelector(getCurrentStringCount);
 
   useEffect(() => {
-    dispatch(loadSortedGuitars(currentSortingType, currentSortingOrder));
+    if (currentGuitarType !== GuitarType.Default && currentGuitarType !== GuitarType.Initial) {
+      dispatch(loadGuitarsByType(currentGuitarType));
+    }
+    if (currentStringCount !== StringCount.Default && currentStringCount !== StringCount.Initial) {
+      dispatch(loadGuitarsByStringCount(currentStringCount));
+    }
+    if (currentGuitarType === GuitarType.Initial || currentStringCount === StringCount.Initial) {
+      dispatch(fetchGuitarsAction());
+    }
+  },[dispatch, currentGuitarType, currentStringCount]);
+
+  useEffect(() => {
+    if (currentSortingType !== SortingType.Default || currentSortingOrder !== SortingOrder.Default) {
+      dispatch(loadSortedGuitars(currentSortingType, currentSortingOrder));
+    }
   },[dispatch, currentSortingType, currentSortingOrder]);
 
   return (

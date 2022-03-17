@@ -1,17 +1,17 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/sort-reducer/selectors';
-import { changeSortingType, changeSortingOrder } from '../../store/action';
-import { SortingType, SortingOrder } from '../../const';
+import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { changeSortingType, changeSortingOrder, addFilterAction, removeFilterAction } from '../../store/action';
+import { SortingType, SortingOrder, FilterQueryParam } from '../../const';
 
 function Sort(): JSX.Element {
-  const currentSortType = useSelector(getCurrentSortType);
-  const currentSortOrder = useSelector(getCurrentSortOrder);
+  const currentSortingType = useSelector(getCurrentSortType);
+  const currentSortingOrder = useSelector(getCurrentSortOrder);
 
-  const isSortTypeByPrice = currentSortType === SortingType.ByPrice;
-  const isSortTypeByRating = currentSortType === SortingType.ByRating;
+  const isSortTypeByPrice = currentSortingType === SortingType.ByPrice;
+  const isSortTypeByRating = currentSortingType === SortingType.ByRating;
 
-  const isSortOrderLowToHigh = currentSortOrder === SortingOrder.LowToHigh;
-  const isSortOrderHighToLow = currentSortOrder === SortingOrder.HighToLow;
+  const isSortOrderLowToHigh = currentSortingOrder === SortingOrder.LowToHigh;
+  const isSortOrderHighToLow = currentSortingOrder === SortingOrder.HighToLow;
 
   const dispatch = useDispatch();
 
@@ -23,13 +23,27 @@ function Sort(): JSX.Element {
           className={`catalog-sort__type-button ${isSortTypeByPrice ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по цене"
           tabIndex={-1}
-          onClick={() => dispatch(changeSortingType(SortingType.ByPrice))}
+          onClick={() => {
+            dispatch(changeSortingType(SortingType.ByPrice));
+            if (currentSortingType === SortingType.ByRating) {
+              dispatch(changeSortingType(SortingType.ByPrice));
+              dispatch(removeFilterAction(FilterQueryParam.ByRating));
+              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+            }
+          }}
         >по цене
         </button>
         <button
           className={`catalog-sort__type-button ${isSortTypeByRating ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
-          onClick={() => dispatch(changeSortingType(SortingType.ByRating))}
+          onClick={() => {
+            dispatch(changeSortingType(SortingType.ByRating));
+            if (currentSortingType === SortingType.ByPrice) {
+              dispatch(changeSortingType(SortingType.ByRating));
+              dispatch(removeFilterAction(FilterQueryParam.ByPrice));
+              dispatch(addFilterAction(FilterQueryParam.ByRating));
+            }
+          }}
         >по популярности
         </button>
       </div>
@@ -39,10 +53,34 @@ function Sort(): JSX.Element {
           aria-label="По возрастанию"
           tabIndex={-1}
           onClick={() => {
-            if (currentSortType === SortingType.Default) {
+            if (currentSortingType === SortingType.Default && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
+              dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
             }
-            dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+            if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.Default) {
+              dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+            }
+            if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.HighToLow) {
+              dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+              dispatch(removeFilterAction(FilterQueryParam.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+            }
+
+            if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.Default) {
+              dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.ByRating));
+              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+            }
+
+            if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.HighToLow) {
+              dispatch(changeSortingOrder(SortingOrder.LowToHigh));
+              dispatch(removeFilterAction(FilterQueryParam.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+            }
           }}
         >
         </button>
@@ -50,10 +88,34 @@ function Sort(): JSX.Element {
           className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortOrderHighToLow ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
           onClick={() => {
-            if (currentSortType === SortingType.Default) {
+            if (currentSortingType === SortingType.Default && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
+              dispatch(changeSortingOrder(SortingOrder.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+              dispatch(addFilterAction(FilterQueryParam.HighToLow));
             }
-            dispatch(changeSortingOrder(SortingOrder.HighToLow));
+            if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.Default) {
+              dispatch(changeSortingOrder(SortingOrder.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+            }
+            if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.LowToHigh) {
+              dispatch(changeSortingOrder(SortingOrder.HighToLow));
+              dispatch(removeFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+            }
+
+            if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.Default) {
+              dispatch(changeSortingOrder(SortingOrder.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.ByRating));
+              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+            }
+
+            if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.LowToHigh) {
+              dispatch(changeSortingOrder(SortingOrder.HighToLow));
+              dispatch(removeFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+            }
           }}
         >
         </button>

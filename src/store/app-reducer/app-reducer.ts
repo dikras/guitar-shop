@@ -1,16 +1,24 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { FilterProcess } from '../../types/state';
-import { INITIAL_URL_FILTER, GuitarType, StringCount } from '../../const';
-import { changeGuitarType, changeStringCount, addFilterAction, removeFilterAction } from '../action';
+import { INITIAL_URL_FILTER, SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
+import { changeGuitarType, changeStringCount, addFilterAction, removeFilterAction, changeSortingOrder, changeSortingType } from '../action';
 
 const initialState: FilterProcess = {
   currentGuitarType: GuitarType.Default,
   currentStringCount: StringCount.Default,
+  currentSortingType: SortingType.Default,
+  currentSortingOrder: SortingOrder.Default,
   currentUrlFilter: INITIAL_URL_FILTER,
 };
 
-const filterReducer = createReducer(initialState, (builder) => {
+const appReducer = createReducer(initialState, (builder) => {
   builder
+    .addCase(changeSortingType, (state, action) => {
+      state.currentSortingType = action.payload;
+    })
+    .addCase(changeSortingOrder, (state, action) => {
+      state.currentSortingOrder = action.payload;
+    })
     .addCase(changeGuitarType, (state, action) => {
       state.currentGuitarType = action.payload;
     })
@@ -25,4 +33,4 @@ const filterReducer = createReducer(initialState, (builder) => {
     });
 });
 
-export {filterReducer};
+export {appReducer};

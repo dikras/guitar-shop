@@ -3,9 +3,14 @@ import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { loadFilteredGuitars, loadSortedGuitars } from '../../store/api-action';
-import { getCurrentGuitarType,getCurrentStringCount, getCurrentUrlFilter } from '../../store/filter-reducer/selectors';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/sort-reducer/selectors';
+import { loadSortFilterGuitars } from '../../store/api-action';
+import {
+  getCurrentGuitarType,
+  getCurrentStringCount,
+  getCurrentUrl,
+  getCurrentSortType,
+  getCurrentSortOrder
+} from '../../store/app-reducer/selectors';
 import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
 
 function GuitarsList(): JSX.Element {
@@ -17,22 +22,19 @@ function GuitarsList(): JSX.Element {
   const currentGuitarType = useSelector(getCurrentGuitarType);
   const currentStringCount = useSelector(getCurrentStringCount);
 
-  const urlFilter = useSelector(getCurrentUrlFilter);
+  const urlSortFilter = useSelector(getCurrentUrl);
 
   useEffect(() => {
     if (currentGuitarType !== GuitarType.Default) {
-      dispatch(loadFilteredGuitars(urlFilter));
+      dispatch(loadSortFilterGuitars(urlSortFilter));
     }
     if (currentStringCount !== StringCount.Default) {
-      dispatch(loadFilteredGuitars(urlFilter));
+      dispatch(loadSortFilterGuitars(urlSortFilter));
     }
-  },[dispatch, urlFilter, currentGuitarType, currentStringCount]);
-
-  useEffect(() => {
-    if (currentSortingType !== SortingType.Default || currentSortingOrder !== SortingOrder.Default) {
-      dispatch(loadSortedGuitars(currentSortingType, currentSortingOrder));
+    if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
     }
-  },[dispatch, currentSortingType, currentSortingOrder]);
+  },[dispatch, urlSortFilter, currentGuitarType, currentStringCount, currentSortingType, currentSortingOrder]);
 
   return (
     <div className="cards catalog__cards">

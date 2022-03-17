@@ -14,6 +14,8 @@ export type SortProcess = {
 export type FilterProcess = {
   currentGuitarType: GuitarType,
   currentStringCount: StringCount,
+  currentSortingType: SortingType,
+  currentSortingOrder: SortingOrder,
   currentUrlFilter: string,
 };
 

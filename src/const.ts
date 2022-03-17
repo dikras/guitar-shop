@@ -28,6 +28,10 @@ export enum FilterQueryParam {
   SixString = 'stringCount=6&',
   SevenString = 'stringCount=7&',
   TwelveString = 'stringCount=12&',
+  ByPrice = '_sort=price&',
+  ByRating = '_sort=rating&',
+  LowToHigh = '_order=asc&',
+  HighToLow = '_order=desc&'
 }
 
 export enum QueryParamName {
@@ -39,15 +43,15 @@ export enum QueryParamName {
 }
 
 export enum SortingType {
-  Default = 'default',
-  ByPrice = 'price',
-  ByRating = 'rating',
+  Default = 'Default',
+  ByPrice = 'ByPrice',
+  ByRating = 'ByRating',
 }
 
 export enum SortingOrder {
-  Default = 'default',
-  LowToHigh = 'asc',
-  HighToLow = 'desc',
+  Default = 'Default',
+  LowToHigh = 'LowToHigh',
+  HighToLow = 'HighToLow',
 }
 
 export enum GuitarType {

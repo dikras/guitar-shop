@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useRef } from 'react';
-// import { GuitarType, StringCount } from '../../const';
-import { GuitarType, FilterTypeQueryParam } from '../../const';
-import { addFilterAction, changeGuitarType, removeFilterAction } from '../../store/action';
+import { GuitarType, StringCount, FilterQueryParam } from '../../const';
+import { addFilterAction, changeGuitarType, changeStringCount, removeFilterAction } from '../../store/action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
 
 function Filter(): JSX.Element {
@@ -65,9 +64,9 @@ function Filter(): JSX.Element {
               setIsAcousticChecked(!isAcousticChecked);
               if (!isAcousticChecked) {
                 dispatch(changeGuitarType(GuitarType.Acoustic));
-                dispatch(addFilterAction(FilterTypeQueryParam.Acoustic));
+                dispatch(addFilterAction(FilterQueryParam.Acoustic));
               } else {
-                dispatch(removeFilterAction(FilterTypeQueryParam.Acoustic));
+                dispatch(removeFilterAction(FilterQueryParam.Acoustic));
               }
             }}
             checked={isAcousticChecked}
@@ -84,9 +83,9 @@ function Filter(): JSX.Element {
               setIsElectricChecked(!isElectricChecked);
               if (!isElectricChecked) {
                 dispatch(changeGuitarType(GuitarType.Electric));
-                dispatch(addFilterAction(FilterTypeQueryParam.Electric));
+                dispatch(addFilterAction(FilterQueryParam.Electric));
               } else {
-                dispatch(removeFilterAction(FilterTypeQueryParam.Electric));
+                dispatch(removeFilterAction(FilterQueryParam.Electric));
               }
             }}
             checked={isElectricChecked}
@@ -103,9 +102,9 @@ function Filter(): JSX.Element {
               setIsUkuleleChecked(!isUkuleleChecked);
               if (!isUkuleleChecked) {
                 dispatch(changeGuitarType(GuitarType.Ukulele));
-                dispatch(addFilterAction(FilterTypeQueryParam.Ukulele));
+                dispatch(addFilterAction(FilterQueryParam.Ukulele));
               } else {
-                dispatch(removeFilterAction(FilterTypeQueryParam.Ukulele));
+                dispatch(removeFilterAction(FilterQueryParam.Ukulele));
               }
             }}
             checked={isUkuleleChecked}
@@ -123,11 +122,12 @@ function Filter(): JSX.Element {
             name="4-strings"
             onChange={() => {
               setIsFourStringsChecked(!isFourStringsChecked);
-              /* if (!isFourStringsChecked) {
-                dispatch(changeStringCount(StringCount.FourStrings));
+              if (!isFourStringsChecked) {
+                dispatch(changeStringCount(StringCount.FourString));
+                dispatch(addFilterAction(FilterQueryParam.FourString));
               } else {
-                dispatch(changeStringCount(StringCount.Initial));
-              } */
+                dispatch(removeFilterAction(FilterQueryParam.FourString));
+              }
             }}
             checked={isFourStringsChecked}
           />
@@ -141,11 +141,12 @@ function Filter(): JSX.Element {
             name="6-strings"
             onChange={() => {
               setIsSixStringsChecked(!isSixStringsChecked);
-              /* if (!isSixStringsChecked) {
-                dispatch(changeStringCount(StringCount.SixStrings));
+              if (!isSixStringsChecked) {
+                dispatch(changeStringCount(StringCount.SixString));
+                dispatch(addFilterAction(FilterQueryParam.SixString));
               } else {
-                dispatch(changeStringCount(StringCount.Initial));
-              } */
+                dispatch(removeFilterAction(FilterQueryParam.SixString));
+              }
             }}
             checked={isSixStringsChecked}
             // disabled={isDisabled}
@@ -160,11 +161,12 @@ function Filter(): JSX.Element {
             name="7-strings"
             onChange={() => {
               setIsSevenStringsChecked(!isSevenStringsChecked);
-              /* if (!isSevenStringsChecked) {
-                dispatch(changeStringCount(StringCount.SevenStrings));
+              if (!isSevenStringsChecked) {
+                dispatch(changeStringCount(StringCount.SevenString));
+                dispatch(addFilterAction(FilterQueryParam.SevenString));
               } else {
-                dispatch(changeStringCount(StringCount.Initial));
-              } */
+                dispatch(removeFilterAction(FilterQueryParam.SevenString));
+              }
             }}
             checked={isSevenStringsChecked}
             // disabled={isDisabled}
@@ -179,11 +181,12 @@ function Filter(): JSX.Element {
             name="12-strings"
             onChange={() => {
               setIsTwelveStringsChecked(!isTwelveStringsChecked);
-              /* if (!isTwelveStringsChecked) {
-                dispatch(changeStringCount(StringCount.TwelveStrings));
+              if (!isTwelveStringsChecked) {
+                dispatch(changeStringCount(StringCount.TwelveString));
+                dispatch(addFilterAction(FilterQueryParam.TwelveString));
               } else {
-                dispatch(changeStringCount(StringCount.Initial));
-              } */
+                dispatch(removeFilterAction(FilterQueryParam.TwelveString));
+              }
             }}
             checked={isTwelveStringsChecked}
             // disabled={isDisabled}

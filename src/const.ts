@@ -20,10 +20,14 @@ export const GuitarImageSize = {
 
 export const INITIAL_URL_FILTER = '/guitars?';
 
-export enum FilterTypeQueryParam {
+export enum FilterQueryParam {
   Acoustic = 'type=acoustic&',
   Electric = 'type=electric&',
   Ukulele = 'type=ukulele&',
+  FourString = 'stringCount=4&',
+  SixString = 'stringCount=6&',
+  SevenString = 'stringCount=7&',
+  TwelveString = 'stringCount=12&',
 }
 
 export enum QueryParamName {
@@ -48,6 +52,7 @@ export enum SortingOrder {
 
 export enum GuitarType {
   Default = 'default',
+  Initial = 'initial',
   Acoustic = 'acoustic',
   Electric = 'electric',
   Ukulele = 'ukulele',
@@ -56,10 +61,10 @@ export enum GuitarType {
 export enum StringCount {
   Default = 0,
   Initial = 1,
-  FourStrings = 4,
-  SixStrings = 6,
-  SevenStrings = 7,
-  TwelveStrings = 12,
+  FourString = 4,
+  SixString = 6,
+  SevenString = 7,
+  TwelveString = 12,
 }
 
 export const IMG_URL_BEGIN_INDEX = 4;

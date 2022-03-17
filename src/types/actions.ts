@@ -7,9 +7,10 @@ export enum ActionType {
   LoadGuitars = 'guitars/loadGuitars',
   ChangeSortingType = 'sort/changeSortingType',
   ChangeSortingOrder = 'sort/changeSortingOrder',
-  ChangeGuitarType = 'app/changeGuitarType',
-  AddFilterAction = 'app/addFilterAction',
-  RemoveFilterAction = 'app/removeFilterAction',
+  ChangeGuitarType = 'filter/changeGuitarType',
+  ChangeStringCount = 'filter/changeStringCount',
+  AddFilterAction = 'filter/addFilterAction',
+  RemoveFilterAction = 'filter/removeFilterAction',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

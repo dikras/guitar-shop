@@ -4,10 +4,9 @@ import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { loadFilteredGuitars, loadSortedGuitars } from '../../store/api-action';
-import { getCurrentGuitarType, getCurrentUrlFilter } from '../../store/filter-reducer/selectors';
+import { getCurrentGuitarType,getCurrentStringCount, getCurrentUrlFilter } from '../../store/filter-reducer/selectors';
 import { getCurrentSortType, getCurrentSortOrder } from '../../store/sort-reducer/selectors';
-import { SortingType, SortingOrder, GuitarType } from '../../const';
-// import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
+import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -16,7 +15,7 @@ function GuitarsList(): JSX.Element {
   const currentSortingType = useSelector(getCurrentSortType);
   const currentSortingOrder = useSelector(getCurrentSortOrder);
   const currentGuitarType = useSelector(getCurrentGuitarType);
-  // const currentStringCount = useSelector(getCurrentStringCount);
+  const currentStringCount = useSelector(getCurrentStringCount);
 
   const urlFilter = useSelector(getCurrentUrlFilter);
 
@@ -24,7 +23,10 @@ function GuitarsList(): JSX.Element {
     if (currentGuitarType !== GuitarType.Default) {
       dispatch(loadFilteredGuitars(urlFilter));
     }
-  },[dispatch, urlFilter, currentGuitarType]);
+    if (currentStringCount !== StringCount.Default) {
+      dispatch(loadFilteredGuitars(urlFilter));
+    }
+  },[dispatch, urlFilter, currentGuitarType, currentStringCount]);
 
   useEffect(() => {
     if (currentSortingType !== SortingType.Default || currentSortingOrder !== SortingOrder.Default) {

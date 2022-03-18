@@ -1,3 +1,4 @@
+import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { GuitarImageSize, IMG_URL_BEGIN_INDEX } from '../../const';
 
@@ -32,7 +33,8 @@ function GuitarCard(props: GuitarProps): JSX.Element {
           </svg><span className="rate__count">5</span><span className="rate__message"></span>
         </div>
         <p className="product-card__title">{name}</p>
-        <p className="product-card__price"><span className="visually-hidden">Цена:</span>{price} ₽
+        <p className="product-card__price"><span className="visually-hidden">Цена:</span>
+          <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
         </p>
       </div>
       <div className="product-card__buttons"><a className="button button--mini" href="#">Подробнее</a><a className="button button--red button--mini button--add-to-cart" href="#">Купить</a>

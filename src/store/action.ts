@@ -1,7 +1,7 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
 import { Guitar } from '../types/guitar';
-import { SortingType, SortingRanking } from '../const';
+import { SortingType, SortingRanking, GuitarType, StringCount } from '../const';
 
 export const loadGuitars = createAction(
   ActionType.LoadGuitars,
@@ -21,5 +21,19 @@ export const changeSortingRanking = createAction(
   ActionType.ChangeSortingRanking,
   (sortingRanking: SortingRanking) => ({
     payload: sortingRanking,
+  }),
+);
+
+export const changeGuitarType = createAction(
+  ActionType.ChangeGuitarType,
+  (guitarType: GuitarType) => ({
+    payload: guitarType,
+  }),
+);
+
+export const changeStringCount = createAction(
+  ActionType.ChangeStringCount,
+  (stringCount: StringCount) => ({
+    payload: stringCount,
   }),
 );

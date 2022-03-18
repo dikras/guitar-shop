@@ -2,15 +2,17 @@
 import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector } from 'react-redux';
-import { getCurrentSortType, getCurrentSortRanking } from '../../store/app-reducer/selectors';
-import { SortingType, SortingRanking } from '../../const';
+import { getCurrentSortType, getCurrentSortRanking, getCurrentGuitarType } from '../../store/app-reducer/selectors';
+import { SortingType, SortingRanking, GuitarType } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const currentSortingRanking = useSelector(getCurrentSortRanking);
   const currentSortingType = useSelector(getCurrentSortType);
 
-  const guitarsForSort = [...guitars];
+  const currentGuitarType = useSelector(getCurrentGuitarType);
+
+  let guitarsForSort = [...guitars];
 
   if (currentSortingType === SortingType.ByPrice) {
     switch (currentSortingRanking) {
@@ -36,6 +38,20 @@ function GuitarsList(): JSX.Element {
       default:
         break;
     }
+  }
+
+  switch (currentGuitarType) {
+    case GuitarType.Acoustic:
+      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Acoustic);
+      break;
+    case GuitarType.Electric:
+      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Electric);
+      break;
+    case GuitarType.Ukulele:
+      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Ukulele);
+      break;
+    default:
+      break;
   }
 
   return (

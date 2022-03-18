@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { GuitarType, StringCount, FilterQueryParam } from '../../const';
 import { addFilterAction, changeGuitarType, changeStringCount, removeFilterAction } from '../../store/action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
+// import { validatePriceInput } from '../../utils';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
@@ -16,16 +17,30 @@ function Filter(): JSX.Element {
   const [ isSevenStringsChecked, setIsSevenStringsChecked ] = useState(false);
   const [ isTwelveStringsChecked, setIsTwelveStringsChecked ] = useState(false);
 
-  const guitarMinPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(useSelector(getGuitarMinPrice));
-  const guitarMaxPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(useSelector(getGuitarMaxPrice));
+  // const [ priceError, setPriceError ] = useState('');
 
-  const priceMinRef = useRef(null);
-  const priceMaxRef = useRef(null);
+  const guitarMinPrice = useSelector(getGuitarMinPrice);
+  const guitarMaxPrice = useSelector(getGuitarMaxPrice);
 
-  // const [ isDisabled, setIsDisabled ] = useState(false);
+  const minPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
+  const maxPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
+
+  const inputMinRef = useRef<HTMLInputElement | null>(null);
+
+  const handleInput = () => {
+    const currentValueNumber = Number(inputMinRef.current?.value);
+    if (currentValueNumber) {
+      if (currentValueNumber < guitarMinPrice) {
+        console.log(minPrice);
+      }
+    }
+  };
 
   return (
-    <form className="catalog-filter">
+    <form
+      className="catalog-filter"
+      onClick={handleInput}
+    >
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
@@ -34,20 +49,20 @@ function Filter(): JSX.Element {
             <label className="visually-hidden">Минимальная цена</label>
             <input
               type="number"
-              placeholder={`${guitarMinPrice}`}
+              placeholder={`${minPrice}`}
               id="priceMin"
               name="от"
-              ref={priceMinRef}
+              ref={inputMinRef}
             />
           </div>
           <div className="form-input">
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type="number"
-              placeholder={`${guitarMaxPrice}`}
+              placeholder={`${maxPrice}`}
               id="priceMax"
               name="до"
-              ref={priceMaxRef}
+              // ref={priceMaxRef}
             />
           </div>
         </div>
@@ -149,7 +164,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isSixStringsChecked}
-            // disabled={isDisabled}
+            disabled={isUkuleleChecked}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -169,7 +184,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isSevenStringsChecked}
-            // disabled={isDisabled}
+            disabled={isUkuleleChecked}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -189,7 +204,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isTwelveStringsChecked}
-            // disabled={isDisabled}
+            disabled={isUkuleleChecked}
           />
           <label htmlFor="12-strings">12</label>
         </div>

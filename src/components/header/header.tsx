@@ -14,7 +14,7 @@ function Header(): JSX.Element {
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
-  const refElement = useRef(null);
+  const refElement = useRef<HTMLInputElement | null>(null);
 
   const searchedGuitars = guitarsNameId.filter((guitar) => guitar.guitarName.includes(word));
 

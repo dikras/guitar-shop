@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 import { ThunkActionResult } from '../types/actions';
-import { APIRoute } from '../const';
+import { APIRoute, WarningMessage } from '../const';
 import { loadGuitars } from './action';
 import { Guitar } from '../types/guitar';
-import { WarningMessage } from '../const';
+import { toast } from 'react-toastify';
 
 export const fetchGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -11,6 +11,17 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
       const {data} = await api.get<Guitar[]>(APIRoute.Guitars);
       dispatch(loadGuitars(data));
     } catch {
-      console.error(WarningMessage.FetchFail);
+      toast.warn(WarningMessage.FetchFail);
     }
   };
+
+export const loadSortFilterGuitars = (urlSortFilter: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const {data} = await api.get<Guitar[]>(urlSortFilter);
+      dispatch(loadGuitars(data));
+    } catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+

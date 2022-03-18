@@ -1,62 +1,44 @@
 /* eslint-disable no-console */
 import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
-import { useSelector } from 'react-redux';
-import { getCurrentSortType, getCurrentSortRanking, getCurrentGuitarType } from '../../store/app-reducer/selectors';
-import { SortingType, SortingRanking, GuitarType } from '../../const';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { loadSortFilterGuitars } from '../../store/api-action';
+import {
+  getCurrentGuitarType,
+  getCurrentStringCount,
+  getCurrentUrl,
+  getCurrentSortType,
+  getCurrentSortOrder
+} from '../../store/app-reducer/selectors';
+import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
-  const currentSortingRanking = useSelector(getCurrentSortRanking);
+  const dispatch = useDispatch();
+
   const currentSortingType = useSelector(getCurrentSortType);
-
+  const currentSortingOrder = useSelector(getCurrentSortOrder);
   const currentGuitarType = useSelector(getCurrentGuitarType);
+  const currentStringCount = useSelector(getCurrentStringCount);
 
-  let guitarsForSort = [...guitars];
+  const urlSortFilter = useSelector(getCurrentUrl);
 
-  if (currentSortingType === SortingType.ByPrice) {
-    switch (currentSortingRanking) {
-      case SortingRanking.HighToLow:
-        guitarsForSort.sort((a, b) => b.price - a.price);
-        break;
-      case SortingRanking.LowToHigh:
-        guitarsForSort.sort((a, b) => a.price - b.price);
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (currentGuitarType !== GuitarType.Default) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
     }
-  }
-
-  if (currentSortingType === SortingType.ByPopularity) {
-    switch (currentSortingRanking) {
-      case SortingRanking.HighToLow:
-        guitarsForSort.sort((a, b) => b.rating - a.rating);
-        break;
-      case SortingRanking.LowToHigh:
-        guitarsForSort.sort((a, b) => a.rating - b.rating);
-        break;
-      default:
-        break;
+    if (currentStringCount !== StringCount.Default) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
     }
-  }
-
-  switch (currentGuitarType) {
-    case GuitarType.Acoustic:
-      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Acoustic);
-      break;
-    case GuitarType.Electric:
-      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Electric);
-      break;
-    case GuitarType.Ukulele:
-      guitarsForSort = guitarsForSort.filter((guitar) => guitar.type === GuitarType.Ukulele);
-      break;
-    default:
-      break;
-  }
+    if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
+    }
+  },[dispatch, urlSortFilter, currentGuitarType, currentStringCount, currentSortingType, currentSortingOrder]);
 
   return (
     <div className="cards catalog__cards">
-      {guitarsForSort.map((guitar) => {
+      {guitars.map((guitar) => {
         const keyValue = `${guitar.id}`;
         return (
           <GuitarCard

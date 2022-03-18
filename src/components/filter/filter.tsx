@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { GuitarType, StringCount, FilterQueryParam } from '../../const';
 import { addFilterAction, changeGuitarType, changeStringCount, removeFilterAction } from '../../store/action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
-// import { validatePriceInput } from '../../utils';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
@@ -16,8 +15,6 @@ function Filter(): JSX.Element {
   const [ isSixStringsChecked, setIsSixStringsChecked ] = useState(false);
   const [ isSevenStringsChecked, setIsSevenStringsChecked ] = useState(false);
   const [ isTwelveStringsChecked, setIsTwelveStringsChecked ] = useState(false);
-
-  // const [ priceError, setPriceError ] = useState('');
 
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);

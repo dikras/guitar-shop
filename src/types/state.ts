@@ -17,6 +17,8 @@ export type FilterProcess = {
   currentSortingType: SortingType,
   currentSortingOrder: SortingOrder,
   currentUrlFilter: string,
+  currentStartPrice: number,
+  currentEndPrice: number,
 };
 
 export type State = RootState;

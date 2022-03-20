@@ -27,8 +27,8 @@ function Sort(): JSX.Element {
             dispatch(changeSortingType(SortingType.ByPrice));
             if (currentSortingType === SortingType.ByRating) {
               dispatch(changeSortingType(SortingType.ByPrice));
-              dispatch(removeFilterAction(FilterQueryParam.ByRating));
-              dispatch(addFilterAction(FilterQueryParam.ByPrice));
+              dispatch(removeFilterAction(FilterQueryParam.SortByRating));
+              dispatch(addFilterAction(FilterQueryParam.SortByPrice));
             }
           }}
         >по цене
@@ -40,8 +40,8 @@ function Sort(): JSX.Element {
             dispatch(changeSortingType(SortingType.ByRating));
             if (currentSortingType === SortingType.ByPrice) {
               dispatch(changeSortingType(SortingType.ByRating));
-              dispatch(removeFilterAction(FilterQueryParam.ByPrice));
-              dispatch(addFilterAction(FilterQueryParam.ByRating));
+              dispatch(removeFilterAction(FilterQueryParam.SortByPrice));
+              dispatch(addFilterAction(FilterQueryParam.SortByRating));
             }
           }}
         >по популярности
@@ -56,30 +56,30 @@ function Sort(): JSX.Element {
             if (currentSortingType === SortingType.Default && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
               dispatch(changeSortingOrder(SortingOrder.LowToHigh));
-              dispatch(addFilterAction(FilterQueryParam.ByPrice));
-              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.SortByPrice));
+              dispatch(addFilterAction(FilterQueryParam.SortLowToHigh));
             }
             if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingOrder(SortingOrder.LowToHigh));
-              dispatch(addFilterAction(FilterQueryParam.ByPrice));
-              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.SortByPrice));
+              dispatch(addFilterAction(FilterQueryParam.SortLowToHigh));
             }
             if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.HighToLow) {
               dispatch(changeSortingOrder(SortingOrder.LowToHigh));
-              dispatch(removeFilterAction(FilterQueryParam.HighToLow));
-              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(removeFilterAction(FilterQueryParam.SortHighToLow));
+              dispatch(addFilterAction(FilterQueryParam.SortLowToHigh));
             }
 
             if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingOrder(SortingOrder.LowToHigh));
-              dispatch(addFilterAction(FilterQueryParam.ByRating));
-              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.SortByRating));
+              dispatch(addFilterAction(FilterQueryParam.SortLowToHigh));
             }
 
             if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.HighToLow) {
               dispatch(changeSortingOrder(SortingOrder.LowToHigh));
-              dispatch(removeFilterAction(FilterQueryParam.HighToLow));
-              dispatch(addFilterAction(FilterQueryParam.LowToHigh));
+              dispatch(removeFilterAction(FilterQueryParam.SortHighToLow));
+              dispatch(addFilterAction(FilterQueryParam.SortLowToHigh));
             }
           }}
         >
@@ -91,30 +91,30 @@ function Sort(): JSX.Element {
             if (currentSortingType === SortingType.Default && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingType(SortingType.ByPrice));
               dispatch(changeSortingOrder(SortingOrder.HighToLow));
-              dispatch(addFilterAction(FilterQueryParam.ByPrice));
-              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.SortByPrice));
+              dispatch(addFilterAction(FilterQueryParam.SortHighToLow));
             }
             if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingOrder(SortingOrder.HighToLow));
-              dispatch(addFilterAction(FilterQueryParam.ByPrice));
-              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.SortByPrice));
+              dispatch(addFilterAction(FilterQueryParam.SortHighToLow));
             }
             if (currentSortingType === SortingType.ByPrice && currentSortingOrder === SortingOrder.LowToHigh) {
               dispatch(changeSortingOrder(SortingOrder.HighToLow));
-              dispatch(removeFilterAction(FilterQueryParam.LowToHigh));
-              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+              dispatch(removeFilterAction(FilterQueryParam.SortLowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.SortHighToLow));
             }
 
             if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.Default) {
               dispatch(changeSortingOrder(SortingOrder.HighToLow));
-              dispatch(addFilterAction(FilterQueryParam.ByRating));
-              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+              dispatch(addFilterAction(FilterQueryParam.SortByRating));
+              dispatch(addFilterAction(FilterQueryParam.SortHighToLow));
             }
 
             if (currentSortingType === SortingType.ByRating && currentSortingOrder === SortingOrder.LowToHigh) {
               dispatch(changeSortingOrder(SortingOrder.HighToLow));
-              dispatch(removeFilterAction(FilterQueryParam.LowToHigh));
-              dispatch(addFilterAction(FilterQueryParam.HighToLow));
+              dispatch(removeFilterAction(FilterQueryParam.SortLowToHigh));
+              dispatch(addFilterAction(FilterQueryParam.SortHighToLow));
             }
           }}
         >

@@ -1,7 +1,23 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { FilterProcess } from '../../types/state';
-import { INITIAL_URL_FILTER, SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
-import { changeGuitarType, changeStringCount, addFilterAction, removeFilterAction, changeSortingOrder, changeSortingType } from '../action';
+import {
+  INITIAL_URL_FILTER,
+  SortingType,
+  SortingOrder,
+  GuitarType,
+  StringCount,
+  InitialPrice
+} from '../../const';
+import {
+  changeGuitarType,
+  changeStringCount,
+  addFilterAction,
+  removeFilterAction,
+  changeSortingOrder,
+  changeSortingType,
+  setStartPrice,
+  setEndPrice
+} from '../action';
 
 const initialState: FilterProcess = {
   currentGuitarType: GuitarType.Default,
@@ -9,6 +25,8 @@ const initialState: FilterProcess = {
   currentSortingType: SortingType.Default,
   currentSortingOrder: SortingOrder.Default,
   currentUrlFilter: INITIAL_URL_FILTER,
+  currentStartPrice: InitialPrice.Min,
+  currentEndPrice: InitialPrice.Max,
 };
 
 const appReducer = createReducer(initialState, (builder) => {
@@ -30,6 +48,12 @@ const appReducer = createReducer(initialState, (builder) => {
     })
     .addCase(removeFilterAction, (state, action) => {
       state.currentUrlFilter = state.currentUrlFilter.replace(action.payload, '');
+    })
+    .addCase(setStartPrice, (state, action) => {
+      state.currentStartPrice = action.payload;
+    })
+    .addCase(setEndPrice, (state, action) => {
+      state.currentEndPrice = action.payload;
     });
 });
 

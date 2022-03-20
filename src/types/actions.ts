@@ -9,6 +9,8 @@ export enum ActionType {
   ChangeSortingOrder = 'app/changeSortingOrder',
   ChangeGuitarType = 'app/changeGuitarType',
   ChangeStringCount = 'app/changeStringCount',
+  SetStartPrice = 'app/setStartPrice',
+  SetEndPrice = 'app/setEndPrice',
   AddFilterAction = 'app/addFilterAction',
   RemoveFilterAction = 'app/removeFilterAction',
 }

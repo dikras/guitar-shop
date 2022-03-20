@@ -7,3 +7,5 @@ export const getCurrentStringCount = (state: State): StringCount => state[NameSp
 export const getCurrentUrl = (state: State): string => state[NameSpace.app].currentUrlFilter;
 export const getCurrentSortType = (state: State): SortingType => state[NameSpace.app].currentSortingType;
 export const getCurrentSortOrder = (state: State): SortingOrder => state[NameSpace.app].currentSortingOrder;
+export const getCurrentStartPrice = (state: State): number => state[NameSpace.app].currentStartPrice;
+export const getCurrentEndPricer = (state: State): number => state[NameSpace.app].currentEndPrice;

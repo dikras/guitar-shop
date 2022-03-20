@@ -2,7 +2,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useRef } from 'react';
 import { GuitarType, StringCount, FilterQueryParam } from '../../const';
-import { addFilterAction, changeGuitarType, changeStringCount, removeFilterAction } from '../../store/action';
+import {
+  addFilterAction,
+  changeGuitarType,
+  changeStringCount,
+  removeFilterAction,
+  setStartPrice,
+  setEndPrice
+} from '../../store/action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
 
 function Filter(): JSX.Element {
@@ -19,24 +26,53 @@ function Filter(): JSX.Element {
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);
 
-  const minPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
-  const maxPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
+  const minFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
+  const maxFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
 
-  const inputMinRef = useRef<HTMLInputElement | null>(null);
+  const [ minPrice, setMinPrice ] = useState('');
+  const [ maxPrice, setMaxPrice ] = useState('');
 
-  const handleInput = () => {
-    const currentValueNumber = Number(inputMinRef.current?.value);
-    if (currentValueNumber) {
-      if (currentValueNumber < guitarMinPrice) {
-        console.log(minPrice);
+  const inputMinRef = useRef(null);
+
+  const handleMinInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setMinPrice(evt.target.value);
+  };
+
+  const handleMaxInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxPrice(evt.target.value);
+  };
+
+  const handleMinInputBlur = () => {
+    if (minPrice) {
+      if (Number(minPrice) < guitarMinPrice) {
+        setMinPrice(minFormatPrice.toString());
+      } else {
+        dispatch(setStartPrice(Number(minPrice)));
+        dispatch(addFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
       }
+    }
+    if (minPrice === '') {
+      dispatch(removeFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
+    }
+  };
+
+  const handleMaxInputBlur = () => {
+    if (maxPrice) {
+      if (Number(maxPrice) > guitarMaxPrice) {
+        setMaxPrice(maxFormatPrice.toString());
+      } else {
+        dispatch(setEndPrice(Number(maxPrice)));
+        dispatch(addFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
+      }
+    }
+    if (maxPrice === '') {
+      dispatch(removeFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
     }
   };
 
   return (
     <form
       className="catalog-filter"
-      onClick={handleInput}
     >
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
       <fieldset className="catalog-filter__block">
@@ -46,9 +82,12 @@ function Filter(): JSX.Element {
             <label className="visually-hidden">Минимальная цена</label>
             <input
               type="number"
-              placeholder={`${minPrice}`}
+              placeholder={`${minFormatPrice}`}
               id="priceMin"
               name="от"
+              onChange={handleMinInputChange}
+              onBlur={handleMinInputBlur}
+              value={minPrice}
               ref={inputMinRef}
             />
           </div>
@@ -56,10 +95,12 @@ function Filter(): JSX.Element {
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type="number"
-              placeholder={`${maxPrice}`}
+              placeholder={`${maxFormatPrice}`}
               id="priceMax"
               name="до"
-              // ref={priceMaxRef}
+              onChange={handleMaxInputChange}
+              onBlur={handleMaxInputBlur}
+              value={maxPrice}
             />
           </div>
         </div>
@@ -142,6 +183,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isFourStringsChecked}
+            disabled={isAcousticChecked && !isUkuleleChecked && !isElectricChecked}
           />
           <label htmlFor="4-strings">4</label>
         </div>
@@ -161,7 +203,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isSixStringsChecked}
-            disabled={isUkuleleChecked}
+            disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -181,7 +223,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isSevenStringsChecked}
-            disabled={isUkuleleChecked}
+            disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -201,7 +243,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isTwelveStringsChecked}
-            disabled={isUkuleleChecked}
+            disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked }
           />
           <label htmlFor="12-strings">12</label>
         </div>

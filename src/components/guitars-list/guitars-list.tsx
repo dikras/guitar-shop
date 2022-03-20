@@ -9,9 +9,11 @@ import {
   getCurrentStringCount,
   getCurrentUrl,
   getCurrentSortType,
-  getCurrentSortOrder
+  getCurrentSortOrder,
+  getCurrentStartPrice,
+  getCurrentEndPricer
 } from '../../store/app-reducer/selectors';
-import { SortingType, SortingOrder, GuitarType, StringCount } from '../../const';
+import { SortingType, SortingOrder, GuitarType, StringCount, InitialPrice } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -21,6 +23,9 @@ function GuitarsList(): JSX.Element {
   const currentSortingOrder = useSelector(getCurrentSortOrder);
   const currentGuitarType = useSelector(getCurrentGuitarType);
   const currentStringCount = useSelector(getCurrentStringCount);
+
+  const currentStartPrice = useSelector(getCurrentStartPrice);
+  const currentEndPrice = useSelector(getCurrentEndPricer);
 
   const urlSortFilter = useSelector(getCurrentUrl);
 
@@ -34,7 +39,21 @@ function GuitarsList(): JSX.Element {
     if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
       dispatch(loadSortFilterGuitars(urlSortFilter));
     }
-  },[dispatch, urlSortFilter, currentGuitarType, currentStringCount, currentSortingType, currentSortingOrder]);
+    if (currentStartPrice !== InitialPrice.Min) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
+    }
+    if (currentEndPrice !== InitialPrice.Max) {
+      dispatch(loadSortFilterGuitars(urlSortFilter));
+    }
+  },[dispatch,
+    urlSortFilter,
+    currentGuitarType,
+    currentStringCount,
+    currentSortingType,
+    currentSortingOrder,
+    currentStartPrice,
+    currentEndPrice,
+  ]);
 
   return (
     <div className="cards catalog__cards">

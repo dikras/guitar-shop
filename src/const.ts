@@ -1,5 +1,5 @@
 export enum APIRoute {
-  Guitars = '/guitars',
+  Guitars = '/guitars?_embed=comments',
   Guitar = '/guitars/:id',
   Comments = '/comments',
   Coupon = '/coupons',
@@ -18,7 +18,7 @@ export const GuitarImageSize = {
   },
 };
 
-export const INITIAL_URL_FILTER = '/guitars?';
+export const INITIAL_URL_FILTER = '/guitars?_embed=comments&';
 
 export enum FilterQueryParam {
   Acoustic = 'type=acoustic&',
@@ -28,10 +28,12 @@ export enum FilterQueryParam {
   SixString = 'stringCount=6&',
   SevenString = 'stringCount=7&',
   TwelveString = 'stringCount=12&',
-  ByPrice = '_sort=price&',
-  ByRating = '_sort=rating&',
-  LowToHigh = '_order=asc&',
-  HighToLow = '_order=desc&'
+  SortByPrice = '_sort=price&',
+  SortByRating = '_sort=rating&',
+  SortLowToHigh = '_order=asc&',
+  SortHighToLow = '_order=desc&',
+  FilterStartPrice = '&price_gte=',
+  FilterEndPrice = '&price_lte=',
 }
 
 export enum QueryParamName {
@@ -39,8 +41,14 @@ export enum QueryParamName {
   SortingOrder = '_order',
   FilterString = 'stringCount',
   StartPrice = 'price_gte',
-  EndPrice = 'price_lte'
+  EndPrice = 'price_lte',
+  GuitarComment = '_embed=comments',
 }
+
+export const InitialPrice = {
+  Min: 0,
+  Max: 0,
+};
 
 export enum SortingType {
   Default = 'Default',
@@ -78,5 +86,3 @@ export const NUMBER_TO_ROUND = 6;
 export enum WarningMessage {
   FetchFail = 'Server is not available',
 }
-
-/* eslint-disable no-console */

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { ThunkActionResult } from '../types/actions';
 import { APIRoute, WarningMessage } from '../const';
 import { loadGuitars } from './action';
@@ -24,4 +23,3 @@ export const loadSortFilterGuitars = (urlSortFilter: string): ThunkActionResult 
       toast.warn(WarningMessage.FetchFail);
     }
   };
-

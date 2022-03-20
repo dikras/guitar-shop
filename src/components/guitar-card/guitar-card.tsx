@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { GuitarImageSize, IMG_URL_BEGIN_INDEX } from '../../const';
@@ -8,7 +9,7 @@ type GuitarProps = {
 
 function GuitarCard(props: GuitarProps): JSX.Element {
   const { guitar } = props;
-  const { previewImg, name, price } = guitar;
+  const { previewImg, name, price, comments } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
 
   return (
@@ -30,7 +31,7 @@ function GuitarCard(props: GuitarProps): JSX.Element {
           </svg>
           <svg width="12" height="11" aria-hidden="true">
             <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count">5</span><span className="rate__message"></span>
+          </svg><span className="rate__count">{comments.length}</span><span className="rate__message"></span>
         </div>
         <p className="product-card__title">{name}</p>
         <p className="product-card__price"><span className="visually-hidden">Цена:</span>

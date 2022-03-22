@@ -1,7 +1,7 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
 import { Guitar } from '../types/guitar';
-import { SortingType, SortingOrder, GuitarType, StringCount } from '../const';
+import { SortingType, SortingOrder, GuitarType } from '../const';
 
 export const loadGuitars = createAction(
   ActionType.LoadGuitars,
@@ -33,7 +33,7 @@ export const changeGuitarType = createAction(
 
 export const changeStringCount = createAction(
   ActionType.ChangeStringCount,
-  (stringCount: StringCount) => ({
+  (stringCount: number) => ({
     payload: stringCount,
   }),
 );
@@ -63,5 +63,12 @@ export const setEndPrice = createAction(
   ActionType.SetEndPrice,
   (endPrice: number) => ({
     payload: endPrice,
+  }),
+);
+
+export const setStartNumber = createAction(
+  ActionType.SetStartNumber,
+  (startNumber: number) => ({
+    payload: startNumber,
   }),
 );

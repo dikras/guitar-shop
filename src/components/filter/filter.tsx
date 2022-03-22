@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useRef } from 'react';
-import { GuitarType, StringCount, FilterQueryParam } from '../../const';
+import { useState } from 'react';
+import { GuitarType, StringCount, FilterQueryParam, ENTER_KEY } from '../../const';
 import {
   addFilterAction,
   changeGuitarType,
@@ -32,14 +32,18 @@ function Filter(): JSX.Element {
   const [ minPrice, setMinPrice ] = useState('');
   const [ maxPrice, setMaxPrice ] = useState('');
 
-  const inputMinRef = useRef(null);
-
   const handleMinInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setMinPrice(evt.target.value);
+    const currentStartValue = evt.target.value;
+    if (Number(currentStartValue) >= 0) {
+      setMinPrice(currentStartValue);
+    }
   };
 
   const handleMaxInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxPrice(evt.target.value);
+    const currentEndValue = evt.target.value;
+    if (Number(currentEndValue) >= 0) {
+      setMaxPrice(evt.target.value);
+    }
   };
 
   const handleMinInputBlur = () => {
@@ -53,6 +57,28 @@ function Filter(): JSX.Element {
     }
     if (minPrice === '') {
       dispatch(removeFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
+    }
+  };
+
+  const handleMinKeyDown = (evt: React.KeyboardEvent) => {
+    if (evt.key === ENTER_KEY && minPrice) {
+      if (Number(minPrice) < guitarMinPrice) {
+        setMinPrice(minFormatPrice.toString());
+      } else {
+        dispatch(setStartPrice(Number(minPrice)));
+        dispatch(addFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
+      }
+    }
+  };
+
+  const handleMaxKeyDown = (evt: React.KeyboardEvent) => {
+    if (evt.key === ENTER_KEY && maxPrice) {
+      if (Number(minPrice) > guitarMinPrice) {
+        setMaxPrice(maxFormatPrice.toString());
+      } else {
+        dispatch(setEndPrice(Number(maxPrice)));
+        dispatch(addFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
+      }
     }
   };
 
@@ -87,8 +113,8 @@ function Filter(): JSX.Element {
               name="от"
               onChange={handleMinInputChange}
               onBlur={handleMinInputBlur}
+              onKeyDown={handleMinKeyDown}
               value={minPrice}
-              ref={inputMinRef}
             />
           </div>
           <div className="form-input">
@@ -100,6 +126,7 @@ function Filter(): JSX.Element {
               name="до"
               onChange={handleMaxInputChange}
               onBlur={handleMaxInputBlur}
+              onKeyDown={handleMaxKeyDown}
               value={maxPrice}
             />
           </div>
@@ -182,7 +209,6 @@ function Filter(): JSX.Element {
                 dispatch(removeFilterAction(FilterQueryParam.FourString));
               }
             }}
-            checked={isFourStringsChecked}
             disabled={isAcousticChecked && !isUkuleleChecked && !isElectricChecked}
           />
           <label htmlFor="4-strings">4</label>
@@ -202,7 +228,6 @@ function Filter(): JSX.Element {
                 dispatch(removeFilterAction(FilterQueryParam.SixString));
               }
             }}
-            checked={isSixStringsChecked}
             disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
           />
           <label htmlFor="6-strings">6</label>
@@ -222,7 +247,6 @@ function Filter(): JSX.Element {
                 dispatch(removeFilterAction(FilterQueryParam.SevenString));
               }
             }}
-            checked={isSevenStringsChecked}
             disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
           />
           <label htmlFor="7-strings">7</label>
@@ -242,8 +266,7 @@ function Filter(): JSX.Element {
                 dispatch(removeFilterAction(FilterQueryParam.TwelveString));
               }
             }}
-            checked={isTwelveStringsChecked}
-            disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked }
+            disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked}
           />
           <label htmlFor="12-strings">12</label>
         </div>

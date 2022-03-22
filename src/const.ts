@@ -21,17 +21,17 @@ export const GuitarImageSize = {
 export const INITIAL_URL_FILTER = '/guitars?_embed=comments&';
 
 export enum FilterQueryParam {
-  Acoustic = 'type=acoustic&',
-  Electric = 'type=electric&',
-  Ukulele = 'type=ukulele&',
-  FourString = 'stringCount=4&',
-  SixString = 'stringCount=6&',
-  SevenString = 'stringCount=7&',
-  TwelveString = 'stringCount=12&',
-  SortByPrice = '_sort=price&',
-  SortByRating = '_sort=rating&',
-  SortLowToHigh = '_order=asc&',
-  SortHighToLow = '_order=desc&',
+  Acoustic = '&type=acoustic&',
+  Electric = '&type=electric&',
+  Ukulele = '&type=ukulele&',
+  FourString = '&stringCount=4&',
+  SixString = '&stringCount=6&',
+  SevenString = '&stringCount=7&',
+  TwelveString = '&stringCount=12&',
+  SortByPrice = '&_sort=price&',
+  SortByRating = '&_sort=rating&',
+  SortLowToHigh = '&_order=asc&',
+  SortHighToLow = '&_order=desc&',
   FilterStartPrice = '&price_gte=',
   FilterEndPrice = '&price_lte=',
 }
@@ -51,15 +51,15 @@ export const InitialPrice = {
 };
 
 export enum SortingType {
-  Default = 'Default',
-  ByPrice = 'ByPrice',
-  ByRating = 'ByRating',
+  Default = 'default',
+  ByPrice = 'price',
+  ByRating = 'rating',
 }
 
 export enum SortingOrder {
-  Default = 'Default',
-  LowToHigh = 'LowToHigh',
-  HighToLow = 'HighToLow',
+  Default = 'default',
+  LowToHigh = 'asc',
+  HighToLow = 'desc',
 }
 
 export enum GuitarType {
@@ -86,3 +86,11 @@ export const NUMBER_TO_ROUND = 6;
 export enum WarningMessage {
   FetchFail = 'Server is not available',
 }
+
+export enum PaginationNumber {
+  Limit = 9,
+  MaxStart = 27,
+  InitialStart = 0,
+}
+
+export const ENTER_KEY = 'Enter';

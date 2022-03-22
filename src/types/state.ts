@@ -21,4 +21,8 @@ export type FilterProcess = {
   currentEndPrice: number,
 };
 
+export type PaginationProcess = {
+  currentStartNumber: number,
+};
+
 export type State = RootState;

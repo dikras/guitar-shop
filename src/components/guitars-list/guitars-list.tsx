@@ -13,7 +13,8 @@ import {
   getCurrentStartPrice,
   getCurrentEndPricer
 } from '../../store/app-reducer/selectors';
-import { SortingType, SortingOrder, GuitarType, StringCount, InitialPrice } from '../../const';
+import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
+import { SortingType, SortingOrder, GuitarType, StringCount, InitialPrice, PaginationNumber } from '../../const';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -27,32 +28,47 @@ function GuitarsList(): JSX.Element {
   const currentStartPrice = useSelector(getCurrentStartPrice);
   const currentEndPrice = useSelector(getCurrentEndPricer);
 
-  const urlSortFilter = useSelector(getCurrentUrl);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
+
+  const urlFilter = `${useSelector(getCurrentUrl)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+
+  let urlSort = '';
+
+  if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+    urlSort = `&_sort=${currentSortingType}&_order=${currentSortingOrder}`;
+  }
+
+  // const urlPagination = `&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
 
   useEffect(() => {
     if (currentGuitarType !== GuitarType.Default) {
-      dispatch(loadSortFilterGuitars(urlSortFilter));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentStringCount !== StringCount.Default) {
-      dispatch(loadSortFilterGuitars(urlSortFilter));
+      dispatch(loadSortFilterGuitars(urlFilter));
     }
     if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
-      dispatch(loadSortFilterGuitars(urlSortFilter));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentStartPrice !== InitialPrice.Min) {
-      dispatch(loadSortFilterGuitars(urlSortFilter));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentEndPrice !== InitialPrice.Max) {
-      dispatch(loadSortFilterGuitars(urlSortFilter));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+    }
+    if (currentStartNumber !== PaginationNumber.InitialStart) {
+      dispatch(loadSortFilterGuitars(`${urlFilter}`));
     }
   },[dispatch,
-    urlSortFilter,
+    urlFilter,
+    urlSort,
     currentGuitarType,
     currentStringCount,
     currentSortingType,
     currentSortingOrder,
     currentStartPrice,
     currentEndPrice,
+    currentStartNumber,
   ]);
 
   return (

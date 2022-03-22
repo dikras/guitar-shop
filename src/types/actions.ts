@@ -11,6 +11,7 @@ export enum ActionType {
   ChangeStringCount = 'app/changeStringCount',
   SetStartPrice = 'app/setStartPrice',
   SetEndPrice = 'app/setEndPrice',
+  SetStartNumber = 'pagination/setStartNumber',
   AddFilterAction = 'app/addFilterAction',
   RemoveFilterAction = 'app/removeFilterAction',
 }

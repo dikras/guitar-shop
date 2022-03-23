@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { GuitarType, StringCount, FilterQueryParam, ENTER_KEY } from '../../const';

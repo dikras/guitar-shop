@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
@@ -39,7 +38,6 @@ function Pagination(): JSX.Element {
             setCurrentPage((prev) => prev - 1);
             history.replace( '/', `catalog/page_${currentPage}`);
             setCurrentStart(currentStart - PaginationNumber.Limit);
-            console.log(currentStart);
             dispatch(setStartNumber(currentStart));
           }}
         >

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
@@ -38,14 +37,12 @@ function GuitarsList(): JSX.Element {
     urlSort = `&_sort=${currentSortingType}&_order=${currentSortingOrder}`;
   }
 
-  // const urlPagination = `&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
-
   useEffect(() => {
     if (currentGuitarType !== GuitarType.Default) {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentStringCount !== StringCount.Default) {
-      dispatch(loadSortFilterGuitars(urlFilter));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));

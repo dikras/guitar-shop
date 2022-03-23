@@ -1,4 +1,5 @@
 export enum APIRoute {
+  GuitarsNotComment = '/guitars',
   Guitars = '/guitars?_embed=comments',
   Guitar = '/guitars/:id',
   Comments = '/comments',

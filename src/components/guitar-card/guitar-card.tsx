@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { GuitarImageSize, IMG_URL_BEGIN_INDEX } from '../../const';

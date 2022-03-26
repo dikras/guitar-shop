@@ -1,9 +1,10 @@
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
-import { AppRoute, NUMBER_TO_ROUND } from '../../const';
+import { AppRoute, NUMBER_TO_ROUND, ENTER_KEY } from '../../const';
+import { setGuitarName } from '../../store/action';
 
 function Header(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -14,9 +15,13 @@ function Header(): JSX.Element {
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
+  const dispatch = useDispatch();
+
   const refElement = useRef<HTMLInputElement | null>(null);
 
   const searchedGuitars = guitarsNameId.filter((guitar) => guitar.guitarName.includes(word));
+
+  // const [ guitarName, setGuitarName ] = useState('');
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setWord(evt.currentTarget.value);
@@ -30,6 +35,12 @@ function Header(): JSX.Element {
     }
   };
 
+  const handleEnterKeyDown = (evt: React.KeyboardEvent) => {
+    if (evt.key === ENTER_KEY) {
+      dispatch(setGuitarName(`${refElement.current?.value}`));
+    }
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleFocusOut);
     return () => document.removeEventListener('click', handleFocusOut);
@@ -37,14 +48,14 @@ function Header(): JSX.Element {
 
   return (
     <header className="header" id="header">
-      <div className="container header__wrapper"><a className="header__logo logo"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></a>
+      <div className="container header__wrapper"><a className="header__logo logo" href="/#"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></a>
         <nav className="main-nav">
           <ul className="main-nav__list">
-            <li><a className="link main-nav__link link--current" href="#">Каталог</a>
+            <li><a className="link main-nav__link link--current" href="/#">Каталог</a>
             </li>
-            <li><a className="link main-nav__link" href="#">Где купить?</a>
+            <li><a className="link main-nav__link" href="/#">Где купить?</a>
             </li>
-            <li><a className="link main-nav__link" href="#">О компании</a>
+            <li><a className="link main-nav__link" href="/#">О компании</a>
             </li>
           </ul>
         </nav>
@@ -62,22 +73,20 @@ function Header(): JSX.Element {
               placeholder="что вы ищите?"
               onChange={handleInputChange}
               onFocus={handleFocusIn}
+              onKeyDown={handleEnterKeyDown}
               ref={refElement}
             />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
           <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`}>
-            {searchedGuitars.map((guitar) => {
-              const keyValue = nanoid(NUMBER_TO_ROUND);
-              return (
-                <li key={keyValue} className="form-search__select-item">
-                  <Link to={`${AppRoute.Guitar}/${guitar.guitarId}`} className="form-search__select-item" tabIndex={0}>{guitar.guitarName}</Link>
-                </li>
-              );
-            })}
+            {searchedGuitars.map((guitar) => (
+              <li key={nanoid(NUMBER_TO_ROUND)} className="form-search__select-item">
+                <Link to={`${AppRoute.Guitar}/${guitar.guitarId}`} className="form-search__select-item" tabIndex={0}>{guitar.guitarName}</Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <a className="header__cart-link" href="#" aria-label="Корзина">
+        <a className="header__cart-link" href="/#" aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg><span className="visually-hidden">Перейти в корзину</span><span className="header__cart-count">2</span>

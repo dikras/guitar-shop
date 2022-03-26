@@ -1,9 +1,9 @@
 import { NameSpace } from '../root-reducer';
 import { State } from '../../types/state';
-import { Guitar, GuitarNotComment } from '../../types/guitar';
+import { Guitar } from '../../types/guitar';
 
 export const getGuitars = (state: State): Guitar[] => state[NameSpace.data].guitars;
-export const getGuitarsNotComment = (state: State): GuitarNotComment[] => state[NameSpace.data].guitarsNotComment;
+export const getAllGuitarsTotalCount = (state: State): number => state[NameSpace.data].guitarsTotalCount;
 
 export const getGuitarMinPrice = (state: State): number => {
   const guitarPrices = state[NameSpace.data].guitars.map((guitar) => guitar.price);

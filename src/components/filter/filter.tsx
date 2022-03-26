@@ -72,7 +72,7 @@ function Filter(): JSX.Element {
 
   const handleMaxKeyDown = (evt: React.KeyboardEvent) => {
     if (evt.key === ENTER_KEY && maxPrice) {
-      if (Number(minPrice) > guitarMinPrice) {
+      if (Number(maxPrice) > guitarMaxPrice) {
         setMaxPrice(maxFormatPrice.toString());
       } else {
         dispatch(setEndPrice(Number(maxPrice)));

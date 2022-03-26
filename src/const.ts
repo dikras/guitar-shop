@@ -1,6 +1,5 @@
 export enum APIRoute {
-  GuitarsNotComment = '/guitars',
-  Guitars = '/guitars?_embed=comments',
+  Guitars = '/guitars?_embed=comments&',
   Guitar = '/guitars/:id',
   Comments = '/comments',
   Coupon = '/coupons',
@@ -12,14 +11,16 @@ export enum AppRoute {
   Guitar = '/guitars',
 }
 
-export const GuitarImageSize = {
-  Card: {
+export const ImageSize = {
+  GuitarCard: {
     Height: '190',
     Width: '75',
   },
+  RatingStar: {
+    Height: '11',
+    Width: '12',
+  },
 };
-
-export const INITIAL_URL_FILTER = '/guitars?_embed=comments&';
 
 export enum FilterQueryParam {
   Acoustic = '&type=acoustic&',
@@ -35,6 +36,7 @@ export enum FilterQueryParam {
   SortHighToLow = '&_order=desc&',
   FilterStartPrice = '&price_gte=',
   FilterEndPrice = '&price_lte=',
+  NameLike = '&name_like='
 }
 
 export enum QueryParamName {
@@ -43,7 +45,6 @@ export enum QueryParamName {
   FilterString = 'stringCount',
   StartPrice = 'price_gte',
   EndPrice = 'price_lte',
-  GuitarComment = '_embed=comments',
 }
 
 export const InitialPrice = {
@@ -90,8 +91,10 @@ export enum WarningMessage {
 
 export enum PaginationNumber {
   Limit = 9,
-  MaxStart = 27,
-  InitialStart = 0,
+  InitialStart = 1,
+  InitialLoad = 0,
 }
 
 export const ENTER_KEY = 'Enter';
+
+export const FULL_STARS_COUNT = 4;

@@ -1,6 +1,6 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import { GuitarNotComment, Guitar } from '../types/guitar';
+import { Guitar } from '../types/guitar';
 import { SortingType, SortingOrder, GuitarType } from '../const';
 
 export const loadGuitars = createAction(
@@ -10,10 +10,10 @@ export const loadGuitars = createAction(
   }),
 );
 
-export const loadGuitarsNotComment = createAction(
-  ActionType.LoadGuitarsNotComment,
-  (guitars: GuitarNotComment[]) => ({
-    payload: guitars,
+export const getGuitarsTotalCount = createAction(
+  ActionType.GetGuitarsTotalCount,
+  (guitarsTotalCount: number) => ({
+    payload: guitarsTotalCount,
   }),
 );
 
@@ -77,5 +77,12 @@ export const setStartNumber = createAction(
   ActionType.SetStartNumber,
   (startNumber: number) => ({
     payload: startNumber,
+  }),
+);
+
+export const setGuitarName = createAction(
+  ActionType.SetGuitarName,
+  (guitarName: string) => ({
+    payload: guitarName,
   }),
 );

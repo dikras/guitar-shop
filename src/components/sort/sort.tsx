@@ -16,7 +16,7 @@ function Sort(): JSX.Element {
   const dispatch = useDispatch();
 
   return (
-    <div className="catalog-sort">
+    <div className="catalog-sort" data-testid="sorting-block">
       <h2 className="catalog-sort__title">Сортировать:</h2>
       <div className="catalog-sort__type">
         <button

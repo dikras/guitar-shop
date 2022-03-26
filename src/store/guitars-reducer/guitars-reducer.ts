@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { GuitarsData } from '../../types/state';
-import { loadGuitars, loadGuitarsNotComment } from '../action';
+import { loadGuitars, getGuitarsTotalCount } from '../action';
 
 const initialState: GuitarsData = {
   guitars: [],
-  guitarsNotComment: [],
+  guitarsTotalCount: 0,
 };
 
 const guitarsReducer = createReducer(initialState, (builder) => {
@@ -12,9 +12,9 @@ const guitarsReducer = createReducer(initialState, (builder) => {
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
     })
-    .addCase(loadGuitarsNotComment, (state, action) => {
-      state.guitarsNotComment = action.payload;
+    .addCase(getGuitarsTotalCount, (state, action) => {
+      state.guitarsTotalCount = action.payload;
     });
 });
 
-export {guitarsReducer};
+export {initialState, guitarsReducer};

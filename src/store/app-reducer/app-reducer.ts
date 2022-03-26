@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { FilterProcess } from '../../types/state';
 import {
-  INITIAL_URL_FILTER,
+  APIRoute,
   SortingType,
   SortingOrder,
   GuitarType,
@@ -24,7 +24,7 @@ const initialState: FilterProcess = {
   currentStringCount: StringCount.Default,
   currentSortingType: SortingType.Default,
   currentSortingOrder: SortingOrder.Default,
-  currentUrlFilter: INITIAL_URL_FILTER,
+  currentUrlFilter: APIRoute.Guitars,
   currentStartPrice: InitialPrice.Min,
   currentEndPrice: InitialPrice.Max,
 };
@@ -57,4 +57,4 @@ const appReducer = createReducer(initialState, (builder) => {
     });
 });
 
-export {appReducer};
+export {initialState, appReducer};

@@ -1,10 +1,10 @@
 import { SortingType, SortingOrder, GuitarType, StringCount } from '../const';
-import { Guitar, GuitarNotComment } from './guitar';
+import { Guitar } from './guitar';
 import { RootState } from '../store/root-reducer';
 
 export type GuitarsData = {
   guitars: Guitar[],
-  guitarsNotComment: GuitarNotComment[],
+  guitarsTotalCount: number,
 };
 
 export type SortProcess = {
@@ -24,6 +24,10 @@ export type FilterProcess = {
 
 export type PaginationProcess = {
   currentStartNumber: number,
+};
+
+export type SearchGuitarByNameProcess = {
+  currentGuitarName: string,
 };
 
 export type State = RootState;

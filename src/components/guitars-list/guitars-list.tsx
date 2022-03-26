@@ -13,7 +13,18 @@ import {
   getCurrentEndPricer
 } from '../../store/app-reducer/selectors';
 import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
-import { SortingType, SortingOrder, GuitarType, StringCount, InitialPrice, PaginationNumber } from '../../const';
+import { getCurrentGuitarName } from '../../store/search-reducer/selectors';
+import {
+  SortingType,
+  SortingOrder,
+  GuitarType,
+  StringCount,
+  InitialPrice,
+  PaginationNumber,
+  NUMBER_TO_ROUND,
+  FilterQueryParam
+} from '../../const';
+import { nanoid } from 'nanoid';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -29,7 +40,11 @@ function GuitarsList(): JSX.Element {
 
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
+  const currentGuitarName = useSelector(getCurrentGuitarName);
+
   const urlFilter = `${useSelector(getCurrentUrl)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+
+  const searchUrl = `${FilterQueryParam.NameLike}`;
 
   let urlSort = '';
 
@@ -54,11 +69,15 @@ function GuitarsList(): JSX.Element {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
     if (currentStartNumber !== PaginationNumber.InitialStart) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}`));
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+    }
+    if (currentGuitarName !== '') {
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}${searchUrl}${currentGuitarName}`));
     }
   },[dispatch,
     urlFilter,
     urlSort,
+    searchUrl,
     currentGuitarType,
     currentStringCount,
     currentSortingType,
@@ -66,19 +85,17 @@ function GuitarsList(): JSX.Element {
     currentStartPrice,
     currentEndPrice,
     currentStartNumber,
+    currentGuitarName,
   ]);
 
   return (
     <div className="cards catalog__cards">
-      {guitars.map((guitar) => {
-        const keyValue = `${guitar.id}`;
-        return (
-          <GuitarCard
-            key={keyValue}
-            guitar={guitar}
-          />
-        );
-      })}
+      {guitars.map((guitar) => (
+        <GuitarCard
+          key={nanoid(NUMBER_TO_ROUND)}
+          guitar={guitar}
+        />
+      ))}
     </div>
   );
 }

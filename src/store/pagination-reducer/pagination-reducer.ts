@@ -14,4 +14,4 @@ const paginationReducer = createReducer(initialState, (builder) => {
     });
 });
 
-export {paginationReducer};
+export {initialState, paginationReducer};

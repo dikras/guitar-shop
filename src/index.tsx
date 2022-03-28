@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Router as BrowserRouter} from 'react-router-dom';
+import {createBrowserHistory} from 'history';
 import App from './components/app/app';
 import { createAPI } from './api';
 import { fetchGuitarsAction } from './store/api-action';
@@ -21,13 +23,18 @@ const store = configureStore({
     }),
 });
 
+const browserHistory = createBrowserHistory();
+
 store.dispatch(fetchGuitarsAction());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ToastContainer />
-      <App />
+      <BrowserRouter history={browserHistory}>
+        <App />
+      </BrowserRouter>
     </Provider>
+    <ToastContainer />
   </React.StrictMode>,
-  document.getElementById('root'));
+  document.getElementById('root'),
+);

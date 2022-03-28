@@ -91,8 +91,7 @@ export enum WarningMessage {
 
 export enum PaginationNumber {
   Limit = 9,
-  InitialStart = 1,
-  InitialLoad = 0,
+  InitialStart = 0,
 }
 
 export const ENTER_KEY = 'Enter';

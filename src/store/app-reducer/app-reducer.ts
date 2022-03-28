@@ -20,10 +20,10 @@ import {
 } from '../action';
 
 const initialState: FilterProcess = {
-  currentGuitarType: GuitarType.Default,
-  currentStringCount: StringCount.Default,
   currentSortingType: SortingType.Default,
   currentSortingOrder: SortingOrder.Default,
+  currentStringCount: StringCount.Default,
+  currentGuitarType: GuitarType.Default,
   currentUrlFilter: APIRoute.Guitars,
   currentStartPrice: InitialPrice.Min,
   currentEndPrice: InitialPrice.Max,

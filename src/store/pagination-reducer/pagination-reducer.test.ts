@@ -10,13 +10,15 @@ describe('Reducer: pagination-reducer', () => {
       .toEqual(initialState);
   });
 
-  it('set start number in pagination', () => {
+  it('set start number in pagination and \'true\' if pagination buttons was clicked', () => {
     const mockStartNumber = createMockStartNumber();
+    const mockIsPaginationDone = true;
 
     expect(paginationReducer(initialState, setStartNumber(mockStartNumber)))
       .toEqual({
         ...initialState,
         currentStartNumber: mockStartNumber,
+        isPaginationDone: mockIsPaginationDone,
       });
   });
 

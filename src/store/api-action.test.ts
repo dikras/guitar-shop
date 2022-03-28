@@ -28,7 +28,7 @@ describe('Async actions', () => {
     const store = mockStore();
 
     mockAPI
-      .onGet(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialLoad}&_limit=${PaginationNumber.Limit}`)
+      .onGet(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`)
       .reply(200, mockGuitars);
 
     await store.dispatch(fetchGuitarsAction());

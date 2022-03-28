@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 export const fetchGuitarsAction = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const response = await api.get<Guitar[]>(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialLoad}&_limit=${PaginationNumber.Limit}`);
+      const response = await api.get<Guitar[]>(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`);
       dispatch(loadGuitars(response.data));
       dispatch(getGuitarsTotalCount(response.headers['x-total-count']));
     } catch {

@@ -98,6 +98,7 @@ function Filter(): JSX.Element {
   return (
     <form
       className="catalog-filter"
+      data-testid="filter-form"
     >
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
       <fieldset className="catalog-filter__block">

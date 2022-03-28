@@ -24,7 +24,7 @@ function Pagination(): JSX.Element {
   const [ currentPage, setCurrentPage ] = useState(1);
 
   return (
-    <div className="pagination page-content__pagination">
+    <div className="pagination page-content__pagination" data-testid="pagination-block">
       <ul className="pagination__list">
         {currentPage !== firstElement &&
         <li

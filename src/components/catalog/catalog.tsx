@@ -5,7 +5,7 @@ import GuitarsList from '../guitars-list/guitars-list';
 
 function Catalog(): JSX.Element {
   return (
-    <main className="page-content">
+    <main className="page-content" data-testid="catalog-container">
       <div className="container">
         <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
         <ul className="breadcrumbs page-content__breadcrumbs">

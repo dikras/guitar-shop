@@ -1,6 +1,6 @@
 function Footer(): JSX.Element {
   return (
-    <footer className="footer">
+    <footer className="footer" data-testid="footer-block">
       <div className="footer__container container"><a className="footer__logo logo" href="/#"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></a>
         <div className="socials footer__socials">
           <ul className="socials__list">

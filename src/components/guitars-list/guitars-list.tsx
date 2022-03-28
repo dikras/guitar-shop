@@ -12,8 +12,8 @@ import {
   getCurrentStartPrice,
   getCurrentEndPricer
 } from '../../store/app-reducer/selectors';
-import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
-import { getCurrentGuitarName } from '../../store/search-reducer/selectors';
+import { getCurrentStartNumber, getIsPaginationDone } from '../../store/pagination-reducer/selectors';
+import { getCurrentGuitarName, getIsSearchDone } from '../../store/search-reducer/selectors';
 import {
   SortingType,
   SortingOrder,
@@ -38,13 +38,16 @@ function GuitarsList(): JSX.Element {
   const currentStartPrice = useSelector(getCurrentStartPrice);
   const currentEndPrice = useSelector(getCurrentEndPricer);
 
+  const isPaginationDone = useSelector(getIsPaginationDone);
+  const isSearchDone = useSelector(getIsSearchDone);
+
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
   const currentGuitarName = useSelector(getCurrentGuitarName);
 
   const urlFilter = `${useSelector(getCurrentUrl)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
 
-  const searchUrl = `${FilterQueryParam.NameLike}`;
+  const searchUrl = `${FilterQueryParam.NameLike}${currentGuitarName}`;
 
   let urlSort = '';
 
@@ -68,11 +71,11 @@ function GuitarsList(): JSX.Element {
     if (currentEndPrice !== InitialPrice.Max) {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
-    if (currentStartNumber !== PaginationNumber.InitialStart) {
+    if (isPaginationDone) {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
-    if (currentGuitarName !== '') {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}${searchUrl}${currentGuitarName}`));
+    if (isSearchDone) {
+      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}${searchUrl}`));
     }
   },[dispatch,
     urlFilter,
@@ -86,10 +89,12 @@ function GuitarsList(): JSX.Element {
     currentEndPrice,
     currentStartNumber,
     currentGuitarName,
+    isPaginationDone,
+    isSearchDone,
   ]);
 
   return (
-    <div className="cards catalog__cards">
+    <div className="cards catalog__cards" data-testid="guitars-list">
       {guitars.map((guitar) => (
         <GuitarCard
           key={nanoid(NUMBER_TO_ROUND)}

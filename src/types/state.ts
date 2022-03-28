@@ -7,11 +7,6 @@ export type GuitarsData = {
   guitarsTotalCount: number,
 };
 
-export type SortProcess = {
-  currentSortingType: SortingType,
-  currentSortingOrder: SortingOrder,
-};
-
 export type FilterProcess = {
   currentGuitarType: GuitarType,
   currentStringCount: StringCount,
@@ -24,10 +19,12 @@ export type FilterProcess = {
 
 export type PaginationProcess = {
   currentStartNumber: number,
+  isPaginationDone: boolean;
 };
 
 export type SearchGuitarByNameProcess = {
   currentGuitarName: string,
+  isSearchDone: boolean,
 };
 
 export type State = RootState;

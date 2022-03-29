@@ -18,11 +18,9 @@ function GuitarCard(props: GuitarProps): JSX.Element {
     ratingStars.push(i);
   }
 
-  console.log(window.location.origin);
-
   return (
     <div className="product-card" data-testid="guitar-card">
-      <img src={`${window.location.origin}/img/content/${urlImg}`} width={ImageSize.GuitarCard.Width} height={ImageSize.GuitarCard.Height} alt={name} />
+      <img src={`/img/content/${urlImg}`} width={ImageSize.GuitarCard.Width} height={ImageSize.GuitarCard.Height} alt={name} />
       <div className="product-card__info">
         <div className="rate product-card__rate" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
           {ratingStars.map(() => (

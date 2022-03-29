@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { ImageSize, IMG_URL_BEGIN_INDEX, FULL_STARS_COUNT, NUMBER_TO_ROUND } from '../../const';
@@ -19,7 +20,7 @@ function GuitarCard(props: GuitarProps): JSX.Element {
 
   return (
     <div className="product-card" data-testid="guitar-card">
-      <img src={`img/content/${urlImg}`} width={ImageSize.GuitarCard.Width} height={ImageSize.GuitarCard.Height} alt={name} />
+      <img src={`${window.location.origin}/img/content/${urlImg}`} width={ImageSize.GuitarCard.Width} height={ImageSize.GuitarCard.Height} alt={name} />
       <div className="product-card__info">
         <div className="rate product-card__rate" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
           {ratingStars.map(() => (

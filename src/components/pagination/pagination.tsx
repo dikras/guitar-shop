@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
 import { NUMBER_TO_ROUND, PaginationNumber } from '../../const';
@@ -9,7 +8,6 @@ import { setStartNumber } from '../../store/action';
 
 function Pagination(): JSX.Element {
   const dispatch = useDispatch();
-  console.log(useParams());
 
   const totalGuitars = useSelector(getAllGuitarsTotalCount);
   const pagesCount = Math.ceil(totalGuitars / PaginationNumber.Limit);

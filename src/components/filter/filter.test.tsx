@@ -52,6 +52,7 @@ describe('Component: Filter', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('filter-form')).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-electric')).toBeInTheDocument();
+    expect(screen.getByTestId('checkbox-12-strings')).toBeInTheDocument();
   });
 });

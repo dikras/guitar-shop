@@ -51,6 +51,6 @@ describe('Component: MainScreen', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('main-container')).toBeInTheDocument();
+    expect(screen.getByTestId('price-filter')).toBeInTheDocument();
   });
 });

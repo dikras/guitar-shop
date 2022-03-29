@@ -52,6 +52,6 @@ describe('Component: GuitarsList', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('guitars-list')).toBeInTheDocument();
+    expect(screen.getByTestId('guitars-catalog')).toBeInTheDocument();
   });
 });

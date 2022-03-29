@@ -46,7 +46,7 @@ function Footer(): JSX.Element {
             </li>
           </ul>
         </section>
-        <section className="footer__nav-section footer__nav-section--contacts">
+        <section className="footer__nav-section footer__nav-section--contacts" data-testid="footer-contacts">
           <h2 className="footer__nav-title">Контакты</h2>
           <p className="footer__nav-content">г. Санкт-Петербург,<br/> м. Невский проспект, <br/>ул. Казанская 6.</p>
           <div className="footer__nav-content">

@@ -17,6 +17,6 @@ describe('Component: Footer', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('footer-block')).toBeInTheDocument();
+    expect(screen.getByTestId('footer-contacts')).toBeInTheDocument();
   });
 });

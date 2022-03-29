@@ -52,6 +52,6 @@ describe('Component: Header', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('header-block')).toBeInTheDocument();
+    expect(screen.getByTestId('search-list')).toBeInTheDocument();
   });
 });

@@ -94,7 +94,7 @@ function GuitarsList(): JSX.Element {
   ]);
 
   return (
-    <div className="cards catalog__cards" data-testid="guitars-list">
+    <div className="cards catalog__cards" data-testid="guitars-catalog">
       {guitars.map((guitar) => (
         <GuitarCard
           key={nanoid(NUMBER_TO_ROUND)}

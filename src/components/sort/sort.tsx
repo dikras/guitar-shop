@@ -16,7 +16,7 @@ function Sort(): JSX.Element {
   const dispatch = useDispatch();
 
   return (
-    <div className="catalog-sort" data-testid="sorting-block">
+    <div className="catalog-sort">
       <h2 className="catalog-sort__title">Сортировать:</h2>
       <div className="catalog-sort__type">
         <button
@@ -26,6 +26,7 @@ function Sort(): JSX.Element {
           onClick={() => {
             dispatch(changeSortingType(SortingType.ByPrice));
           }}
+          data-testid="sort-button-price"
         >по цене
         </button>
         <button
@@ -34,6 +35,7 @@ function Sort(): JSX.Element {
           onClick={() => {
             dispatch(changeSortingType(SortingType.ByRating));
           }}
+          data-testid="sort-button-rating"
         >по популярности
         </button>
       </div>
@@ -48,6 +50,7 @@ function Sort(): JSX.Element {
             }
             dispatch(changeSortingOrder(SortingOrder.LowToHigh));
           }}
+          data-testid="sort-button-asc"
         >
         </button>
         <button
@@ -59,6 +62,7 @@ function Sort(): JSX.Element {
             }
             dispatch(changeSortingOrder(SortingOrder.HighToLow));
           }}
+          data-testid="sort-button-desc"
         >
         </button>
       </div>

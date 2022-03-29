@@ -54,6 +54,6 @@ describe('Component: GuitarCard', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('guitar-card')).toBeInTheDocument();
+    expect(screen.getByTestId('button-details')).toBeInTheDocument();
   });
 });

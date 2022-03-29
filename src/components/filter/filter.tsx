@@ -103,7 +103,7 @@ function Filter(): JSX.Element {
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
-        <div className="catalog-filter__price-range">
+        <div className="catalog-filter__price-range" data-testid="price-filter">
           <div className="form-input">
             <label className="visually-hidden">Минимальная цена</label>
             <input
@@ -169,6 +169,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isElectricChecked}
+            data-testid="checkbox-electric"
           />
           <label htmlFor="electric">Электрогитары</label>
         </div>
@@ -267,6 +268,7 @@ function Filter(): JSX.Element {
               }
             }}
             disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked}
+            data-testid="checkbox-12-strings"
           />
           <label htmlFor="12-strings">12</label>
         </div>

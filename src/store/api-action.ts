@@ -18,8 +18,9 @@ export const fetchGuitarsAction = (): ThunkActionResult =>
 export const loadSortFilterGuitars = (urlSortFilter: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const {data} = await api.get<Guitar[]>(urlSortFilter);
-      dispatch(loadGuitars(data));
+      const response = await api.get<Guitar[]>(urlSortFilter);
+      dispatch(loadGuitars(response.data));
+      dispatch(getGuitarsTotalCount(response.headers['x-total-count']));
     } catch {
       toast.warn(WarningMessage.FetchFail);
     }

@@ -9,6 +9,9 @@ function App(): JSX.Element {
       <Route exact path={AppRoute.Main}>
         <MainScreen />
       </Route>
+      <Route exact path={AppRoute.Catalog}>
+        <MainScreen />
+      </Route>
       <Route>
         <NotFoundScreen />
       </Route>

@@ -8,6 +8,7 @@ export enum APIRoute {
 
 export enum AppRoute {
   Main = '/',
+  Catalog = '/catalog/page_:id',
   Guitar = '/guitars',
 }
 

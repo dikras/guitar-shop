@@ -4,7 +4,7 @@ import Footer from '../footer/footer';
 
 function MainScreen(): JSX.Element {
   return (
-    <div className="wrapper" data-testid="main-container">
+    <div className="wrapper">
       <Header />
       <Catalog />
       <Footer />

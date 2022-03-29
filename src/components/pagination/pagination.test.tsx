@@ -47,6 +47,6 @@ describe('Component: Pagination', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('pagination-block')).toBeInTheDocument();
+    expect(screen.getByTestId('button-next')).toBeInTheDocument();
   });
 });

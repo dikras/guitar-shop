@@ -89,7 +89,7 @@ function Header(): JSX.Element {
             />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
-          <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`}>
+          <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`} data-testid="search-list">
             {searchedGuitars.map((guitar) => (
               <li key={nanoid(NUMBER_TO_ROUND)} className="form-search__select-item">
                 <Link to={`${AppRoute.Guitar}/${guitar.guitarId}`} className="form-search__select-item" tabIndex={0}>{guitar.guitarName}</Link>

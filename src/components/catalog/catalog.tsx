@@ -8,7 +8,7 @@ function Catalog(): JSX.Element {
     <main className="page-content" data-testid="catalog-container">
       <div className="container">
         <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
-        <ul className="breadcrumbs page-content__breadcrumbs">
+        <ul className="breadcrumbs page-content__breadcrumbs" data-testid="breadcrumbs-list">
           <li className="breadcrumbs__item"><a className="link" href="./main.html">Главная</a>
           </li>
           <li className="breadcrumbs__item"><a className="link" href="/#">Каталог</a>

@@ -37,7 +37,9 @@ function GuitarCard(props: GuitarProps): JSX.Element {
           <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
         </p>
       </div>
-      <div className="product-card__buttons"><a className="button button--mini" href="/#">Подробнее</a><a className="button button--red button--mini button--add-to-cart" href="/#">Купить</a>
+      <div className="product-card__buttons">
+        <a className="button button--mini" href="/#" data-testid="button-details">Подробнее</a>
+        <a className="button button--red button--mini button--add-to-cart" href="/#">Купить</a>
       </div>
     </div>
   );

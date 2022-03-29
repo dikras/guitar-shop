@@ -25,6 +25,9 @@ describe('Component: Sort', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('sorting-block')).toBeInTheDocument();
+    expect(screen.getByTestId('sort-button-asc')).toBeInTheDocument();
+    expect(screen.getByTestId('sort-button-rating')).toBeInTheDocument();
+    expect(screen.getByTestId('sort-button-price')).toBeInTheDocument();
+    expect(screen.getByTestId('sort-button-desc')).toBeInTheDocument();
   });
 });

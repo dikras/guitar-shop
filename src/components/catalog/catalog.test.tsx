@@ -52,6 +52,6 @@ describe('Component: Catalog', () => {
         </Router>
       </Provider>);
 
-    expect(screen.getByTestId('catalog-container')).toBeInTheDocument();
+    expect(screen.getByTestId('breadcrumbs-list')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
 export enum APIRoute {
+  GuitarsNoComments = '/guitars',
   Guitars = '/guitars?_embed=comments&',
   Guitar = '/guitars/:id',
   Comments = '/comments',
@@ -37,7 +38,6 @@ export enum FilterQueryParam {
   SortHighToLow = '&_order=desc&',
   FilterStartPrice = '&price_gte=',
   FilterEndPrice = '&price_lte=',
-  NameLike = '&name_like='
 }
 
 export enum QueryParamName {
@@ -46,6 +46,7 @@ export enum QueryParamName {
   FilterString = 'stringCount',
   StartPrice = 'price_gte',
   EndPrice = 'price_lte',
+  NameLike = 'name_like'
 }
 
 export const InitialPrice = {

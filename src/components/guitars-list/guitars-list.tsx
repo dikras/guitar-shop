@@ -2,7 +2,7 @@ import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { loadSortFilterGuitars } from '../../store/api-action';
+import { fetchGuitarsNoComments, loadSortFilterGuitars } from '../../store/api-action';
 import {
   getCurrentGuitarType,
   getCurrentStringCount,
@@ -22,7 +22,8 @@ import {
   InitialPrice,
   PaginationNumber,
   NUMBER_TO_ROUND,
-  FilterQueryParam
+  APIRoute,
+  QueryParamName
 } from '../../const';
 import { nanoid } from 'nanoid';
 
@@ -46,8 +47,6 @@ function GuitarsList(): JSX.Element {
   const currentGuitarName = useSelector(getCurrentGuitarName);
 
   const urlFilter = `${useSelector(getCurrentUrl)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
-
-  const searchUrl = `${FilterQueryParam.NameLike}${currentGuitarName}`;
 
   let urlSort = '';
 
@@ -74,13 +73,12 @@ function GuitarsList(): JSX.Element {
     if (isPaginationDone) {
       dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
     }
-    if (isSearchDone) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}${searchUrl}`));
+    if (currentGuitarName !== '') {
+      dispatch(fetchGuitarsNoComments(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${currentGuitarName}`));
     }
   },[dispatch,
     urlFilter,
     urlSort,
-    searchUrl,
     currentGuitarType,
     currentStringCount,
     currentSortingType,

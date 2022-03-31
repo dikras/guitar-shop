@@ -8,7 +8,7 @@ import { APIRoute, PaginationNumber, FilterQueryParam } from '../const';
 import { createMockGuitars } from '../mocks/guitars';
 import { createMockUrlFilter } from '../mocks/sort-filter-data';
 import { loadGuitars } from '../store/action';
-import { fetchGuitarsAction, loadSortFilterGuitars } from '../store/api-action';
+import { fetchGuitars, loadSortFilterGuitars } from '../store/api-action';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -31,7 +31,7 @@ describe('Async actions', () => {
       .onGet(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`)
       .reply(200, mockGuitars);
 
-    await store.dispatch(fetchGuitarsAction());
+    await store.dispatch(fetchGuitars());
 
     expect(store.getActions()).toEqual([
       loadGuitars(mockGuitars),

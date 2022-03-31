@@ -1,4 +1,4 @@
-import { getGuitars } from '../../store/guitars-reducer/selectors';
+import { getGuitarsNoComments } from '../../store/guitars-reducer/selectors';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
@@ -7,11 +7,7 @@ import { AppRoute, NUMBER_TO_ROUND } from '../../const';
 import { setGuitarName } from '../../store/action';
 
 function Header(): JSX.Element {
-  const guitars = useSelector(getGuitars);
-  const guitarsNameId = guitars.map((guitar) => ({
-    guitarName: guitar.name,
-    guitarId: guitar.id,
-  }));
+  const guitars = useSelector(getGuitarsNoComments);
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
@@ -19,26 +15,31 @@ function Header(): JSX.Element {
 
   const refElement = useRef<HTMLInputElement | null>(null);
 
-  const searchedGuitars = guitarsNameId.filter((guitar) => guitar.guitarName.includes(word));
-
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setWord(evt.currentTarget.value);
-    if (refElement.current?.value === '') {
-      dispatch(setGuitarName(`${refElement.current?.value}`));
+    if (evt.currentTarget.value !== '') {
+      setIsFocus(true);
+    } else {
+      setIsFocus(false);
     }
   };
 
-  const handleFocusIn = () => setIsFocus(true);
+  const handleInputFocusIn = () => {
+    if (word !== '') {
+      setIsFocus(true);
+    }
+  };
 
-  const handleFocusOut = (evt: MouseEvent) => {
+  const handleInputFocusOut = (evt: MouseEvent) => {
     if (evt.target !== refElement.current) {
       setIsFocus(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleFocusOut);
-    return () => document.removeEventListener('click', handleFocusOut);
+    dispatch(setGuitarName(word));
+    document.addEventListener('click', handleInputFocusOut);
+    return () => document.removeEventListener('click', handleInputFocusOut);
   });
 
   return (
@@ -55,25 +56,8 @@ function Header(): JSX.Element {
           </ul>
         </nav>
         <div className="form-search">
-          <form
-            className="form-search__form"
-            onSubmit={(evt) => {
-              evt.preventDefault();
-              if (refElement.current?.value) {
-                dispatch(setGuitarName(`${refElement.current?.value}`));
-              }
-            }}
-          >
-            <button
-              className="form-search__submit"
-              type="submit"
-              onClick={(evt) => {
-                evt.preventDefault();
-                if (refElement.current?.value) {
-                  dispatch(setGuitarName(`${refElement.current?.value}`));
-                }
-              }}
-            >
+          <form className="form-search__form">
+            <button className="form-search__submit" type="submit">
               <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
                 <use xlinkHref="#icon-search"></use>
               </svg><span className="visually-hidden">Начать поиск</span>
@@ -84,15 +68,15 @@ function Header(): JSX.Element {
               autoComplete="off"
               placeholder="что вы ищите?"
               onChange={handleInputChange}
-              onFocus={handleFocusIn}
+              onFocus={handleInputFocusIn}
               ref={refElement}
             />
             <label className="visually-hidden" htmlFor="search">Поиск</label>
           </form>
           <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`} data-testid="search-list">
-            {searchedGuitars.map((guitar) => (
+            {guitars.map((guitar) => (
               <li key={nanoid(NUMBER_TO_ROUND)} className="form-search__select-item">
-                <Link to={`${AppRoute.Guitar}/${guitar.guitarId}`} className="form-search__select-item" tabIndex={0}>{guitar.guitarName}</Link>
+                <Link to={`${AppRoute.Guitar}/${guitar.id}`} className="form-search__select-item" tabIndex={0}>{guitar.name}</Link>
               </li>
             ))}
           </ul>

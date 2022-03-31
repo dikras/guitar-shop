@@ -4,6 +4,7 @@ import { AxiosInstance } from 'axios';
 import { State } from './state';
 
 export enum ActionType {
+  LoadGuitarsNoComments = 'guitars/loadGuitarsNoComments',
   LoadGuitars = 'guitars/loadGuitars',
   GetGuitarsTotalCount = 'guitars/getGuitarsTotalCount',
   ChangeSortingType = 'app/changeSortingType',

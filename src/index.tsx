@@ -4,10 +4,11 @@ import {Router as BrowserRouter} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import App from './components/app/app';
 import { createAPI } from './api';
-import { fetchGuitarsAction } from './store/api-action';
+import { fetchGuitars, fetchGuitarsNoComments } from './store/api-action';
 import { rootReducer } from './store/root-reducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
+import { APIRoute } from './const';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,7 +26,8 @@ const store = configureStore({
 
 const browserHistory = createBrowserHistory();
 
-store.dispatch(fetchGuitarsAction());
+store.dispatch(fetchGuitarsNoComments(APIRoute.GuitarsNoComments));
+store.dispatch(fetchGuitars());
 
 ReactDOM.render(
   <React.StrictMode>

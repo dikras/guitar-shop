@@ -1,7 +1,14 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import { Guitar } from '../types/guitar';
+import { Guitar, GuitarNoComments } from '../types/guitar';
 import { SortingType, SortingOrder, GuitarType } from '../const';
+
+export const loadGuitarsNoComments = createAction(
+  ActionType.LoadGuitarsNoComments,
+  (guitarsNoComments: GuitarNoComments[]) => ({
+    payload: guitarsNoComments,
+  }),
+);
 
 export const loadGuitars = createAction(
   ActionType.LoadGuitars,

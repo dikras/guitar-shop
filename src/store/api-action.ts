@@ -1,10 +1,20 @@
 import { ThunkActionResult } from '../types/actions';
 import { APIRoute, WarningMessage, PaginationNumber } from '../const';
-import { loadGuitars, getGuitarsTotalCount } from './action';
+import { loadGuitars, loadGuitarsNoComments, getGuitarsTotalCount } from './action';
 import { Guitar } from '../types/guitar';
 import { toast } from 'react-toastify';
 
-export const fetchGuitarsAction = (): ThunkActionResult =>
+export const fetchGuitarsNoComments = (url: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const response = await api.get<Guitar[]>(url);
+      dispatch(loadGuitarsNoComments(response.data));
+    } catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export const fetchGuitars = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
       const response = await api.get<Guitar[]>(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`);

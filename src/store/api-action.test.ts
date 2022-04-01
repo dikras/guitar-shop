@@ -31,7 +31,7 @@ describe('Async actions', () => {
       .onGet(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`)
       .reply(200, mockGuitars);
 
-    await store.dispatch(fetchGuitars());
+    await store.dispatch(fetchGuitars('', ''));
 
     expect(store.getActions()).toEqual([
       loadGuitars(mockGuitars),

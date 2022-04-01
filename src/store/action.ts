@@ -17,6 +17,13 @@ export const loadGuitars = createAction(
   }),
 );
 
+export const loadGuitarsSearch = createAction(
+  ActionType.LoadGuitarsSearch,
+  (guitarsSearch: GuitarNoComments[]) => ({
+    payload: guitarsSearch,
+  }),
+);
+
 export const getGuitarsTotalCount = createAction(
   ActionType.GetGuitarsTotalCount,
   (guitarsTotalCount: number) => ({

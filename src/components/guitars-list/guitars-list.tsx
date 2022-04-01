@@ -2,28 +2,23 @@ import GuitarCard from '../guitar-card/guitar-card';
 import { getGuitars } from '../../store/guitars-reducer/selectors';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchGuitarsNoComments, loadSortFilterGuitars } from '../../store/api-action';
+import { fetchGuitars } from '../../store/api-action';
 import {
-  getCurrentGuitarType,
-  getCurrentStringCount,
+  // getCurrentGuitarType,
+  // getCurrentStringCount,
   getCurrentUrl,
   getCurrentSortType,
-  getCurrentSortOrder,
-  getCurrentStartPrice,
-  getCurrentEndPricer
+  getCurrentSortOrder
 } from '../../store/app-reducer/selectors';
-import { getCurrentStartNumber, getIsPaginationDone } from '../../store/pagination-reducer/selectors';
-import { getCurrentGuitarName, getIsSearchDone } from '../../store/search-reducer/selectors';
+import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 import {
+  APIRoute,
   SortingType,
   SortingOrder,
-  GuitarType,
-  StringCount,
-  InitialPrice,
-  PaginationNumber,
+  // GuitarType,
+  // StringCount,
   NUMBER_TO_ROUND,
-  APIRoute,
-  QueryParamName
+  PaginationNumber
 } from '../../const';
 import { nanoid } from 'nanoid';
 
@@ -33,48 +28,58 @@ function GuitarsList(): JSX.Element {
 
   const currentSortingType = useSelector(getCurrentSortType);
   const currentSortingOrder = useSelector(getCurrentSortOrder);
-  const currentGuitarType = useSelector(getCurrentGuitarType);
-  const currentStringCount = useSelector(getCurrentStringCount);
+  // const currentGuitarType = useSelector(getCurrentGuitarType);
+  // const currentStringCount = useSelector(getCurrentStringCount);
 
-  const currentStartPrice = useSelector(getCurrentStartPrice);
-  const currentEndPrice = useSelector(getCurrentEndPricer);
+  // const currentStartPrice = useSelector(getCurrentStartPrice);
+  // const currentEndPrice = useSelector(getCurrentEndPricer);
 
-  const isPaginationDone = useSelector(getIsPaginationDone);
-  const isSearchDone = useSelector(getIsSearchDone);
+  // const isPaginationDone = useSelector(getIsPaginationDone);
 
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
-  const currentGuitarName = useSelector(getCurrentGuitarName);
-
-  const urlFilter = `${useSelector(getCurrentUrl)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+  const url = `${useSelector(getCurrentUrl)}`;
 
   let urlSort = '';
 
   if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
-    urlSort = `&_sort=${currentSortingType}&_order=${currentSortingOrder}`;
+    urlSort = `_sort=${currentSortingType}&_order=${currentSortingOrder}`;
   }
 
+  const urlNoComments = APIRoute.GuitarsNoComments;
+  const urlWithComments = `${APIRoute.Guitars}_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+
   useEffect(() => {
+    if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+      dispatch(fetchGuitars(`${urlNoComments}${url}${urlSort}`, `${urlWithComments}${url}${urlSort}`));
+    }
+  },[dispatch,
+    url,
+    urlSort,
+    currentSortingType,
+    currentSortingOrder,
+    urlNoComments,
+    urlWithComments,
+  ]);
+
+  /* useEffect(() => {
     if (currentGuitarType !== GuitarType.Default) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
     if (currentStringCount !== StringCount.Default) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
     if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
     if (currentStartPrice !== InitialPrice.Min) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
     if (currentEndPrice !== InitialPrice.Max) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
     if (isPaginationDone) {
-      dispatch(loadSortFilterGuitars(`${urlFilter}${urlSort}`));
-    }
-    if (currentGuitarName !== '') {
-      dispatch(fetchGuitarsNoComments(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${currentGuitarName}`));
+      dispatch(loadSortFilterGuitars(`${url}${urlSort}`));
     }
   },[dispatch,
     urlFilter,
@@ -86,10 +91,8 @@ function GuitarsList(): JSX.Element {
     currentStartPrice,
     currentEndPrice,
     currentStartNumber,
-    currentGuitarName,
     isPaginationDone,
-    isSearchDone,
-  ]);
+  ]); */
 
   return (
     <div className="cards catalog__cards" data-testid="guitars-catalog">

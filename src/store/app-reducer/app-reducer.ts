@@ -1,7 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { FilterProcess } from '../../types/state';
 import {
-  APIRoute,
   SortingType,
   SortingOrder,
   GuitarType,
@@ -24,7 +23,7 @@ const initialState: FilterProcess = {
   currentSortingOrder: SortingOrder.Default,
   currentStringCount: StringCount.Default,
   currentGuitarType: GuitarType.Default,
-  currentUrlFilter: APIRoute.Guitars,
+  currentUrlFilter: '',
   currentStartPrice: InitialPrice.Min,
   currentEndPrice: InitialPrice.Max,
 };

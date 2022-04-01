@@ -1,13 +1,14 @@
-import { getGuitarsNoComments } from '../../store/guitars-reducer/selectors';
+import { getGuitarsByName } from '../../store/guitars-reducer/selectors';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
-import { AppRoute, NUMBER_TO_ROUND } from '../../const';
+import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParamName } from '../../const';
 import { setGuitarName } from '../../store/action';
+import { loadGuitarsByName } from '../../store/api-action';
 
 function Header(): JSX.Element {
-  const guitars = useSelector(getGuitarsNoComments);
+  const guitars = useSelector(getGuitarsByName);
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
@@ -16,9 +17,11 @@ function Header(): JSX.Element {
   const refElement = useRef<HTMLInputElement | null>(null);
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setWord(evt.currentTarget.value);
-    if (evt.currentTarget.value !== '') {
+    const currentValue = evt.currentTarget.value;
+    setWord(currentValue);
+    if (currentValue !== '') {
       setIsFocus(true);
+      dispatch(loadGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${currentValue}`));
     } else {
       setIsFocus(false);
     }

@@ -15,7 +15,6 @@ import {
   createMockEndPrice
 } from '../../mocks/sort-filter-data';
 import { createMockStartNumber } from '../../mocks/pagination';
-import { createMockGuitarName } from '../../mocks/search';
 
 const mockStore = configureMockStore();
 
@@ -37,9 +36,6 @@ const store = mockStore({
   },
   PAGINATION: {
     currentStartNumber: createMockStartNumber(),
-  },
-  SEARCH: {
-    currentGuitarName: createMockGuitarName(),
   },
 });
 describe('Component: Header', () => {

@@ -35,7 +35,7 @@ function Pagination(): JSX.Element {
             dispatch(setStartNumber((currentPage - (pages.length -1)) * PaginationNumber.Limit));
           }}
         >
-          <Link to={`/catalog/page_${currentPage - 1}`} className="link pagination__page-link">Назад</Link>
+          <Link to={`/page_${currentPage - 1}`} className="link pagination__page-link">Назад</Link>
         </li>}
         {pages.map((page) => (
           <li
@@ -47,7 +47,7 @@ function Pagination(): JSX.Element {
               dispatch(setStartNumber((page - 1) * PaginationNumber.Limit));
             }}
           >
-            <Link to={`/catalog/page_${page}`} className="link pagination__page-link" href={`${page}`}>{page}</Link>
+            <Link to={`/page_${page}`} className="link pagination__page-link" href={`${page}`}>{page}</Link>
           </li>
         ))}
         {currentPage !== lastElement &&
@@ -61,7 +61,7 @@ function Pagination(): JSX.Element {
           }}
           data-testid="button-next"
         >
-          <Link to={`/catalog/page_${currentPage + 1}`} className="link pagination__page-link">Далее</Link>
+          <Link to={`/page_${currentPage + 1}`} className="link pagination__page-link">Далее</Link>
         </li>}
       </ul>
     </div>

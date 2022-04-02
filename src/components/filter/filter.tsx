@@ -150,6 +150,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isAcousticChecked}
+            disabled={isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked && !isTwelveStringsChecked}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
         </div>
@@ -169,6 +170,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isElectricChecked}
+            disabled={isTwelveStringsChecked && !isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked}
             data-testid="checkbox-electric"
           />
           <label htmlFor="electric">Электрогитары</label>
@@ -189,6 +191,7 @@ function Filter(): JSX.Element {
               }
             }}
             checked={isUkuleleChecked}
+            disabled={(isSixStringsChecked || isSevenStringsChecked || isTwelveStringsChecked) && !isFourStringsChecked}
           />
           <label htmlFor="ukulele">Укулеле</label>
         </div>

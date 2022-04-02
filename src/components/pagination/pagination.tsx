@@ -50,7 +50,7 @@ function Pagination(): JSX.Element {
             <Link to={`/page_${page}`} className="link pagination__page-link" href={`${page}`}>{page}</Link>
           </li>
         ))}
-        {currentPage !== lastElement &&
+        {(currentPage !== lastElement && pagesCount !== 1) &&
         <li
           className="pagination__page pagination__page--next"
           id="next"

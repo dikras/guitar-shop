@@ -51,6 +51,7 @@ function Sort(): JSX.Element {
             dispatch(changeSortingOrder(SortingOrder.LowToHigh));
           }}
           data-testid="sort-button-asc"
+          style={isSortOrderLowToHigh ? {borderBottomColor: '#131212'} : {borderBottomColor: '#a49e9e'}}
         >
         </button>
         <button

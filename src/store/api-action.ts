@@ -1,36 +1,50 @@
 import { ThunkActionResult } from '../types/actions';
 import { APIRoute, WarningMessage, PaginationNumber } from '../const';
-import { loadGuitars, loadGuitarsNoComments, getGuitarsTotalCount } from './action';
-import { Guitar } from '../types/guitar';
+import { loadGuitars, loadGuitarsNoComments, getGuitarsTotalCount, loadGuitarsByName } from './action';
+import { Guitar, GuitarNoComments } from '../types/guitar';
 import { toast } from 'react-toastify';
 
-export const fetchGuitarsNoComments = (url: string): ThunkActionResult =>
+export const initialFetchGuitars = (): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const response = await api.get<Guitar[]>(url);
-      dispatch(loadGuitarsNoComments(response.data));
+      const responseNoComments = await api.get<GuitarNoComments[]>(APIRoute.GuitarsNoComments);
+      const responseWithComments = await api.get<Guitar[]>(`${APIRoute.Guitars}_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`);
+      dispatch(loadGuitarsNoComments(responseNoComments.data));
+      dispatch(loadGuitars(responseWithComments.data));
+      dispatch(getGuitarsTotalCount(responseWithComments.headers['x-total-count']));
     } catch {
       toast.warn(WarningMessage.FetchFail);
     }
   };
 
-export const fetchGuitars = (): ThunkActionResult =>
+export const fetchGuitarsByName = (url: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const response = await api.get<Guitar[]>(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`);
-      dispatch(loadGuitars(response.data));
-      dispatch(getGuitarsTotalCount(response.headers['x-total-count']));
+      const { data } = await api.get<GuitarNoComments[]>(url);
+      dispatch(loadGuitarsByName(data));
     } catch {
       toast.warn(WarningMessage.FetchFail);
     }
   };
 
-export const loadSortFilterGuitars = (urlSortFilter: string): ThunkActionResult =>
+export const loadSortedGuitars = (urlSort: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const response = await api.get<Guitar[]>(urlSortFilter);
+      const response = await api.get<Guitar[]>(urlSort);
       dispatch(loadGuitars(response.data));
-      dispatch(getGuitarsTotalCount(response.headers['x-total-count']));
+    } catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export const loadFilteredGuitars = (filterNoCommentsURL: string, filterWithCommentsURL: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const responseNoComments = await api.get<GuitarNoComments[]>(filterNoCommentsURL);
+      const responseWithComments = await api.get<Guitar[]>(filterWithCommentsURL);
+      dispatch(loadGuitarsNoComments(responseNoComments.data));
+      dispatch(loadGuitars(responseWithComments.data));
+      dispatch(getGuitarsTotalCount(responseWithComments.headers['x-total-count']));
     } catch {
       toast.warn(WarningMessage.FetchFail);
     }

@@ -6,6 +6,7 @@ import { State } from './state';
 export enum ActionType {
   LoadGuitarsNoComments = 'guitars/loadGuitarsNoComments',
   LoadGuitars = 'guitars/loadGuitars',
+  LoadGuitarsByName = 'guitars/loadGuitarsByName',
   GetGuitarsTotalCount = 'guitars/getGuitarsTotalCount',
   ChangeSortingType = 'app/changeSortingType',
   ChangeSortingOrder = 'app/changeSortingOrder',

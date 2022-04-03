@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
-import { GuitarType, StringCount, FilterQueryParam, ENTER_KEY } from '../../const';
+import { useEffect, useState } from 'react';
+import { APIRoute, GuitarType, StringCount, FilterQueryParam, ENTER_KEY, PaginationNumber } from '../../const';
 import {
   addFilterAction,
   changeGuitarType,
@@ -9,10 +9,23 @@ import {
   setStartPrice,
   setEndPrice
 } from '../../store/action';
+import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
+import { getCurrentSortFilterURL, getCurrentGuitarType } from '../../store/app-reducer/selectors';
+import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
 function Filter(): JSX.Element {
+  const currentSortFilterURL = useSelector(getCurrentSortFilterURL);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
+  const currentGuitarType = useSelector(getCurrentGuitarType);
+  const guitarMinPrice = useSelector(getGuitarMinPrice);
+  const guitarMaxPrice = useSelector(getGuitarMaxPrice);
+
+  const urlFilterNoComments = `${APIRoute.GuitarsNoComments}?${currentSortFilterURL}`;
+  const urlFilterWithComments = `${APIRoute.Guitars}${currentSortFilterURL}_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+
   const dispatch = useDispatch();
+
   const [ isAcousticChecked, setIsAcousticChecked ] = useState(false);
   const [ isElectricChecked, setIsElectricChecked ] = useState(false);
   const [ isUkuleleChecked, setIsUkuleleChecked ] = useState(false);
@@ -21,9 +34,6 @@ function Filter(): JSX.Element {
   const [ isSixStringsChecked, setIsSixStringsChecked ] = useState(false);
   const [ isSevenStringsChecked, setIsSevenStringsChecked ] = useState(false);
   const [ isTwelveStringsChecked, setIsTwelveStringsChecked ] = useState(false);
-
-  const guitarMinPrice = useSelector(getGuitarMinPrice);
-  const guitarMaxPrice = useSelector(getGuitarMaxPrice);
 
   const minFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
   const maxFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
@@ -94,6 +104,12 @@ function Filter(): JSX.Element {
       dispatch(removeFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
     }
   };
+
+  useEffect(() => {
+    if (currentGuitarType !== GuitarType.Default) {
+      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+    }
+  }, [dispatch, currentGuitarType, urlFilterNoComments, urlFilterWithComments]);
 
   return (
     <form

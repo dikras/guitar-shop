@@ -25,13 +25,13 @@ export const ImageSize = {
 };
 
 export enum FilterQueryParam {
-  Acoustic = '&type=acoustic&',
-  Electric = '&type=electric&',
-  Ukulele = '&type=ukulele&',
-  FourString = '&stringCount=4&',
-  SixString = '&stringCount=6&',
-  SevenString = '&stringCount=7&',
-  TwelveString = '&stringCount=12&',
+  Acoustic = 'type=acoustic&',
+  Electric = 'type=electric&',
+  Ukulele = 'type=ukulele&',
+  FourString = 'stringCount=4&',
+  SixString = 'stringCount=6&',
+  SevenString = 'stringCount=7&',
+  TwelveString = 'stringCount=12&',
   SortByPrice = '&_sort=price&',
   SortByRating = '&_sort=rating&',
   SortLowToHigh = '&_order=asc&',

@@ -4,11 +4,11 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { APIRoute, PaginationNumber, FilterQueryParam } from '../const';
+import { APIRoute, FilterQueryParam } from '../const';
 import { createMockGuitars } from '../mocks/guitars';
 import { createMockUrlFilter } from '../mocks/sort-filter-data';
 import { loadGuitars } from '../store/action';
-import { fetchGuitars, loadSortFilterGuitars } from '../store/api-action';
+import { loadFilteredGuitars } from '../store/api-action';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -24,7 +24,7 @@ describe('Async actions', () => {
   const mockGuitars = createMockGuitars();
   const mockUrlFilter = createMockUrlFilter();
 
-  it('should dispatch loadGuitars when GET /guitars?_embed=comments&', async () => {
+  /* it('should dispatch loadGuitars when GET /guitars?_embed=comments&', async () => {
     const store = mockStore();
 
     mockAPI
@@ -36,7 +36,7 @@ describe('Async actions', () => {
     expect(store.getActions()).toEqual([
       loadGuitars(mockGuitars),
     ]);
-  });
+  }); */
 
   it('should dispatch loadGuitars when GET /guitars?_embed=comments&&_sort=price&', async () => {
     const store = mockStore();
@@ -45,7 +45,7 @@ describe('Async actions', () => {
       .onGet(`${APIRoute.Guitars}${FilterQueryParam.SortByPrice}`)
       .reply(200, mockGuitars);
 
-    await store.dispatch(loadSortFilterGuitars(`${APIRoute.Guitars}${mockUrlFilter}`));
+    await store.dispatch(loadFilteredGuitars(`${APIRoute.GuitarsNoComments}${mockUrlFilter}`, `${APIRoute.Guitars}${mockUrlFilter}`));
 
     expect(store.getActions()).toEqual([
       loadGuitars(mockGuitars),

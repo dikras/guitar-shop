@@ -1,13 +1,14 @@
-import { getGuitarsNoComments } from '../../store/guitars-reducer/selectors';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
-import { AppRoute, NUMBER_TO_ROUND } from '../../const';
+import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParamName } from '../../const';
 import { setGuitarName } from '../../store/action';
+import { fetchGuitarsByName } from '../../store/api-action';
+import { getGuitarsByName } from '../../store/search-reducer/selectors';
 
 function Header(): JSX.Element {
-  const guitars = useSelector(getGuitarsNoComments);
+  const guitars = useSelector(getGuitarsByName);
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
@@ -38,9 +39,12 @@ function Header(): JSX.Element {
 
   useEffect(() => {
     dispatch(setGuitarName(word));
+    if (word !== '') {
+      dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${word}`));
+    }
     document.addEventListener('click', handleInputFocusOut);
     return () => document.removeEventListener('click', handleInputFocusOut);
-  });
+  }, [dispatch, word]);
 
   return (
     <header className="header" id="header" data-testid="header-block">

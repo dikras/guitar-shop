@@ -13,19 +13,20 @@ export type FilterProcess = {
   currentStringCount: StringCount,
   currentSortingType: SortingType,
   currentSortingOrder: SortingOrder,
-  currentUrlFilter: string,
+  currentSortFilterURL: string,
   currentStartPrice: number,
   currentEndPrice: number,
 };
 
 export type PaginationProcess = {
   currentStartNumber: number,
-  isPaginationDone: boolean;
+  isPaginationDone: boolean,
 };
 
 export type SearchGuitarByNameProcess = {
   currentGuitarName: string,
   isSearchDone: boolean,
+  guitarsByName: GuitarNoComments[],
 };
 
 export type State = RootState;

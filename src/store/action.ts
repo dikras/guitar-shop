@@ -17,10 +17,10 @@ export const loadGuitars = createAction(
   }),
 );
 
-export const loadGuitarsSearch = createAction(
-  ActionType.LoadGuitarsSearch,
-  (guitarsSearch: GuitarNoComments[]) => ({
-    payload: guitarsSearch,
+export const loadGuitarsByName = createAction(
+  ActionType.LoadGuitarsByName,
+  (guitarsByName: GuitarNoComments[]) => ({
+    payload: guitarsByName,
   }),
 );
 

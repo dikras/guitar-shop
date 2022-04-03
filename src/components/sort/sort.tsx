@@ -1,11 +1,15 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { getCurrentSortType, getCurrentSortOrder, getCurrentSortFilterURL } from '../../store/app-reducer/selectors';
 import { changeSortingType, changeSortingOrder } from '../../store/action';
-import { SortingType, SortingOrder } from '../../const';
+import { SortingType, SortingOrder, PaginationNumber } from '../../const';
+import { loadSortedGuitars } from '../../store/api-action';
+import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
 function Sort(): JSX.Element {
   const currentSortingType = useSelector(getCurrentSortType);
   const currentSortingOrder = useSelector(getCurrentSortOrder);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
 
   const isSortTypeByPrice = currentSortingType === SortingType.ByPrice;
   const isSortTypeByRating = currentSortingType === SortingType.ByRating;
@@ -13,7 +17,27 @@ function Sort(): JSX.Element {
   const isSortOrderLowToHigh = currentSortingOrder === SortingOrder.LowToHigh;
   const isSortOrderHighToLow = currentSortingOrder === SortingOrder.HighToLow;
 
+  const currentURL = `${useSelector(getCurrentSortFilterURL)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+
+  let sortURL = '';
+
+  if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+    sortURL = `&_sort=${currentSortingType}&_order=${currentSortingOrder}`;
+  }
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+      dispatch(loadSortedGuitars(`${currentURL}${sortURL}`));
+    }
+  },[dispatch,
+    currentURL,
+    sortURL,
+    currentSortingType,
+    currentSortingOrder,
+    currentStartNumber,
+  ]);
 
   return (
     <div className="catalog-sort">

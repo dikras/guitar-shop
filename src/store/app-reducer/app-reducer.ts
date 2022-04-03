@@ -23,7 +23,7 @@ const initialState: FilterProcess = {
   currentSortingOrder: SortingOrder.Default,
   currentStringCount: StringCount.Default,
   currentGuitarType: GuitarType.Default,
-  currentUrlFilter: '',
+  currentSortFilterURL: '',
   currentStartPrice: InitialPrice.Min,
   currentEndPrice: InitialPrice.Max,
 };
@@ -43,10 +43,10 @@ const appReducer = createReducer(initialState, (builder) => {
       state.currentStringCount = action.payload;
     })
     .addCase(addFilterAction, (state, action) => {
-      state.currentUrlFilter += action.payload;
+      state.currentSortFilterURL += action.payload;
     })
     .addCase(removeFilterAction, (state, action) => {
-      state.currentUrlFilter = state.currentUrlFilter.replace(action.payload, '');
+      state.currentSortFilterURL = state.currentSortFilterURL.replace(action.payload, '');
     })
     .addCase(setStartPrice, (state, action) => {
       state.currentStartPrice = action.payload;

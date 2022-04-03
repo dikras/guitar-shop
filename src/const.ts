@@ -32,12 +32,12 @@ export enum FilterQueryParam {
   SixString = 'stringCount=6&',
   SevenString = 'stringCount=7&',
   TwelveString = 'stringCount=12&',
-  SortByPrice = '_sort=price&',
-  SortByRating = '_sort=rating&',
-  SortLowToHigh = '_order=asc&',
-  SortHighToLow = '_order=desc&',
-  FilterStartPrice = 'price_gte=',
-  FilterEndPrice = 'price_lte=',
+  SortByPrice = '&_sort=price&',
+  SortByRating = '&_sort=rating&',
+  SortLowToHigh = '&_order=asc&',
+  SortHighToLow = '&_order=desc&',
+  FilterStartPrice = '&price_gte=',
+  FilterEndPrice = '&price_lte=',
 }
 
 export enum QueryParamName {

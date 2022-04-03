@@ -1,11 +1,11 @@
-import { getGuitarsByName } from '../../store/guitars-reducer/selectors';
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
 import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParamName } from '../../const';
 import { setGuitarName } from '../../store/action';
-import { loadGuitarsByName } from '../../store/api-action';
+import { fetchGuitarsByName } from '../../store/api-action';
+import { getGuitarsByName } from '../../store/search-reducer/selectors';
 
 function Header(): JSX.Element {
   const guitars = useSelector(getGuitarsByName);
@@ -17,11 +17,9 @@ function Header(): JSX.Element {
   const refElement = useRef<HTMLInputElement | null>(null);
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const currentValue = evt.currentTarget.value;
-    setWord(currentValue);
-    if (currentValue !== '') {
+    setWord(evt.currentTarget.value);
+    if (evt.currentTarget.value !== '') {
       setIsFocus(true);
-      dispatch(loadGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${currentValue}`));
     } else {
       setIsFocus(false);
     }
@@ -41,9 +39,12 @@ function Header(): JSX.Element {
 
   useEffect(() => {
     dispatch(setGuitarName(word));
+    if (word !== '') {
+      dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${word}`));
+    }
     document.addEventListener('click', handleInputFocusOut);
     return () => document.removeEventListener('click', handleInputFocusOut);
-  });
+  }, [dispatch, word]);
 
   return (
     <header className="header" id="header" data-testid="header-block">

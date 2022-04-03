@@ -5,7 +5,6 @@ import { RootState } from '../store/root-reducer';
 export type GuitarsData = {
   guitarsNoComments: GuitarNoComments[],
   guitars: Guitar[],
-  guitarsSearch: GuitarNoComments[],
   guitarsTotalCount: number,
 };
 
@@ -14,7 +13,7 @@ export type FilterProcess = {
   currentStringCount: StringCount,
   currentSortingType: SortingType,
   currentSortingOrder: SortingOrder,
-  currentUrlFilter: string,
+  currentSortFilterURL: string,
   currentStartPrice: number,
   currentEndPrice: number,
 };
@@ -26,6 +25,8 @@ export type PaginationProcess = {
 
 export type SearchGuitarByNameProcess = {
   currentGuitarName: string,
+  isSearchDone: boolean,
+  guitarsByName: GuitarNoComments[],
 };
 
 export type State = RootState;

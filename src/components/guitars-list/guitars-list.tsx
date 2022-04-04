@@ -4,19 +4,38 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { loadFilteredGuitars } from '../../store/api-action';
 import {
-  getCurrentSortFilterURL
+  getCurrentGuitarType,
+  getCurrentStringCount,
+  getCurrentSortFilterURL,
+  getCurrentSortType,
+  getCurrentSortOrder,
+  getCurrentStartPrice,
+  getCurrentEndPricer
 } from '../../store/app-reducer/selectors';
 import { getCurrentStartNumber, getIsPaginationDone } from '../../store/pagination-reducer/selectors';
 import {
   APIRoute,
+  SortingType,
+  SortingOrder,
+  StringCount,
+  InitialPrice,
   PaginationNumber,
-  NUMBER_TO_ROUND
+  NUMBER_TO_ROUND,
+  GuitarType
 } from '../../const';
 import { nanoid } from 'nanoid';
 
 function GuitarsList(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const dispatch = useDispatch();
+
+  const currentSortingType = useSelector(getCurrentSortType);
+  const currentSortingOrder = useSelector(getCurrentSortOrder);
+  const currentGuitarType = useSelector(getCurrentGuitarType);
+  const currentStringCount = useSelector(getCurrentStringCount);
+
+  const currentStartPrice = useSelector(getCurrentStartPrice);
+  const currentEndPrice = useSelector(getCurrentEndPricer);
 
   const isPaginationDone = useSelector(getIsPaginationDone);
 
@@ -25,13 +44,37 @@ function GuitarsList(): JSX.Element {
   const urlFilterNoComments = `${APIRoute.GuitarsNoComments}?${useSelector(getCurrentSortFilterURL)}`;
   const urlFilterWithComments = `${APIRoute.Guitars}${useSelector(getCurrentSortFilterURL)}_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
 
+  let urlSort = '';
+
+  if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+    urlSort = `&_sort=${currentSortingType}&_order=${currentSortingOrder}`;
+  }
+
   useEffect(() => {
+    if (currentGuitarType !== GuitarType.Default) {
+      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+    }
+    if (currentStringCount !== StringCount.Default) {
+      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+    }
+    if (currentStartPrice !== InitialPrice.Min) {
+      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+    }
+    if (currentEndPrice !== InitialPrice.Max) {
+      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+    }
     if (isPaginationDone) {
       dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
     }
   },[dispatch,
     urlFilterNoComments,
     urlFilterWithComments,
+    urlSort,
+    currentGuitarType,
+    currentStringCount,
+    currentStartPrice,
+    currentEndPrice,
+    currentStartNumber,
     isPaginationDone,
   ]);
 

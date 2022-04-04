@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentSortType, getCurrentSortOrder, getCurrentSortFilterURL } from '../../store/app-reducer/selectors';
 import { changeSortingType, changeSortingOrder } from '../../store/action';
-import { SortingType, SortingOrder, PaginationNumber } from '../../const';
+import { SortingType, SortingOrder, PaginationNumber, APIRoute } from '../../const';
 import { loadSortedGuitars } from '../../store/api-action';
 import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
@@ -17,7 +17,7 @@ function Sort(): JSX.Element {
   const isSortOrderLowToHigh = currentSortingOrder === SortingOrder.LowToHigh;
   const isSortOrderHighToLow = currentSortingOrder === SortingOrder.HighToLow;
 
-  const currentURL = `${useSelector(getCurrentSortFilterURL)}&_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
+  const currentURL = `${APIRoute.Guitars}${useSelector(getCurrentSortFilterURL)}_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
 
   let sortURL = '';
 

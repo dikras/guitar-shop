@@ -41,9 +41,6 @@ function FilterPrice(): JSX.Element {
     if (Number(currentStartValue) >= 0) {
       setMinPrice(currentStartValue);
     }
-    if (minPrice === '') {
-      dispatch(removeFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
-    }
   };
 
   const handleMaxInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,9 +58,6 @@ function FilterPrice(): JSX.Element {
         dispatch(setStartPrice(Number(minPrice)));
         dispatch(addFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}&`));
       }
-    }
-    if (minPrice === '') {
-      dispatch(removeFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}&`));
     }
   };
 
@@ -97,9 +91,6 @@ function FilterPrice(): JSX.Element {
         dispatch(setEndPrice(Number(maxPrice)));
         dispatch(addFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
       }
-    }
-    if (maxPrice === '') {
-      dispatch(removeFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
     }
   };
 

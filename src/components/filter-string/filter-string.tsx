@@ -56,6 +56,7 @@ function FilterString(props: FilterStringProps): JSX.Element {
   useEffect(() => {
     if (currentStringCount !== StringCount.Default) {
       dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
+
     }
   }, [
     dispatch,

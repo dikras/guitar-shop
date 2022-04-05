@@ -4,7 +4,7 @@ import {Router as BrowserRouter} from 'react-router-dom';
 import {createBrowserHistory} from 'history';
 import App from './components/app/app';
 import { createAPI } from './api';
-import { initialFetchGuitars } from './store/api-action';
+// import { initialFetchGuitars } from './store/api-action';
 import { rootReducer } from './store/root-reducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
@@ -25,7 +25,7 @@ const store = configureStore({
 
 const browserHistory = createBrowserHistory();
 
-store.dispatch(initialFetchGuitars());
+// store.dispatch(initialFetchGuitars());
 
 ReactDOM.render(
   <React.StrictMode>

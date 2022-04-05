@@ -4,11 +4,11 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { APIRoute, FilterQueryParam } from '../const';
-import { createMockGuitars } from '../mocks/guitars';
-import { createMockUrlFilter } from '../mocks/sort-filter-data';
-import { loadGuitars } from '../store/action';
-import { loadFilteredGuitars } from '../store/api-action';
+import { APIRoute, QueryParamName } from '../const';
+import { createMockGuitarsWithoutComments } from '../mocks/guitars';
+import { loadGuitarsByName } from '../store/action';
+import { fetchGuitarsByName } from '../store/api-action';
+import {lorem} from 'faker';
 
 describe('Async actions', () => {
   const api = createAPI();
@@ -21,34 +21,19 @@ describe('Async actions', () => {
     ThunkDispatch<State, typeof api, Action>
   >(middlewares);
 
-  const mockGuitars = createMockGuitars();
-  const mockUrlFilter = createMockUrlFilter();
+  const mockGuitarsWithoutComments = createMockGuitarsWithoutComments();
 
-  /* it('should dispatch loadGuitars when GET /guitars?_embed=comments&', async () => {
+  it('should dispatch loadGuitarsByName when GET /guitars?name_like=word', async () => {
     const store = mockStore();
 
     mockAPI
-      .onGet(`${APIRoute.Guitars}&_start=${PaginationNumber.InitialStart}&_limit=${PaginationNumber.Limit}`)
-      .reply(200, mockGuitars);
+      .onGet(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${lorem.word}`)
+      .reply(200, mockGuitarsWithoutComments);
 
-    await store.dispatch(fetchGuitars('', ''));
-
-    expect(store.getActions()).toEqual([
-      loadGuitars(mockGuitars),
-    ]);
-  }); */
-
-  it('should dispatch loadGuitars when GET /guitars?_embed=comments&&_sort=price&', async () => {
-    const store = mockStore();
-
-    mockAPI
-      .onGet(`${APIRoute.Guitars}${FilterQueryParam.SortByPrice}`)
-      .reply(200, mockGuitars);
-
-    await store.dispatch(loadFilteredGuitars(`${APIRoute.GuitarsNoComments}${mockUrlFilter}`, `${APIRoute.Guitars}${mockUrlFilter}`));
+    await store.dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${lorem.word}`));
 
     expect(store.getActions()).toEqual([
-      loadGuitars(mockGuitars),
+      loadGuitarsByName(mockGuitarsWithoutComments),
     ]);
   });
 

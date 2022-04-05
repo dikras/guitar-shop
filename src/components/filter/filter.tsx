@@ -1,30 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { APIRoute, GuitarType, StringCount, FilterQueryParam, ENTER_KEY, PaginationNumber } from '../../const';
-import {
-  addFilterAction,
-  changeGuitarType,
-  changeStringCount,
-  removeFilterAction,
-  setStartPrice,
-  setEndPrice
-} from '../../store/action';
+import { useHistory } from 'react-router-dom';
+import { ENTER_KEY, SortingOrder, SortingType, PaginationNumber } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
-import { getCurrentSortFilterURL, getCurrentGuitarType } from '../../store/app-reducer/selectors';
-import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
+import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
+import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
 
 function Filter(): JSX.Element {
-  const currentSortFilterURL = useSelector(getCurrentSortFilterURL);
-  const currentStartNumber = useSelector(getCurrentStartNumber);
-  const currentGuitarType = useSelector(getCurrentGuitarType);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);
-
-  const urlFilterNoComments = `${APIRoute.GuitarsNoComments}?${currentSortFilterURL}`;
-  const urlFilterWithComments = `${APIRoute.Guitars}${currentSortFilterURL}_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}`;
-
-  const dispatch = useDispatch();
+  const currentSortingType = useSelector(getCurrentSortType);
+  const currentSortingOrder = useSelector(getCurrentSortOrder);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
+  const currentPage = useSelector(getCurrentPage);
 
   const [ isAcousticChecked, setIsAcousticChecked ] = useState(false);
   const [ isElectricChecked, setIsElectricChecked ] = useState(false);
@@ -41,75 +33,43 @@ function Filter(): JSX.Element {
   const [ minPrice, setMinPrice ] = useState('');
   const [ maxPrice, setMaxPrice ] = useState('');
 
-  const handleMinInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const currentStartValue = evt.target.value;
-    if (Number(currentStartValue) >= 0) {
-      setMinPrice(currentStartValue);
-    }
-  };
+  const [acousticParam, setAcousticParam] = useState('');
+  const [electricParam, setElectricParam] = useState('');
+  const [ukuleleParam, setUkuleleParam] = useState('');
 
-  const handleMaxInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const currentEndValue = evt.target.value;
-    if (Number(currentEndValue) >= 0) {
-      setMaxPrice(evt.target.value);
-    }
-  };
+  const [fourStringsParam, setFourStringsParam] = useState('');
+  const [sixStringsParam, setSixStringsParam] = useState('');
+  const [sevenStringsParam, setSevenStringsParam] = useState('');
+  const [twelveStringsParam, setTwelveStringsParam] = useState('');
 
-  const handleMinInputBlur = () => {
-    if (minPrice) {
-      if (Number(minPrice) < guitarMinPrice || Number(minPrice) > guitarMaxPrice) {
-        setMinPrice(minFormatPrice.toString());
-      } else {
-        dispatch(setStartPrice(Number(minPrice)));
-        dispatch(addFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}&`));
-      }
-    }
-  };
+  const [minPriceParam, setMinPriceParam] = useState('');
+  const [maxPriceParam, setMaxPriceParam] = useState('');
 
-  const handleMinKeyDown = (evt: React.KeyboardEvent) => {
-    if (evt.key === ENTER_KEY && minPrice) {
-      if (Number(minPrice) < guitarMinPrice) {
-        setMinPrice(minFormatPrice.toString());
-      } else {
-        dispatch(setStartPrice(Number(minPrice)));
-        dispatch(addFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}&`));
-      }
-    }
-  };
+  const guitarTypeParam = `${acousticParam}${electricParam}${ukuleleParam}`;
+  const stringCountParam = `${fourStringsParam}${sixStringsParam}${sevenStringsParam}${twelveStringsParam}`;
+  const priceParam = `${minPriceParam}${maxPriceParam}`;
 
-  const handleMaxKeyDown = (evt: React.KeyboardEvent) => {
-    if (evt.key === ENTER_KEY && maxPrice) {
-      if (Number(maxPrice) > guitarMaxPrice) {
-        setMaxPrice(maxFormatPrice.toString());
-      } else {
-        dispatch(setEndPrice(Number(maxPrice)));
-        dispatch(addFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}&`));
-      }
-    }
-  };
+  let sortParam = '';
 
-  const handleMaxInputBlur = () => {
-    if (maxPrice) {
-      if (Number(maxPrice) > guitarMaxPrice || Number(maxPrice) < guitarMinPrice) {
-        setMaxPrice(maxFormatPrice.toString());
-      } else {
-        dispatch(setEndPrice(Number(maxPrice)));
-        dispatch(addFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}&`));
-      }
-    }
-  };
+  if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
+    sortParam = `${currentSortingType ? '&' : ''}_sort=${currentSortingType}&_order=${currentSortingOrder}`;
+  }
+
+  const filter = `_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}${guitarTypeParam ? '&' :
+    ''}${guitarTypeParam}${stringCountParam ? '&' :
+    ''}${stringCountParam}${priceParam ? '&' :
+    ''}${priceParam}${sortParam}`;
 
   useEffect(() => {
-    if (currentGuitarType !== GuitarType.Default) {
-      dispatch(loadFilteredGuitars(urlFilterNoComments, urlFilterWithComments));
-    }
-    if (minPrice === '') {
-      dispatch(removeFilterAction(`${FilterQueryParam.FilterStartPrice}${minPrice}`));
-    }
-    if (maxPrice === '') {
-      dispatch(removeFilterAction(`${FilterQueryParam.FilterEndPrice}${maxPrice}`));
-    }
-  }, [dispatch, minPrice, maxPrice, currentGuitarType, urlFilterNoComments, urlFilterWithComments]);
+    dispatch(loadFilteredGuitars(filter));
+  }, [dispatch, filter]);
+
+  useEffect(() => {
+    history.push({
+      pathname: `page_${currentPage}`,
+      search: filter,
+    });
+  }, [history, filter, currentPage]);
 
   return (
     <form
@@ -127,9 +87,37 @@ function Filter(): JSX.Element {
               placeholder={`${minFormatPrice}`}
               id="priceMin"
               name="от"
-              onChange={handleMinInputChange}
-              onBlur={handleMinInputBlur}
-              onKeyDown={handleMinKeyDown}
+              onChange={(evt) => {
+                const currentStartValue = evt.target.value;
+                if (Number(currentStartValue) >= 0) {
+                  setMinPrice(currentStartValue);
+                }
+                if(!currentStartValue) {
+                  setMinPriceParam('');
+                }
+              }}
+              onBlur={(evt) => {
+                const currentStartPrice = evt.target.value;
+                if (Number(currentStartPrice) < guitarMinPrice || Number(currentStartPrice) > guitarMaxPrice) {
+                  setMinPrice(minFormatPrice.toString());
+                } else {
+                  setMinPrice(currentStartPrice);
+                  setMinPriceParam(`price_gte=${currentStartPrice}&`);
+                }
+                if(!currentStartPrice) {
+                  setMinPriceParam('');
+                }
+              }}
+              onKeyDown={(evt) => {
+                const currentStartPrice = evt.currentTarget.value;
+                if (evt.key === ENTER_KEY && currentStartPrice) {
+                  if (Number(currentStartPrice) < guitarMinPrice || Number(currentStartPrice) > guitarMaxPrice) {
+                    setMinPrice(minFormatPrice.toString());
+                  } else {
+                    setMinPriceParam(`price_gte=${currentStartPrice}&`);
+                  }
+                }
+              }}
               value={minPrice}
             />
           </div>
@@ -140,9 +128,37 @@ function Filter(): JSX.Element {
               placeholder={`${maxFormatPrice}`}
               id="priceMax"
               name="до"
-              onChange={handleMaxInputChange}
-              onBlur={handleMaxInputBlur}
-              onKeyDown={handleMaxKeyDown}
+              onChange={(evt) => {
+                const currentEndValue = evt.target.value;
+                if (Number(currentEndValue) >= 0) {
+                  setMaxPrice(currentEndValue);
+                }
+                if(!currentEndValue) {
+                  setMinPriceParam('');
+                }
+              }}
+              onBlur={(evt) => {
+                const currentEndPrice = evt.target.value;
+                if (Number(currentEndPrice) < guitarMinPrice || Number(currentEndPrice) > guitarMaxPrice) {
+                  setMaxPrice(maxFormatPrice.toString());
+                } else {
+                  setMaxPrice(currentEndPrice);
+                  setMaxPriceParam(`price_lte=${currentEndPrice}&`);
+                }
+                if(!currentEndPrice) {
+                  setMaxPriceParam('');
+                }
+              }}
+              onKeyDown={(evt) => {
+                const currentEndPrice = evt.currentTarget.value;
+                if (evt.key === ENTER_KEY && currentEndPrice) {
+                  if (Number(currentEndPrice) < guitarMinPrice || Number(currentEndPrice) > guitarMaxPrice) {
+                    setMaxPrice(maxFormatPrice.toString());
+                  } else {
+                    setMaxPriceParam(`price_lte=${currentEndPrice}&`);
+                  }
+                }
+              }}
               value={maxPrice}
             />
           </div>
@@ -156,16 +172,14 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="acoustic"
             name="acoustic"
-            onChange={() => {
+            onChange={(evt) => {
               setIsAcousticChecked(!isAcousticChecked);
-              if (!isAcousticChecked) {
-                dispatch(changeGuitarType(GuitarType.Acoustic));
-                dispatch(addFilterAction(FilterQueryParam.Acoustic));
+              if (evt.target.checked) {
+                setAcousticParam(`type=${evt.target.name}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.Acoustic));
+                setAcousticParam('');
               }
             }}
-            checked={isAcousticChecked}
             disabled={isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked && !isTwelveStringsChecked}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
@@ -176,16 +190,14 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="electric"
             name="electric"
-            onChange={() => {
+            onChange={(evt) => {
               setIsElectricChecked(!isElectricChecked);
-              if (!isElectricChecked) {
-                dispatch(changeGuitarType(GuitarType.Electric));
-                dispatch(addFilterAction(FilterQueryParam.Electric));
+              if (evt.target.checked) {
+                setElectricParam(`type=${evt.target.name}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.Electric));
+                setElectricParam('');
               }
             }}
-            checked={isElectricChecked}
             disabled={isTwelveStringsChecked && !isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked}
             data-testid="checkbox-electric"
           />
@@ -197,16 +209,14 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="ukulele"
             name="ukulele"
-            onChange={() => {
+            onChange={(evt) => {
               setIsUkuleleChecked(!isUkuleleChecked);
-              if (!isUkuleleChecked) {
-                dispatch(changeGuitarType(GuitarType.Ukulele));
-                dispatch(addFilterAction(FilterQueryParam.Ukulele));
+              if (evt.target.checked) {
+                setUkuleleParam(`type=${evt.target.name}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.Ukulele));
+                setUkuleleParam('');
               }
             }}
-            checked={isUkuleleChecked}
             disabled={(isSixStringsChecked || isSevenStringsChecked || isTwelveStringsChecked) && !isFourStringsChecked}
           />
           <label htmlFor="ukulele">Укулеле</label>
@@ -220,13 +230,12 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="4-strings"
             name="4-strings"
-            onChange={() => {
+            onChange={(evt) => {
               setIsFourStringsChecked(!isFourStringsChecked);
-              if (!isFourStringsChecked) {
-                dispatch(changeStringCount(StringCount.FourString));
-                dispatch(addFilterAction(FilterQueryParam.FourString));
+              if (evt.target.checked) {
+                setFourStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.FourString));
+                setFourStringsParam('');
               }
             }}
             disabled={isAcousticChecked && !isUkuleleChecked && !isElectricChecked}
@@ -239,13 +248,12 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="6-strings"
             name="6-strings"
-            onChange={() => {
+            onChange={(evt) => {
               setIsSixStringsChecked(!isSixStringsChecked);
-              if (!isSixStringsChecked) {
-                dispatch(changeStringCount(StringCount.SixString));
-                dispatch(addFilterAction(FilterQueryParam.SixString));
+              if (evt.target.checked) {
+                setSixStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.SixString));
+                setSixStringsParam('');
               }
             }}
             disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
@@ -258,13 +266,12 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="7-strings"
             name="7-strings"
-            onChange={() => {
+            onChange={(evt) => {
               setIsSevenStringsChecked(!isSevenStringsChecked);
-              if (!isSevenStringsChecked) {
-                dispatch(changeStringCount(StringCount.SevenString));
-                dispatch(addFilterAction(FilterQueryParam.SevenString));
+              if (evt.target.checked) {
+                setSevenStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.SevenString));
+                setSevenStringsParam('');
               }
             }}
             disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
@@ -277,13 +284,12 @@ function Filter(): JSX.Element {
             type="checkbox"
             id="12-strings"
             name="12-strings"
-            onChange={() => {
+            onChange={(evt) => {
               setIsTwelveStringsChecked(!isTwelveStringsChecked);
-              if (!isTwelveStringsChecked) {
-                dispatch(changeStringCount(StringCount.TwelveString));
-                dispatch(addFilterAction(FilterQueryParam.TwelveString));
+              if (evt.target.checked) {
+                setTwelveStringsParam(`stringCount=${evt.target.name.slice(0, 2)}&`);
               } else {
-                dispatch(removeFilterAction(FilterQueryParam.TwelveString));
+                setTwelveStringsParam('');
               }
             }}
             disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked}

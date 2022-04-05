@@ -4,16 +4,12 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import Header from './header';
-import { createMockGuitars, createMockGuitarsCount } from '../../mocks/guitars';
+import { createMockGuitars, createMockGuitarsWithoutComments, createMockGuitarsCount } from '../../mocks/guitars';
 import {
-  createMockGuitarType,
-  createMockStringCount,
   createMockSortingType,
-  createMockSortingOrder,
-  createMockUrlFilter,
-  createMockStartPrice,
-  createMockEndPrice
+  createMockSortingOrder
 } from '../../mocks/sort-filter-data';
+import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 
 const mockStore = configureMockStore();
@@ -22,20 +18,23 @@ const history = createMemoryHistory();
 
 const store = mockStore({
   DATA: {
+    guitarsNoComments: createMockGuitarsWithoutComments(),
     guitars: createMockGuitars(),
     guitarsTotalCount: createMockGuitarsCount(),
   },
   APP: {
     currentSortingType: createMockSortingType(),
     currentSortingOrder: createMockSortingOrder(),
-    currentStringCount: createMockStringCount(),
-    currentGuitarType: createMockGuitarType(),
-    currentUrlFilter: createMockUrlFilter(),
-    currentStartPrice: createMockStartPrice(),
-    currentEndPrice: createMockEndPrice(),
   },
   PAGINATION: {
     currentStartNumber: createMockStartNumber(),
+    isPaginationDone: false,
+    currentPage: createMockStartNumber(),
+  },
+  SEARCH: {
+    currentGuitarName: createMockGuitarName(),
+    isSearchDone: false,
+    guitarsByName: createMockGuitarsWithoutComments(),
   },
 });
 describe('Component: Header', () => {

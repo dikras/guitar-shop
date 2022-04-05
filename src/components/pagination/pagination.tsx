@@ -3,14 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
-import { getCurrentSortFilterURL } from '../../store/app-reducer/selectors';
-import { NUMBER_TO_ROUND, PaginationNumber, APIRoute } from '../../const';
-import { setStartNumber } from '../../store/action';
-import { useHistory } from 'react-router-dom';
+import { NUMBER_TO_ROUND, PaginationNumber } from '../../const';
+import { setStartNumber, setCurrentPageNumber } from '../../store/action';
 
 function Pagination(): JSX.Element {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const totalGuitars = useSelector(getAllGuitarsTotalCount);
   const pagesCount = Math.ceil(totalGuitars / PaginationNumber.Limit);
@@ -25,15 +22,9 @@ function Pagination(): JSX.Element {
 
   const [ currentPage, setCurrentPage ] = useState(1);
 
-  const currentSortFilterURL = useSelector(getCurrentSortFilterURL);
-  const urlFilterNoComments = `${APIRoute.GuitarsNoComments}?${currentSortFilterURL}`;
-
   useEffect(() => {
-    history.push({
-      pathname: `page_${currentPage}`,
-      search: urlFilterNoComments.slice(9),
-    });
-  }, [history, urlFilterNoComments, currentPage]);
+    dispatch(setCurrentPageNumber(currentPage));
+  }, [dispatch, currentPage]);
 
   return (
     <div className="pagination page-content__pagination">

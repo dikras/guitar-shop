@@ -1,6 +1,6 @@
 export enum APIRoute {
   GuitarsNoComments = '/guitars',
-  Guitars = '/guitars?_embed=comments&',
+  Guitars = '/guitars?_embed=comments',
   Guitar = '/guitars/:id',
   Comments = '/comments',
   Coupon = '/coupons',

@@ -1,4 +1,4 @@
-import { SortingType, SortingOrder, GuitarType, StringCount } from '../const';
+import { SortingType, SortingOrder } from '../const';
 import { Guitar, GuitarNoComments } from './guitar';
 import { RootState } from '../store/root-reducer';
 
@@ -8,19 +8,15 @@ export type GuitarsData = {
   guitarsTotalCount: number,
 };
 
-export type FilterProcess = {
-  currentGuitarType: GuitarType,
-  currentStringCount: StringCount,
+export type AppProcess = {
   currentSortingType: SortingType,
   currentSortingOrder: SortingOrder,
-  currentSortFilterURL: string,
-  currentStartPrice: number,
-  currentEndPrice: number,
 };
 
 export type PaginationProcess = {
   currentStartNumber: number,
   isPaginationDone: boolean,
+  currentPage: number,
 };
 
 export type SearchGuitarByNameProcess = {

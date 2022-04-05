@@ -100,3 +100,10 @@ export const setGuitarName = createAction(
     payload: guitarName,
   }),
 );
+
+export const setCurrentPageNumber = createAction(
+  ActionType.SetCurrentPage,
+  (currentPage: number) => ({
+    payload: currentPage,
+  }),
+);

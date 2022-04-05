@@ -15,6 +15,7 @@ export enum ActionType {
   SetStartPrice = 'app/setStartPrice',
   SetEndPrice = 'app/setEndPrice',
   SetStartNumber = 'pagination/setStartNumber',
+  SetCurrentPage = 'pagination/setCurrentPage',
   AddFilterAction = 'app/addFilterAction',
   RemoveFilterAction = 'app/removeFilterAction',
   SetGuitarName = 'search/setGuitarName',

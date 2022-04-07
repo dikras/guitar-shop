@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ENTER_KEY, SortingOrder, SortingType, PaginationNumber } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
@@ -10,6 +11,7 @@ import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-re
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);
@@ -61,15 +63,16 @@ function Filter(): JSX.Element {
     ''}${priceParam}${sortParam}`;
 
   useEffect(() => {
-    dispatch(loadFilteredGuitars(filter));
-  }, [dispatch, filter]);
+    if (location.search) {
+      dispatch(loadFilteredGuitars(location.search));
+    }
 
-  useEffect(() => {
     history.push({
       pathname: `page_${currentPage}`,
       search: filter,
     });
-  }, [history, filter, currentPage]);
+  }, [dispatch, history, filter, currentPage]);
+
 
   return (
     <form

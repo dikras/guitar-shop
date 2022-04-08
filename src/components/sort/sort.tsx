@@ -1,6 +1,4 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
-import { SortingType, SortingOrder } from '../../const';
 import { useLocation, useHistory } from 'react-router';
 import { useEffect, useState } from 'react';
 import { getCurrentPage } from '../../store/pagination-reducer/selectors';
@@ -12,15 +10,6 @@ function Sort(): JSX.Element {
   const location = useLocation();
 
   const currentPage = useSelector(getCurrentPage);
-
-  const currentSortingType = useSelector(getCurrentSortType);
-  const currentSortingOrder = useSelector(getCurrentSortOrder);
-
-  const isSortTypeByPrice = currentSortingType === SortingType.ByPrice;
-  const isSortTypeByRating = currentSortingType === SortingType.ByRating;
-
-  const isSortOrderLowToHigh = currentSortingOrder === SortingOrder.LowToHigh;
-  const isSortOrderHighToLow = currentSortingOrder === SortingOrder.HighToLow;
 
   const params = new URLSearchParams(location.search);
 
@@ -61,7 +50,7 @@ function Sort(): JSX.Element {
       <h2 className="catalog-sort__title">Сортировать:</h2>
       <div className="catalog-sort__type">
         <button
-          className={`catalog-sort__type-button ${isSortTypeByPrice ? 'catalog-sort__type-button--active' : ''}`}
+          className={`catalog-sort__type-button ${sortType === 'price' ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по цене"
           tabIndex={-1}
           onClick={() => {
@@ -74,7 +63,7 @@ function Sort(): JSX.Element {
         >по цене
         </button>
         <button
-          className={`catalog-sort__type-button ${isSortTypeByRating ? 'catalog-sort__type-button--active' : ''}`}
+          className={`catalog-sort__type-button ${sortType === 'rating' ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
           onClick={() => {
             setSortType('rating');
@@ -88,7 +77,7 @@ function Sort(): JSX.Element {
       </div>
       <div className="catalog-sort__order">
         <button
-          className={`catalog-sort__order-button catalog-sort__order-button--up ${isSortOrderLowToHigh ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--up ${sortOrder === 'asc' ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По возрастанию"
           tabIndex={-1}
           onClick={() => {
@@ -98,11 +87,11 @@ function Sort(): JSX.Element {
             }
           }}
           data-testid="sort-button-asc"
-          style={isSortOrderLowToHigh ? {borderBottomColor: '#131212'} : {borderBottomColor: '#a49e9e'}}
+          style={sortOrder === 'asc' ? {borderBottomColor: '#131212'} : {borderBottomColor: '#a49e9e'}}
         >
         </button>
         <button
-          className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortOrderHighToLow ? 'catalog-sort__order-button--active' : ''}`}
+          className={`catalog-sort__order-button catalog-sort__order-button--down ${sortOrder === 'desc' ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
           onClick={() => {
             setSortOrder('desc');

@@ -1,10 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
-import { changeSortingType, changeSortingOrder } from '../../store/action';
 import { SortingType, SortingOrder } from '../../const';
+import { useLocation, useHistory } from 'react-router';
+import { useEffect, useState } from 'react';
+import { getCurrentPage } from '../../store/pagination-reducer/selectors';
+import { loadSortedGuitars } from '../../store/api-action';
 
 function Sort(): JSX.Element {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
+
+  const currentPage = useSelector(getCurrentPage);
+
   const currentSortingType = useSelector(getCurrentSortType);
   const currentSortingOrder = useSelector(getCurrentSortOrder);
 
@@ -13,6 +21,40 @@ function Sort(): JSX.Element {
 
   const isSortOrderLowToHigh = currentSortingOrder === SortingOrder.LowToHigh;
   const isSortOrderHighToLow = currentSortingOrder === SortingOrder.HighToLow;
+
+  const params = new URLSearchParams(location.search);
+
+  const [sortOrder, setSortOrder] = useState('');
+  const [sortType, setSortType] = useState('');
+
+  useEffect(() => {
+    params.delete('_sort');
+    params.delete('_order');
+
+    if (sortType) {
+      params.set('_sort', sortType);
+    }
+
+    if (sortOrder) {
+      params.set('_order', sortOrder);
+    }
+
+    if (sortType || sortOrder) {
+      dispatch(loadSortedGuitars(params.toString()));
+    }
+
+    history.push({
+      pathname: `page_${currentPage}`,
+      search: params.toString(),
+    });
+  }, [
+    dispatch,
+    history,
+    sortOrder,
+    sortType,
+    currentPage,
+  ]);
+
 
   return (
     <div className="catalog-sort">
@@ -23,7 +65,10 @@ function Sort(): JSX.Element {
           aria-label="по цене"
           tabIndex={-1}
           onClick={() => {
-            dispatch(changeSortingType(SortingType.ByPrice));
+            setSortType('price');
+            if (!sortOrder) {
+              setSortOrder('asc');
+            }
           }}
           data-testid="sort-button-price"
         >по цене
@@ -32,7 +77,10 @@ function Sort(): JSX.Element {
           className={`catalog-sort__type-button ${isSortTypeByRating ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
           onClick={() => {
-            dispatch(changeSortingType(SortingType.ByRating));
+            setSortType('rating');
+            if (!sortOrder) {
+              setSortOrder('asc');
+            }
           }}
           data-testid="sort-button-rating"
         >по популярности
@@ -44,10 +92,10 @@ function Sort(): JSX.Element {
           aria-label="По возрастанию"
           tabIndex={-1}
           onClick={() => {
-            if (SortingType.Default) {
-              dispatch(changeSortingType(SortingType.ByPrice));
+            setSortOrder('asc');
+            if (!sortType) {
+              setSortType('price');
             }
-            dispatch(changeSortingOrder(SortingOrder.LowToHigh));
           }}
           data-testid="sort-button-asc"
           style={isSortOrderLowToHigh ? {borderBottomColor: '#131212'} : {borderBottomColor: '#a49e9e'}}
@@ -57,10 +105,10 @@ function Sort(): JSX.Element {
           className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortOrderHighToLow ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
           onClick={() => {
-            if (SortingType.Default) {
-              dispatch(changeSortingType(SortingType.ByPrice));
+            setSortOrder('desc');
+            if (!sortType) {
+              setSortType('price');
             }
-            dispatch(changeSortingOrder(SortingOrder.HighToLow));
           }}
           data-testid="sort-button-desc"
         >

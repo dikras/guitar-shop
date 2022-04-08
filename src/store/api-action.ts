@@ -17,11 +17,21 @@ export const fetchGuitarsByName = (url: string): ThunkActionResult =>
 export const loadFilteredGuitars = (filterURL: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const responseNoComments = await api.get<GuitarNoComments[]>(`${APIRoute.GuitarsNoComments}?${filterURL}`);
+      const responseNoComments = await api.get<GuitarNoComments[]>(`${APIRoute.GuitarsNoComments}?${filterURL.slice(18)}`);
       const responseWithComments = await api.get<Guitar[]>(`${APIRoute.Guitars}&${filterURL}`);
       dispatch(loadGuitarsNoComments(responseNoComments.data));
       dispatch(loadGuitars(responseWithComments.data));
       dispatch(getGuitarsTotalCount(responseWithComments.headers['x-total-count']));
+    } catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export const loadSortedGuitars = (sortURL: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const responseWithComments = await api.get<Guitar[]>(`${APIRoute.Guitars}&${sortURL}`);
+      dispatch(loadGuitars(responseWithComments.data));
     } catch {
       toast.warn(WarningMessage.FetchFail);
     }

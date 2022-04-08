@@ -20,35 +20,15 @@ function Filter(): JSX.Element {
   const currentStartNumber = useSelector(getCurrentStartNumber);
   const currentPage = useSelector(getCurrentPage);
 
-  const [ isAcousticChecked, setIsAcousticChecked ] = useState(false);
-  const [ isElectricChecked, setIsElectricChecked ] = useState(false);
-  const [ isUkuleleChecked, setIsUkuleleChecked ] = useState(false);
-
-  const [ isFourStringsChecked, setIsFourStringsChecked ] = useState(false);
-  const [ isSixStringsChecked, setIsSixStringsChecked ] = useState(false);
-  const [ isSevenStringsChecked, setIsSevenStringsChecked ] = useState(false);
-  const [ isTwelveStringsChecked, setIsTwelveStringsChecked ] = useState(false);
-
   const minFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
   const maxFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
 
   const [ minPrice, setMinPrice ] = useState('');
   const [ maxPrice, setMaxPrice ] = useState('');
 
-  const [acousticParam, setAcousticParam] = useState('');
-  const [electricParam, setElectricParam] = useState('');
-  const [ukuleleParam, setUkuleleParam] = useState('');
-
-  const [fourStringsParam, setFourStringsParam] = useState('');
-  const [sixStringsParam, setSixStringsParam] = useState('');
-  const [sevenStringsParam, setSevenStringsParam] = useState('');
-  const [twelveStringsParam, setTwelveStringsParam] = useState('');
-
   const [minPriceParam, setMinPriceParam] = useState('');
   const [maxPriceParam, setMaxPriceParam] = useState('');
 
-  const guitarTypeParam = `${acousticParam}${electricParam}${ukuleleParam}`;
-  const stringCountParam = `${fourStringsParam}${sixStringsParam}${sevenStringsParam}${twelveStringsParam}`;
   const priceParam = `${minPriceParam}${maxPriceParam}`;
 
   let sortParam = '';
@@ -57,21 +37,69 @@ function Filter(): JSX.Element {
     sortParam = `${currentSortingType ? '&' : ''}_sort=${currentSortingType}&_order=${currentSortingOrder}`;
   }
 
-  const filter = `_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}${guitarTypeParam ? '&' :
-    ''}${guitarTypeParam}${stringCountParam ? '&' :
-    ''}${stringCountParam}${priceParam ? '&' :
+  // _start=${currentStartNumber}&_limit=${PaginationNumber.Limit}
+
+  const filter = `_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}${priceParam ? '&' :
     ''}${priceParam}${sortParam}`;
+  console.log(filter);
+
+  const params = new URLSearchParams(location.search);
+
+  const [ isAcousticClicked, setIsAcousticClicked ] = useState(params.getAll('type').includes('acoustic'));
+  const [ isElectricClicked, setIsElectricClicked ] = useState(params.getAll('type').includes('electric'));
+  const [ isUkuleleClicked, setIsUkuleleClicked ] = useState(params.getAll('type').includes('ukulele'));
+
+  const [ isFourStringsClicked, setIsFourStringsClicked ] = useState(params.getAll('stringCount').includes('4'));
+  const [ isSixStringsClicked, setIsSixStringsClicked ] = useState(params.getAll('stringCount').includes('6'));
+  const [ isSevenStringsClicked, setIsSevenStringsClicked ] = useState(params.getAll('stringCount').includes('7'));
+  const [ isTwelveStringsClicked, setIsTwelveStringsClicked ] = useState(params.getAll('stringCount').includes('12'));
 
   useEffect(() => {
-    if (location.search) {
-      dispatch(loadFilteredGuitars(location.search));
+    params.delete('type');
+    params.delete('stringCount');
+    params.delete('price_gte');
+
+    if (isAcousticClicked) {
+      params.append('type', 'acoustic');
     }
+    if (isElectricClicked) {
+      params.append('type', 'electric');
+    }
+    if (isUkuleleClicked) {
+      params.append('type', 'ukulele');
+    }
+
+    if (isFourStringsClicked) {
+      params.append('stringCount', '4');
+    }
+    if (isSixStringsClicked) {
+      params.append('stringCount', '6');
+    }
+    if (isSevenStringsClicked) {
+      params.append('stringCount', '7');
+    }
+    if (isTwelveStringsClicked) {
+      params.append('stringCount', '12');
+    }
+
+    dispatch(loadFilteredGuitars(params.toString()));
 
     history.push({
       pathname: `page_${currentPage}`,
-      search: filter,
+      search: params.toString(),
     });
-  }, [dispatch, history, filter, currentPage]);
+  }, [
+    dispatch,
+    history,
+    currentPage,
+    isAcousticClicked,
+    isElectricClicked,
+    isUkuleleClicked,
+    isFourStringsClicked,
+    isSixStringsClicked,
+    isSevenStringsClicked,
+    isTwelveStringsClicked,
+  ]);
 
 
   return (
@@ -105,10 +133,6 @@ function Filter(): JSX.Element {
                   setMinPrice(minFormatPrice.toString());
                 } else {
                   setMinPrice(currentStartPrice);
-                  setMinPriceParam(`price_gte=${currentStartPrice}&`);
-                }
-                if(!currentStartPrice) {
-                  setMinPriceParam('');
                 }
               }}
               onKeyDown={(evt) => {
@@ -176,14 +200,13 @@ function Filter(): JSX.Element {
             id="acoustic"
             name="acoustic"
             onChange={(evt) => {
-              setIsAcousticChecked(!isAcousticChecked);
               if (evt.target.checked) {
-                setAcousticParam(`type=${evt.target.name}&`);
+                setIsAcousticClicked(true);
               } else {
-                setAcousticParam('');
+                setIsAcousticClicked(false);
               }
             }}
-            disabled={isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked && !isTwelveStringsChecked}
+            disabled={isFourStringsClicked && !isSixStringsClicked && !isSevenStringsClicked && !isTwelveStringsClicked}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
         </div>
@@ -194,14 +217,13 @@ function Filter(): JSX.Element {
             id="electric"
             name="electric"
             onChange={(evt) => {
-              setIsElectricChecked(!isElectricChecked);
               if (evt.target.checked) {
-                setElectricParam(`type=${evt.target.name}&`);
+                setIsElectricClicked(true);
               } else {
-                setElectricParam('');
+                setIsElectricClicked(false);
               }
             }}
-            disabled={isTwelveStringsChecked && !isFourStringsChecked && !isSixStringsChecked && !isSevenStringsChecked}
+            disabled={isTwelveStringsClicked && !isFourStringsClicked && !isSixStringsClicked && !isSevenStringsClicked}
             data-testid="checkbox-electric"
           />
           <label htmlFor="electric">Электрогитары</label>
@@ -213,14 +235,13 @@ function Filter(): JSX.Element {
             id="ukulele"
             name="ukulele"
             onChange={(evt) => {
-              setIsUkuleleChecked(!isUkuleleChecked);
               if (evt.target.checked) {
-                setUkuleleParam(`type=${evt.target.name}&`);
+                setIsUkuleleClicked(true);
               } else {
-                setUkuleleParam('');
+                setIsUkuleleClicked(false);
               }
             }}
-            disabled={(isSixStringsChecked || isSevenStringsChecked || isTwelveStringsChecked) && !isFourStringsChecked}
+            disabled={(isSixStringsClicked || isSevenStringsClicked || isTwelveStringsClicked) && !isFourStringsClicked}
           />
           <label htmlFor="ukulele">Укулеле</label>
         </div>
@@ -234,14 +255,13 @@ function Filter(): JSX.Element {
             id="4-strings"
             name="4-strings"
             onChange={(evt) => {
-              setIsFourStringsChecked(!isFourStringsChecked);
               if (evt.target.checked) {
-                setFourStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
+                setIsFourStringsClicked(true);
               } else {
-                setFourStringsParam('');
+                setIsFourStringsClicked(false);
               }
             }}
-            disabled={isAcousticChecked && !isUkuleleChecked && !isElectricChecked}
+            disabled={isAcousticClicked && !isUkuleleClicked && !isElectricClicked}
           />
           <label htmlFor="4-strings">4</label>
         </div>
@@ -252,14 +272,13 @@ function Filter(): JSX.Element {
             id="6-strings"
             name="6-strings"
             onChange={(evt) => {
-              setIsSixStringsChecked(!isSixStringsChecked);
               if (evt.target.checked) {
-                setSixStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
+                setIsSixStringsClicked(true);
               } else {
-                setSixStringsParam('');
+                setIsSixStringsClicked(false);
               }
             }}
-            disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
+            disabled={isUkuleleClicked && !isElectricClicked && !isAcousticClicked}
           />
           <label htmlFor="6-strings">6</label>
         </div>
@@ -270,14 +289,13 @@ function Filter(): JSX.Element {
             id="7-strings"
             name="7-strings"
             onChange={(evt) => {
-              setIsSevenStringsChecked(!isSevenStringsChecked);
               if (evt.target.checked) {
-                setSevenStringsParam(`stringCount=${evt.target.name.slice(0, 1)}&`);
+                setIsSevenStringsClicked(true);
               } else {
-                setSevenStringsParam('');
+                setIsSevenStringsClicked(false);
               }
             }}
-            disabled={isUkuleleChecked && !isElectricChecked && !isAcousticChecked}
+            disabled={isUkuleleClicked && !isElectricClicked && !isAcousticClicked}
           />
           <label htmlFor="7-strings">7</label>
         </div>
@@ -288,14 +306,13 @@ function Filter(): JSX.Element {
             id="12-strings"
             name="12-strings"
             onChange={(evt) => {
-              setIsTwelveStringsChecked(!isTwelveStringsChecked);
               if (evt.target.checked) {
-                setTwelveStringsParam(`stringCount=${evt.target.name.slice(0, 2)}&`);
+                setIsTwelveStringsClicked(true);
               } else {
-                setTwelveStringsParam('');
+                setIsTwelveStringsClicked(false);
               }
             }}
-            disabled={(isUkuleleChecked || isElectricChecked) && !isAcousticChecked}
+            disabled={(isUkuleleClicked || isElectricClicked) && !isAcousticClicked}
             data-testid="checkbox-12-strings"
           />
           <label htmlFor="12-strings">12</label>

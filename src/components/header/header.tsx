@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
-import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParamName } from '../../const';
+import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParam } from '../../const';
 import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
@@ -40,7 +40,7 @@ function Header(): JSX.Element {
   useEffect(() => {
     dispatch(setGuitarName(word));
     if (word !== '') {
-      dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${word}`));
+      dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParam.NameLike}=${word}`));
     }
     document.addEventListener('click', handleInputFocusOut);
     return () => document.removeEventListener('click', handleInputFocusOut);

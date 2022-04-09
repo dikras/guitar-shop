@@ -4,7 +4,7 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { APIRoute, QueryParamName } from '../const';
+import { APIRoute, QueryParam } from '../const';
 import { createMockGuitarsWithoutComments } from '../mocks/guitars';
 import { loadGuitarsByName } from '../store/action';
 import { fetchGuitarsByName } from '../store/api-action';
@@ -27,10 +27,10 @@ describe('Async actions', () => {
     const store = mockStore();
 
     mockAPI
-      .onGet(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${lorem.word}`)
+      .onGet(`${APIRoute.GuitarsNoComments}?${QueryParam.NameLike}=${lorem.word}`)
       .reply(200, mockGuitarsWithoutComments);
 
-    await store.dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParamName.NameLike}=${lorem.word}`));
+    await store.dispatch(fetchGuitarsByName(`${APIRoute.GuitarsNoComments}?${QueryParam.NameLike}=${lorem.word}`));
 
     expect(store.getActions()).toEqual([
       loadGuitarsByName(mockGuitarsWithoutComments),

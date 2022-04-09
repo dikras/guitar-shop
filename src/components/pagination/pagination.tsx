@@ -24,7 +24,10 @@ function Pagination(): JSX.Element {
 
   useEffect(() => {
     dispatch(setCurrentPageNumber(currentPage));
-  }, [dispatch, currentPage]);
+  }, [
+    dispatch,
+    currentPage,
+  ]);
 
   return (
     <div className="pagination page-content__pagination">

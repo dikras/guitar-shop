@@ -2,11 +2,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ENTER_KEY, SortingOrder, SortingType, PaginationNumber } from '../../const';
+import { ENTER_KEY, PaginationNumber, QueryParam, GuitarType, StringNumber } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
-import { getCurrentSortType, getCurrentSortOrder } from '../../store/app-reducer/selectors';
-import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
+import { getCurrentPage, getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
@@ -15,10 +14,8 @@ function Filter(): JSX.Element {
 
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);
-  const currentSortingType = useSelector(getCurrentSortType);
-  const currentSortingOrder = useSelector(getCurrentSortOrder);
-  const currentStartNumber = useSelector(getCurrentStartNumber);
   const currentPage = useSelector(getCurrentPage);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
 
   const minFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
   const maxFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMaxPrice);
@@ -26,60 +23,58 @@ function Filter(): JSX.Element {
   const [ minPrice, setMinPrice ] = useState('');
   const [ maxPrice, setMaxPrice ] = useState('');
 
-  const [minPriceParam, setMinPriceParam] = useState('');
-  const [maxPriceParam, setMaxPriceParam] = useState('');
-
-  const priceParam = `${minPriceParam}${maxPriceParam}`;
-
-  let sortParam = '';
-
-  if (currentSortingType !== SortingType.Default && currentSortingOrder !== SortingOrder.Default) {
-    sortParam = `${currentSortingType ? '&' : ''}_sort=${currentSortingType}&_order=${currentSortingOrder}`;
-  }
-
-  // _start=${currentStartNumber}&_limit=${PaginationNumber.Limit}
-
-  const filter = `_start=${currentStartNumber}&_limit=${PaginationNumber.Limit}${priceParam ? '&' :
-    ''}${priceParam}${sortParam}`;
-  console.log(filter);
-
   const params = new URLSearchParams(location.search);
 
-  const [ isAcousticClicked, setIsAcousticClicked ] = useState(params.getAll('type').includes('acoustic'));
-  const [ isElectricClicked, setIsElectricClicked ] = useState(params.getAll('type').includes('electric'));
-  const [ isUkuleleClicked, setIsUkuleleClicked ] = useState(params.getAll('type').includes('ukulele'));
+  const [ isAcousticClicked, setIsAcousticClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Acoustic));
+  const [ isElectricClicked, setIsElectricClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Electric));
+  const [ isUkuleleClicked, setIsUkuleleClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Ukulele));
 
-  const [ isFourStringsClicked, setIsFourStringsClicked ] = useState(params.getAll('stringCount').includes('4'));
-  const [ isSixStringsClicked, setIsSixStringsClicked ] = useState(params.getAll('stringCount').includes('6'));
-  const [ isSevenStringsClicked, setIsSevenStringsClicked ] = useState(params.getAll('stringCount').includes('7'));
-  const [ isTwelveStringsClicked, setIsTwelveStringsClicked ] = useState(params.getAll('stringCount').includes('12'));
+  const [ isFourStringsClicked, setIsFourStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.FourString));
+  const [ isSixStringsClicked, setIsSixStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.SixString));
+  const [ isSevenStringsClicked, setIsSevenStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.SevenString));
+  const [ isTwelveStringsClicked, setIsTwelveStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.TwelveString));
+
+  const [ isMinPriceEntered, setIsMinPriceEntered ] = useState(!!params.get(QueryParam.StartPrice));
+  const [ isMaxPriceEntered, setIsMaxPriceEntered ] = useState(!!params.get(QueryParam.EndPrice));
+
+  params.set(QueryParam.PaginationStart, `${currentStartNumber}`);
+  params.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
 
   useEffect(() => {
-    params.delete('type');
-    params.delete('stringCount');
-    params.delete('price_gte');
+    params.delete(QueryParam.Type);
+    params.delete(QueryParam.StringCount);
+    params.delete(QueryParam.StartPrice);
+    params.delete(QueryParam.EndPrice);
+
+    params.set(QueryParam.PaginationStart, currentStartNumber.toString());
+    params.set(QueryParam.PaginationLimit, PaginationNumber.Limit.toString());
 
     if (isAcousticClicked) {
-      params.append('type', 'acoustic');
+      params.append(QueryParam.Type, GuitarType.Acoustic);
     }
     if (isElectricClicked) {
-      params.append('type', 'electric');
+      params.append(QueryParam.Type, GuitarType.Electric);
     }
     if (isUkuleleClicked) {
-      params.append('type', 'ukulele');
+      params.append(QueryParam.Type, GuitarType.Ukulele);
     }
-
     if (isFourStringsClicked) {
-      params.append('stringCount', '4');
+      params.append(QueryParam.StringCount, StringNumber.FourString);
     }
     if (isSixStringsClicked) {
-      params.append('stringCount', '6');
+      params.append(QueryParam.StringCount, StringNumber.SixString);
     }
     if (isSevenStringsClicked) {
-      params.append('stringCount', '7');
+      params.append(QueryParam.StringCount, StringNumber.SevenString);
     }
     if (isTwelveStringsClicked) {
-      params.append('stringCount', '12');
+      params.append(QueryParam.StringCount, StringNumber.TwelveString);
+    }
+    if (isMinPriceEntered) {
+      params.append(QueryParam.StartPrice, minPrice);
+    }
+    if (isMaxPriceEntered) {
+      params.append(QueryParam.EndPrice, maxPrice);
     }
 
     dispatch(loadFilteredGuitars(params.toString()));
@@ -92,6 +87,9 @@ function Filter(): JSX.Element {
     dispatch,
     history,
     currentPage,
+    minPrice,
+    maxPrice,
+    currentStartNumber,
     isAcousticClicked,
     isElectricClicked,
     isUkuleleClicked,
@@ -99,6 +97,8 @@ function Filter(): JSX.Element {
     isSixStringsClicked,
     isSevenStringsClicked,
     isTwelveStringsClicked,
+    isMinPriceEntered,
+    isMaxPriceEntered,
   ]);
 
 
@@ -124,7 +124,7 @@ function Filter(): JSX.Element {
                   setMinPrice(currentStartValue);
                 }
                 if(!currentStartValue) {
-                  setMinPriceParam('');
+                  setIsMinPriceEntered(false);
                 }
               }}
               onBlur={(evt) => {
@@ -133,6 +133,7 @@ function Filter(): JSX.Element {
                   setMinPrice(minFormatPrice.toString());
                 } else {
                   setMinPrice(currentStartPrice);
+                  setIsMinPriceEntered(true);
                 }
               }}
               onKeyDown={(evt) => {
@@ -141,7 +142,7 @@ function Filter(): JSX.Element {
                   if (Number(currentStartPrice) < guitarMinPrice || Number(currentStartPrice) > guitarMaxPrice) {
                     setMinPrice(minFormatPrice.toString());
                   } else {
-                    setMinPriceParam(`price_gte=${currentStartPrice}&`);
+                    setIsMinPriceEntered(true);
                   }
                 }
               }}
@@ -161,7 +162,7 @@ function Filter(): JSX.Element {
                   setMaxPrice(currentEndValue);
                 }
                 if(!currentEndValue) {
-                  setMinPriceParam('');
+                  setIsMaxPriceEntered(false);
                 }
               }}
               onBlur={(evt) => {
@@ -170,10 +171,7 @@ function Filter(): JSX.Element {
                   setMaxPrice(maxFormatPrice.toString());
                 } else {
                   setMaxPrice(currentEndPrice);
-                  setMaxPriceParam(`price_lte=${currentEndPrice}&`);
-                }
-                if(!currentEndPrice) {
-                  setMaxPriceParam('');
+                  setIsMaxPriceEntered(true);
                 }
               }}
               onKeyDown={(evt) => {
@@ -182,7 +180,7 @@ function Filter(): JSX.Element {
                   if (Number(currentEndPrice) < guitarMinPrice || Number(currentEndPrice) > guitarMaxPrice) {
                     setMaxPrice(maxFormatPrice.toString());
                   } else {
-                    setMaxPriceParam(`price_lte=${currentEndPrice}&`);
+                    setIsMaxPriceEntered(true);
                   }
                 }
               }}

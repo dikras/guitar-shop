@@ -24,29 +24,16 @@ export const ImageSize = {
   },
 };
 
-export enum FilterQueryParam {
-  Acoustic = 'type=acoustic&',
-  Electric = 'type=electric&',
-  Ukulele = 'type=ukulele&',
-  FourString = 'stringCount=4&',
-  SixString = 'stringCount=6&',
-  SevenString = 'stringCount=7&',
-  TwelveString = 'stringCount=12&',
-  SortByPrice = '&_sort=price&',
-  SortByRating = '&_sort=rating&',
-  SortLowToHigh = '&_order=asc&',
-  SortHighToLow = '&_order=desc&',
-  FilterStartPrice = '&price_gte=',
-  FilterEndPrice = '&price_lte=',
-}
-
-export enum QueryParamName {
+export enum QueryParam {
+  Type = 'type',
+  StringCount = 'stringCount',
   SortingType ='_sort',
   SortingOrder = '_order',
-  FilterString = 'stringCount',
   StartPrice = 'price_gte',
   EndPrice = 'price_lte',
-  NameLike = 'name_like'
+  NameLike = 'name_like',
+  PaginationStart = '_start',
+  PaginationLimit = '_limit',
 }
 
 export const InitialPrice = {
@@ -74,13 +61,11 @@ export enum GuitarType {
   Ukulele = 'ukulele',
 }
 
-export enum StringCount {
-  Default = 0,
-  Initial = 1,
-  FourString = 4,
-  SixString = 6,
-  SevenString = 7,
-  TwelveString = 12,
+export enum StringNumber {
+  FourString = '4',
+  SixString = '6',
+  SevenString = '7',
+  TwelveString = '12',
 }
 
 export const IMG_URL_BEGIN_INDEX = 4;

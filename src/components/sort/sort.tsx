@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
 import { loadSortedGuitars } from '../../store/api-action';
-import { QueryParam, SortingOrder, SortingType, PaginationNumber, INITIAL_PAGE } from '../../const';
-import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
+import { QueryParam, SortingOrder, SortingType, PaginationNumber } from '../../const';
+import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
 
 function Sort(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
+  const currentPage = useSelector(getCurrentPage);
 
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
@@ -36,7 +37,7 @@ function Sort(): JSX.Element {
     paramsInner.set(paramType, paramName);
     dispatch(loadSortedGuitars(paramsInner.toString()));
     history.push({
-      pathname: `page_${INITIAL_PAGE}`,
+      pathname: `page_${currentPage}`,
       search: paramsInner.toString(),
     });
 

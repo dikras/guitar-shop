@@ -4,7 +4,7 @@ import { Link, useLocation, useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
 import { NUMBER_TO_ROUND, PaginationNumber, QueryParam, INITIAL_PAGE } from '../../const';
-import { setStartNumber } from '../../store/action';
+import { setStartNumber, setCurrentPageNumber } from '../../store/action';
 import { loadFilteredGuitars } from '../../store/api-action';
 
 function Pagination(): JSX.Element {
@@ -54,6 +54,7 @@ function Pagination(): JSX.Element {
           onClick={(evt) => {
             evt.preventDefault();
             setCurrentPage((prev) => prev - 1);
+            dispatch(setCurrentPageNumber(currentPage + 1));
             dispatch(setStartNumber((currentPage - (pages.length -1)) * PaginationNumber.Limit));
             handleParamsChange((currentPage - (pages.length -1)) * PaginationNumber.Limit);
           }}
@@ -67,6 +68,7 @@ function Pagination(): JSX.Element {
             onClick={(evt) => {
               evt.preventDefault();
               setCurrentPage(page);
+              dispatch(setCurrentPageNumber(currentPage + 1));
               dispatch(setStartNumber((page - 1) * PaginationNumber.Limit));
               handleParamsChange((page - 1) * PaginationNumber.Limit);
             }}
@@ -81,6 +83,7 @@ function Pagination(): JSX.Element {
           onClick={(evt) => {
             evt.preventDefault();
             setCurrentPage((prev) => prev + 1);
+            dispatch(setCurrentPageNumber(currentPage + 1));
             dispatch(setStartNumber(currentPage * PaginationNumber.Limit));
             handleParamsChange(currentPage * PaginationNumber.Limit);
           }}

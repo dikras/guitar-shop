@@ -2,10 +2,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ENTER_KEY, PaginationNumber, QueryParam, GuitarType, StringNumber } from '../../const';
+import { ENTER_KEY, QueryParam, GuitarType, StringNumber, PaginationNumber } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
-import { getCurrentPage, getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
+import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
@@ -25,82 +25,78 @@ function Filter(): JSX.Element {
 
   const params = new URLSearchParams(location.search);
 
-  const [ isAcousticClicked, setIsAcousticClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Acoustic));
-  const [ isElectricClicked, setIsElectricClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Electric));
-  const [ isUkuleleClicked, setIsUkuleleClicked ] = useState(params.getAll(QueryParam.Type).includes(GuitarType.Ukulele));
+  const [ isAcousticClicked, setIsAcousticClicked ] = useState(false);
+  const [ isElectricClicked, setIsElectricClicked ] = useState(false);
+  const [ isUkuleleClicked, setIsUkuleleClicked ] = useState(false);
 
-  const [ isFourStringsClicked, setIsFourStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.FourString));
-  const [ isSixStringsClicked, setIsSixStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.SixString));
-  const [ isSevenStringsClicked, setIsSevenStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.SevenString));
-  const [ isTwelveStringsClicked, setIsTwelveStringsClicked ] = useState(params.getAll(QueryParam.StringCount).includes(StringNumber.TwelveString));
-
-  const [ isMinPriceEntered, setIsMinPriceEntered ] = useState(!!params.get(QueryParam.StartPrice));
-  const [ isMaxPriceEntered, setIsMaxPriceEntered ] = useState(!!params.get(QueryParam.EndPrice));
+  const [ isFourStringsClicked, setIsFourStringsClicked ] = useState(false);
+  const [ isSixStringsClicked, setIsSixStringsClicked ] = useState(false);
+  const [ isSevenStringsClicked, setIsSevenStringsClicked ] = useState(false);
+  const [ isTwelveStringsClicked, setIsTwelveStringsClicked ] = useState(false);
 
   params.set(QueryParam.PaginationStart, `${currentStartNumber}`);
   params.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
 
   useEffect(() => {
-    params.delete(QueryParam.Type);
-    params.delete(QueryParam.StringCount);
-    params.delete(QueryParam.StartPrice);
-    params.delete(QueryParam.EndPrice);
+    const isAcoustic = params.getAll(QueryParam.Type).includes(GuitarType.Acoustic);
+    const isElectric = params.getAll(QueryParam.Type).includes(GuitarType.Electric);
+    const isUkulele = params.getAll(QueryParam.Type).includes(GuitarType.Ukulele);
 
-    params.set(QueryParam.PaginationStart, currentStartNumber.toString());
-    params.set(QueryParam.PaginationLimit, PaginationNumber.Limit.toString());
+    const isFourStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.FourString);
+    const isSixStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.SixString);
+    const isSevenStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.SevenString);
+    const isTwelveStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.TwelveString);
 
-    if (isAcousticClicked) {
-      params.append(QueryParam.Type, GuitarType.Acoustic);
-    }
-    if (isElectricClicked) {
-      params.append(QueryParam.Type, GuitarType.Electric);
-    }
-    if (isUkuleleClicked) {
-      params.append(QueryParam.Type, GuitarType.Ukulele);
-    }
-    if (isFourStringsClicked) {
-      params.append(QueryParam.StringCount, StringNumber.FourString);
-    }
-    if (isSixStringsClicked) {
-      params.append(QueryParam.StringCount, StringNumber.SixString);
-    }
-    if (isSevenStringsClicked) {
-      params.append(QueryParam.StringCount, StringNumber.SevenString);
-    }
-    if (isTwelveStringsClicked) {
-      params.append(QueryParam.StringCount, StringNumber.TwelveString);
-    }
-    if (isMinPriceEntered) {
-      params.append(QueryParam.StartPrice, minPrice);
-    }
-    if (isMaxPriceEntered) {
-      params.append(QueryParam.EndPrice, maxPrice);
-    }
+    const isStartNumber = !!params.get(QueryParam.PaginationStart);
 
-    dispatch(loadFilteredGuitars(params.toString()));
+    isAcoustic ? params.append(QueryParam.Type, GuitarType.Acoustic) : params.delete(QueryParam.Type);
+    isElectric ? params.append(QueryParam.Type, GuitarType.Electric) : params.delete(QueryParam.Type);
+    isUkulele ? params.append(QueryParam.Type, GuitarType.Ukulele) : params.delete(QueryParam.Type);
 
-    history.push({
-      pathname: `page_${currentPage}`,
-      search: params.toString(),
-    });
-  }, [
-    dispatch,
-    history,
-    currentPage,
-    minPrice,
-    maxPrice,
-    currentStartNumber,
-    isAcousticClicked,
-    isElectricClicked,
-    isUkuleleClicked,
-    isFourStringsClicked,
-    isSixStringsClicked,
-    isSevenStringsClicked,
-    isTwelveStringsClicked,
-    isMinPriceEntered,
-    isMaxPriceEntered,
-  ]);
+    isFourStrings ? params.append(QueryParam.StringCount, StringNumber.FourString) : params.delete(QueryParam.StringCount);
+    isSixStrings ? params.append(QueryParam.StringCount, StringNumber.SixString) : params.delete(QueryParam.StringCount);
+    isSevenStrings ? params.append(QueryParam.StringCount, StringNumber.SevenString) : params.delete(QueryParam.StringCount);
+    isTwelveStrings ? params.append(QueryParam.StringCount, StringNumber.TwelveString) : params.delete(QueryParam.StringCount);
 
+    isStartNumber ? params.set(QueryParam.PaginationStart, (currentPage * PaginationNumber.Limit).toString()) : params.set(QueryParam.PaginationStart, currentStartNumber.toString());
+
+    const searchParam = params.toString();
+
+    setIsAcousticClicked(isAcoustic);
+    setIsElectricClicked(isElectric);
+    setIsUkuleleClicked(isUkulele);
+
+    setIsFourStringsClicked(isFourStrings);
+    setIsSixStringsClicked(isSixStrings);
+    setIsSevenStringsClicked(isSevenStrings);
+    setIsTwelveStringsClicked(isTwelveStrings);
+
+    dispatch(loadFilteredGuitars(searchParam));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleParamsChange = (paramName: string, paramValue: boolean, paramType: string)=> {
+    const paramsInner = new URLSearchParams(location.search);
+    paramsInner.set(QueryParam.PaginationStart, `${currentStartNumber}`);
+    paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
+    if(paramValue) {
+      paramsInner.append(paramType, paramName);
+      dispatch(loadFilteredGuitars(paramsInner.toString()));
+      history.push({
+        pathname: `page_${currentPage}`,
+        search: paramsInner.toString(),
+      });
+    } else {
+      const paramsType = paramsInner.getAll(paramType).filter((it) => it !== paramName);
+      paramsInner.delete(paramType);
+      paramsType.map((it) => paramsInner.append(paramType, it));
+      history.push({
+        search: paramsInner.toString(),
+      });
+      dispatch(loadFilteredGuitars(paramsInner.toString()));
+
+    }
+  };
 
   return (
     <form
@@ -124,7 +120,7 @@ function Filter(): JSX.Element {
                   setMinPrice(currentStartValue);
                 }
                 if(!currentStartValue) {
-                  setIsMinPriceEntered(false);
+                  handleParamsChange(minPrice, !!currentStartValue, QueryParam.StartPrice);
                 }
               }}
               onBlur={(evt) => {
@@ -133,7 +129,7 @@ function Filter(): JSX.Element {
                   setMinPrice(minFormatPrice.toString());
                 } else {
                   setMinPrice(currentStartPrice);
-                  setIsMinPriceEntered(true);
+                  handleParamsChange(minPrice, !!currentStartPrice, QueryParam.StartPrice);
                 }
               }}
               onKeyDown={(evt) => {
@@ -142,7 +138,7 @@ function Filter(): JSX.Element {
                   if (Number(currentStartPrice) < guitarMinPrice || Number(currentStartPrice) > guitarMaxPrice) {
                     setMinPrice(minFormatPrice.toString());
                   } else {
-                    setIsMinPriceEntered(true);
+                    handleParamsChange(minPrice, !!currentStartPrice, QueryParam.StartPrice);
                   }
                 }
               }}
@@ -162,7 +158,7 @@ function Filter(): JSX.Element {
                   setMaxPrice(currentEndValue);
                 }
                 if(!currentEndValue) {
-                  setIsMaxPriceEntered(false);
+                  handleParamsChange(maxPrice, !!currentEndValue, QueryParam.EndPrice);
                 }
               }}
               onBlur={(evt) => {
@@ -171,7 +167,7 @@ function Filter(): JSX.Element {
                   setMaxPrice(maxFormatPrice.toString());
                 } else {
                   setMaxPrice(currentEndPrice);
-                  setIsMaxPriceEntered(true);
+                  handleParamsChange(maxPrice, !!currentEndPrice, QueryParam.EndPrice);
                 }
               }}
               onKeyDown={(evt) => {
@@ -180,7 +176,7 @@ function Filter(): JSX.Element {
                   if (Number(currentEndPrice) < guitarMinPrice || Number(currentEndPrice) > guitarMaxPrice) {
                     setMaxPrice(maxFormatPrice.toString());
                   } else {
-                    setIsMaxPriceEntered(true);
+                    handleParamsChange(maxPrice, !!currentEndPrice, QueryParam.EndPrice);
                   }
                 }
               }}
@@ -198,12 +194,10 @@ function Filter(): JSX.Element {
             id="acoustic"
             name="acoustic"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsAcousticClicked(true);
-              } else {
-                setIsAcousticClicked(false);
-              }
+              handleParamsChange('acoustic', evt.target.checked, 'type');
+              setIsAcousticClicked(evt.target.checked);
             }}
+            checked={isAcousticClicked}
             disabled={isFourStringsClicked && !isSixStringsClicked && !isSevenStringsClicked && !isTwelveStringsClicked}
           />
           <label htmlFor="acoustic">Акустические гитары</label>
@@ -215,12 +209,10 @@ function Filter(): JSX.Element {
             id="electric"
             name="electric"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsElectricClicked(true);
-              } else {
-                setIsElectricClicked(false);
-              }
+              handleParamsChange('electric', evt.target.checked, 'type');
+              setIsElectricClicked(evt.target.checked);
             }}
+            checked={isElectricClicked}
             disabled={isTwelveStringsClicked && !isFourStringsClicked && !isSixStringsClicked && !isSevenStringsClicked}
             data-testid="checkbox-electric"
           />
@@ -233,12 +225,10 @@ function Filter(): JSX.Element {
             id="ukulele"
             name="ukulele"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsUkuleleClicked(true);
-              } else {
-                setIsUkuleleClicked(false);
-              }
+              handleParamsChange('ukulele', evt.target.checked, 'type');
+              setIsUkuleleClicked(evt.target.checked);
             }}
+            checked={isUkuleleClicked}
             disabled={(isSixStringsClicked || isSevenStringsClicked || isTwelveStringsClicked) && !isFourStringsClicked}
           />
           <label htmlFor="ukulele">Укулеле</label>
@@ -253,12 +243,10 @@ function Filter(): JSX.Element {
             id="4-strings"
             name="4-strings"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsFourStringsClicked(true);
-              } else {
-                setIsFourStringsClicked(false);
-              }
+              handleParamsChange('4', evt.target.checked, 'stringCount');
+              setIsFourStringsClicked(evt.target.checked);
             }}
+            checked={isFourStringsClicked}
             disabled={isAcousticClicked && !isUkuleleClicked && !isElectricClicked}
           />
           <label htmlFor="4-strings">4</label>
@@ -270,12 +258,10 @@ function Filter(): JSX.Element {
             id="6-strings"
             name="6-strings"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsSixStringsClicked(true);
-              } else {
-                setIsSixStringsClicked(false);
-              }
+              handleParamsChange('6', evt.target.checked, 'stringCount');
+              setIsSixStringsClicked(evt.target.checked);
             }}
+            checked={isSixStringsClicked}
             disabled={isUkuleleClicked && !isElectricClicked && !isAcousticClicked}
           />
           <label htmlFor="6-strings">6</label>
@@ -287,12 +273,10 @@ function Filter(): JSX.Element {
             id="7-strings"
             name="7-strings"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsSevenStringsClicked(true);
-              } else {
-                setIsSevenStringsClicked(false);
-              }
+              handleParamsChange('7', evt.target.checked, 'stringCount');
+              setIsSevenStringsClicked(evt.target.checked);
             }}
+            checked={isSevenStringsClicked}
             disabled={isUkuleleClicked && !isElectricClicked && !isAcousticClicked}
           />
           <label htmlFor="7-strings">7</label>
@@ -304,12 +288,10 @@ function Filter(): JSX.Element {
             id="12-strings"
             name="12-strings"
             onChange={(evt) => {
-              if (evt.target.checked) {
-                setIsTwelveStringsClicked(true);
-              } else {
-                setIsTwelveStringsClicked(false);
-              }
+              handleParamsChange('12', evt.target.checked, 'stringCount');
+              setIsTwelveStringsClicked(evt.target.checked);
             }}
+            checked={isTwelveStringsClicked}
             disabled={(isUkuleleClicked || isElectricClicked) && !isAcousticClicked}
             data-testid="checkbox-12-strings"
           />

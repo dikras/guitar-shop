@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable no-console */
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
-import { NUMBER_TO_ROUND, PaginationNumber } from '../../const';
-import { setStartNumber, setCurrentPageNumber } from '../../store/action';
+import { NUMBER_TO_ROUND, PaginationNumber, QueryParam } from '../../const';
+import { setStartNumber } from '../../store/action';
+import { loadFilteredGuitars } from '../../store/api-action';
 
 function Pagination(): JSX.Element {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useHistory();
 
   const totalGuitars = useSelector(getAllGuitarsTotalCount);
   const pagesCount = Math.ceil(totalGuitars / PaginationNumber.Limit);
@@ -22,12 +26,15 @@ function Pagination(): JSX.Element {
 
   const [ currentPage, setCurrentPage ] = useState(1);
 
-  useEffect(() => {
-    dispatch(setCurrentPageNumber(currentPage));
-  }, [
-    dispatch,
-    currentPage,
-  ]);
+  const handleParamsChange = (paramStart: number) => {
+    const paramsInner = new URLSearchParams(location.search);
+    paramsInner.set(QueryParam.PaginationStart, paramStart.toString());
+    paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
+    history.push({
+      search: paramsInner.toString(),
+    });
+    dispatch(loadFilteredGuitars(paramsInner.toString()));
+  };
 
   return (
     <div className="pagination page-content__pagination">
@@ -40,6 +47,7 @@ function Pagination(): JSX.Element {
             evt.preventDefault();
             setCurrentPage((prev) => prev - 1);
             dispatch(setStartNumber((currentPage - (pages.length -1)) * PaginationNumber.Limit));
+            handleParamsChange((currentPage - (pages.length -1)) * PaginationNumber.Limit);
           }}
         >
           <Link to={`/page_${currentPage - 1}`} className="link pagination__page-link">Назад</Link>
@@ -52,6 +60,7 @@ function Pagination(): JSX.Element {
               evt.preventDefault();
               setCurrentPage(page);
               dispatch(setStartNumber((page - 1) * PaginationNumber.Limit));
+              handleParamsChange((page - 1) * PaginationNumber.Limit);
             }}
           >
             <Link to={`/page_${page}`} className="link pagination__page-link" href={`${page}`}>{page}</Link>
@@ -65,6 +74,7 @@ function Pagination(): JSX.Element {
             evt.preventDefault();
             setCurrentPage((prev) => prev + 1);
             dispatch(setStartNumber(currentPage * PaginationNumber.Limit));
+            handleParamsChange(currentPage * PaginationNumber.Limit);
           }}
           data-testid="button-next"
         >

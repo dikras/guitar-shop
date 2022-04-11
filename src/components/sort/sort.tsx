@@ -1,9 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useSelector, useDispatch } from 'react-redux';
+/* eslint-disable no-console */
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getCurrentPage } from '../../store/pagination-reducer/selectors';
 import { loadSortedGuitars } from '../../store/api-action';
+import { QueryParam, SortingOrder, SortingType, PaginationNumber } from '../../const';
+import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
 function Sort(): JSX.Element {
   const dispatch = useDispatch();
@@ -11,45 +13,36 @@ function Sort(): JSX.Element {
   const location = useLocation();
 
   const currentPage = useSelector(getCurrentPage);
+  const currentStartNumber = useSelector(getCurrentStartNumber);
 
-  const params = new URLSearchParams(location.search);
-
-  const [ isSortByPrice, setIsSortByPrice ] = useState(params.get('_sort') === 'price');
-  const [ isSortByRating, setIsSortByRating ] = useState(params.get('_sort') === 'rating');
-  const [ isSortLowToHigh, setIsLowToHigh ] = useState(params.get('_order') === 'asc');
-  const [ isSortHighToLow, setIsSortHighToLow ] = useState(params.get('_order') === 'desc');
+  const [ isSortByPrice, setIsSortByPrice ] = useState(false);
+  const [ isSortByRating, setIsSortByRating ] = useState(false);
+  const [ isSortLowToHigh, setIsLowToHigh ] = useState(false);
+  const [ isSortHighToLow, setIsSortHighToLow ] = useState(false);
 
   useEffect(() => {
-    if (isSortByPrice) {
-      params.set('_sort', 'price');
-    }
-    if (isSortByRating) {
-      params.set('_sort', 'rating');
-    }
-    if (isSortLowToHigh) {
-      params.set('_order', 'asc');
-    }
-    if (isSortHighToLow) {
-      params.set('_order', 'desc');
-    }
+    const isByPrice = new URLSearchParams(location.search).get('_sort') === 'price';
     if (isSortLowToHigh || isSortHighToLow) {
-      dispatch(loadSortedGuitars(params.toString()));
+      dispatch(loadSortedGuitars(isByPrice ? '_sort=price' : ''));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  const handleParamsChange = (paramType: string, paramName: string)=> {
+    const paramsInner = new URLSearchParams(location.search);
+    paramsInner.set(QueryParam.PaginationStart, `${currentStartNumber}`);
+    paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
+    if (!isSortLowToHigh && !isSortHighToLow && !isSortByRating) {
+      paramsInner.set(QueryParam.SortingType, SortingType.ByPrice);
+    }
+    paramsInner.set(paramType, paramName);
+    dispatch(loadSortedGuitars(paramsInner.toString()));
     history.push({
       pathname: `page_${currentPage}`,
-      search: params.toString(),
+      search: paramsInner.toString(),
     });
-  }, [
-    dispatch,
-    history,
-    currentPage,
-    isSortByPrice,
-    isSortByRating,
-    isSortLowToHigh,
-    isSortHighToLow,
-  ]);
 
+  };
 
   return (
     <div className="catalog-sort">
@@ -60,6 +53,7 @@ function Sort(): JSX.Element {
           aria-label="по цене"
           tabIndex={-1}
           onClick={() => {
+            handleParamsChange(QueryParam.SortingType, SortingType.ByPrice);
             setIsSortByPrice(true);
             setIsSortByRating(false);
           }}
@@ -70,6 +64,7 @@ function Sort(): JSX.Element {
           className={`catalog-sort__type-button ${isSortByRating ? 'catalog-sort__type-button--active' : ''}`}
           aria-label="по популярности"
           onClick={() => {
+            handleParamsChange(QueryParam.SortingType, SortingType.ByRating);
             setIsSortByRating(true);
             setIsSortByPrice(false);
           }}
@@ -83,9 +78,7 @@ function Sort(): JSX.Element {
           aria-label="По возрастанию"
           tabIndex={-1}
           onClick={() => {
-            if (!isSortLowToHigh && !isSortHighToLow) {
-              setIsSortByPrice(true);
-            }
+            handleParamsChange(QueryParam.SortingOrder, SortingOrder.LowToHigh);
             setIsLowToHigh(true);
             setIsSortHighToLow(false);
           }}
@@ -97,9 +90,7 @@ function Sort(): JSX.Element {
           className={`catalog-sort__order-button catalog-sort__order-button--down ${isSortHighToLow ? 'catalog-sort__order-button--active' : ''}`}
           aria-label="По убыванию"
           onClick={() => {
-            if (!isSortLowToHigh && !isSortHighToLow) {
-              setIsSortByPrice(true);
-            }
+            handleParamsChange(QueryParam.SortingOrder, SortingOrder.HighToLow);
             setIsSortHighToLow(true);
             setIsLowToHigh(false);
           }}

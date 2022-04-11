@@ -1,5 +1,5 @@
 import { ThunkActionResult } from '../types/actions';
-import { APIRoute, WarningMessage } from '../const';
+import { APIRoute, PaginationNumber, WarningMessage } from '../const';
 import { loadGuitars, loadGuitarsNoComments, getGuitarsTotalCount, loadGuitarsByName } from './action';
 import { Guitar, GuitarNoComments } from '../types/guitar';
 import { toast } from 'react-toastify';
@@ -17,7 +17,7 @@ export const fetchGuitarsByName = (url: string): ThunkActionResult =>
 export const loadFilteredGuitars = (filterURL: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
     try {
-      const responseNoComments = await api.get<GuitarNoComments[]>(`${APIRoute.GuitarsNoComments}?${filterURL.slice(18)}`);
+      const responseNoComments = await api.get<GuitarNoComments[]>(`${APIRoute.GuitarsNoComments}?${filterURL.slice(PaginationNumber.Limit*2)}`);
       const responseWithComments = await api.get<Guitar[]>(`${APIRoute.Guitars}&${filterURL}`);
       dispatch(loadGuitarsNoComments(responseNoComments.data));
       dispatch(loadGuitars(responseWithComments.data));

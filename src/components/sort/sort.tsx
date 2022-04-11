@@ -14,15 +14,24 @@ function Sort(): JSX.Element {
 
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
+  const params = new URLSearchParams(location.search);
+
   const [ isSortByPrice, setIsSortByPrice ] = useState(false);
   const [ isSortByRating, setIsSortByRating ] = useState(false);
   const [ isSortLowToHigh, setIsLowToHigh ] = useState(false);
   const [ isSortHighToLow, setIsSortHighToLow ] = useState(false);
 
   useEffect(() => {
-    const isByPrice = new URLSearchParams(location.search).get('_sort') === 'price';
+    const startNumber = params.get(QueryParam.PaginationStart);
+    const isByPrice = params.get('_sort') === 'price';
+
+    isByPrice ? params.append('_sort', 'price') : params.delete('_sort');
+    startNumber ? params.set(QueryParam.PaginationStart, startNumber) : params.set(QueryParam.PaginationStart, '0');
+
+    const searchParams = params.toString();
+
     if (isSortLowToHigh || isSortHighToLow) {
-      dispatch(loadSortedGuitars(isByPrice ? '_sort=price' : ''));
+      dispatch(loadSortedGuitars(searchParams));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

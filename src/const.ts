@@ -84,3 +84,5 @@ export enum PaginationNumber {
 export const ENTER_KEY = 'Enter';
 
 export const FULL_STARS_COUNT = 4;
+
+export const INITIAL_PAGE = 1;

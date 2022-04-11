@@ -2,9 +2,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router';
 import { useState, useEffect } from 'react';
-import { getCurrentPage } from '../../store/pagination-reducer/selectors';
 import { loadSortedGuitars } from '../../store/api-action';
-import { QueryParam, SortingOrder, SortingType, PaginationNumber } from '../../const';
+import { QueryParam, SortingOrder, SortingType, PaginationNumber, INITIAL_PAGE } from '../../const';
 import { getCurrentStartNumber } from '../../store/pagination-reducer/selectors';
 
 function Sort(): JSX.Element {
@@ -12,7 +11,6 @@ function Sort(): JSX.Element {
   const history = useHistory();
   const location = useLocation();
 
-  const currentPage = useSelector(getCurrentPage);
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
   const [ isSortByPrice, setIsSortByPrice ] = useState(false);
@@ -38,7 +36,7 @@ function Sort(): JSX.Element {
     paramsInner.set(paramType, paramName);
     dispatch(loadSortedGuitars(paramsInner.toString()));
     history.push({
-      pathname: `page_${currentPage}`,
+      pathname: `page_${INITIAL_PAGE}`,
       search: paramsInner.toString(),
     });
 

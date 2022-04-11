@@ -1,10 +1,9 @@
-/* eslint-disable no-console */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
-import { NUMBER_TO_ROUND, PaginationNumber, QueryParam } from '../../const';
+import { NUMBER_TO_ROUND, PaginationNumber, QueryParam, INITIAL_PAGE } from '../../const';
 import { setStartNumber } from '../../store/action';
 import { loadFilteredGuitars } from '../../store/api-action';
 
@@ -24,7 +23,16 @@ function Pagination(): JSX.Element {
   const [ firstElement, ...others ] = pages;
   const [ lastElement ] = others.reverse();
 
-  const [ currentPage, setCurrentPage ] = useState(1);
+  const [ currentPage, setCurrentPage ] = useState(INITIAL_PAGE);
+
+  const params = new URLSearchParams(location.search);
+
+  useEffect(() => {
+    const isPaginationParams = !!params.get(QueryParam.PaginationStart);
+    const pageNumber = location.pathname.slice(6);
+    isPaginationParams ? setCurrentPage(Number(pageNumber)) : setCurrentPage(INITIAL_PAGE);
+    /* eslint-disable react-hooks/exhaustive-deps */
+  }, []);
 
   const handleParamsChange = (paramStart: number) => {
     const paramsInner = new URLSearchParams(location.search);

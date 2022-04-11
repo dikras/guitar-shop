@@ -1,8 +1,7 @@
-/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { ENTER_KEY, QueryParam, GuitarType, StringNumber, PaginationNumber } from '../../const';
+import { ENTER_KEY, QueryParam, GuitarType, StringNumber, PaginationNumber, INITIAL_PAGE } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
 import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
@@ -58,9 +57,10 @@ function Filter(): JSX.Element {
     isSevenStrings ? params.append(QueryParam.StringCount, StringNumber.SevenString) : params.delete(QueryParam.StringCount);
     isTwelveStrings ? params.append(QueryParam.StringCount, StringNumber.TwelveString) : params.delete(QueryParam.StringCount);
 
-    isStartNumber ? params.set(QueryParam.PaginationStart, (currentPage * PaginationNumber.Limit).toString()) : params.set(QueryParam.PaginationStart, currentStartNumber.toString());
+    isStartNumber ? params.set(QueryParam.PaginationStart, (currentPage * PaginationNumber.Limit).toString())
+      : params.set(QueryParam.PaginationStart, currentStartNumber.toString());
 
-    const searchParam = params.toString();
+    const searchParams = params.toString();
 
     setIsAcousticClicked(isAcoustic);
     setIsElectricClicked(isElectric);
@@ -71,7 +71,7 @@ function Filter(): JSX.Element {
     setIsSevenStringsClicked(isSevenStrings);
     setIsTwelveStringsClicked(isTwelveStrings);
 
-    dispatch(loadFilteredGuitars(searchParam));
+    dispatch(loadFilteredGuitars(searchParams));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -83,7 +83,7 @@ function Filter(): JSX.Element {
       paramsInner.append(paramType, paramName);
       dispatch(loadFilteredGuitars(paramsInner.toString()));
       history.push({
-        pathname: `page_${currentPage}`,
+        pathname: `page_${INITIAL_PAGE}`,
         search: paramsInner.toString(),
       });
     } else {

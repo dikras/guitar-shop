@@ -1,11 +1,10 @@
-/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { ENTER_KEY, QueryParam, GuitarType, StringNumber, PaginationNumber } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { getGuitarMinPrice, getGuitarMaxPrice } from '../../store/guitars-reducer/selectors';
-import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
+import { getCurrentStartNumber, getCurrentPageNumber } from '../../store/pagination-reducer/selectors';
 
 function Filter(): JSX.Element {
   const dispatch = useDispatch();
@@ -14,7 +13,7 @@ function Filter(): JSX.Element {
 
   const guitarMinPrice = useSelector(getGuitarMinPrice);
   const guitarMaxPrice = useSelector(getGuitarMaxPrice);
-  const currentPage = useSelector(getCurrentPage);
+  const currentPage = useSelector(getCurrentPageNumber);
   const currentStartNumber = useSelector(getCurrentStartNumber);
 
   const minFormatPrice = new Intl.NumberFormat('ru-RU', {useGrouping: true}).format(guitarMinPrice);
@@ -38,29 +37,73 @@ function Filter(): JSX.Element {
   params.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
 
   useEffect(() => {
-    const isAcoustic = params.getAll(QueryParam.Type).includes(GuitarType.Acoustic);
-    const isElectric = params.getAll(QueryParam.Type).includes(GuitarType.Electric);
-    const isUkulele = params.getAll(QueryParam.Type).includes(GuitarType.Ukulele);
+    const isAcoustic = params.getAll('type').includes(GuitarType.Acoustic);
+    const isElectric = params.getAll('type').includes(GuitarType.Electric);
+    const isUkulele = params.getAll('type').includes(GuitarType.Ukulele);
 
-    const isFourStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.FourString);
-    const isSixStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.SixString);
-    const isSevenStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.SevenString);
-    const isTwelveStrings = params.getAll(QueryParam.StringCount).includes(StringNumber.TwelveString);
+    const isFourStrings = params.getAll('stringCount').includes(StringNumber.FourString);
+    const isSixStrings = params.getAll('stringCount').includes(StringNumber.SixString);
+    const isSevenStrings = params.getAll('stringCount').includes(StringNumber.SevenString);
+    const isTwelveStrings = params.getAll('stringCount').includes(StringNumber.TwelveString);
 
-    const startNumber = params.get(QueryParam.PaginationStart);
+    const startPrice = params.get('price_gte');
+    const endPrice = params.get('price_lte');
 
-    isAcoustic ? params.append(QueryParam.Type, GuitarType.Acoustic) : params.delete(QueryParam.Type);
-    isElectric ? params.append(QueryParam.Type, GuitarType.Electric) : params.delete(QueryParam.Type);
-    isUkulele ? params.append(QueryParam.Type, GuitarType.Ukulele) : params.delete(QueryParam.Type);
+    const sortType = params.get('_sort');
+    const orderType = params.get('_order');
 
-    isFourStrings ? params.append(QueryParam.StringCount, StringNumber.FourString) : params.delete(QueryParam.StringCount);
-    isSixStrings ? params.append(QueryParam.StringCount, StringNumber.SixString) : params.delete(QueryParam.StringCount);
-    isSevenStrings ? params.append(QueryParam.StringCount, StringNumber.SevenString) : params.delete(QueryParam.StringCount);
-    isTwelveStrings ? params.append(QueryParam.StringCount, StringNumber.TwelveString) : params.delete(QueryParam.StringCount);
+    const pageNumber = params.get('page');
+    const startNumber = params.get('_start');
+    const limitNumber = params.get('_limit');
 
-    startNumber ? params.set(QueryParam.PaginationStart, startNumber) : params.set(QueryParam.PaginationStart, '0');
+    let paramString = '';
 
-    const searchParams = params.toString();
+    if (isAcoustic) {
+      paramString += '&type=acoustic&';
+    }
+    if (isElectric) {
+      paramString += '&type=electric&';
+    }
+    if (isUkulele) {
+      paramString += '&type=ukulele&';
+    }
+    if (isFourStrings) {
+      paramString += '&stringCount=4&';
+    }
+    if (isSixStrings) {
+      paramString += '&stringCount=6&';
+    }
+    if (isSevenStrings) {
+      paramString += '&stringCount=7&';
+    }
+    if (isTwelveStrings) {
+      paramString += '&stringCount=12&';
+    }
+    if (startPrice) {
+      paramString += `&price_gte=${startPrice}&`;
+    }
+    if (endPrice) {
+      paramString += `&price_lte=${endPrice}&`;
+    }
+    if (sortType) {
+      paramString += `&_sort=${sortType}&`;
+    }
+    if (orderType) {
+      paramString += `&_order=${orderType}&`;
+    }
+    if (startNumber) {
+      paramString += `&page=${pageNumber}&`;
+    } else {
+      history.push({
+        search: 'page=1',
+      });
+    }
+    if (startNumber) {
+      paramString += `&_start=${startNumber}&`;
+    }
+    if (limitNumber) {
+      paramString += `&_limit=${limitNumber}&`;
+    }
 
     setIsAcousticClicked(isAcoustic);
     setIsElectricClicked(isElectric);
@@ -71,19 +114,19 @@ function Filter(): JSX.Element {
     setIsSevenStringsClicked(isSevenStrings);
     setIsTwelveStringsClicked(isTwelveStrings);
 
-    dispatch(loadFilteredGuitars(searchParams));
+    dispatch(loadFilteredGuitars(paramString));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleParamsChange = (paramName: string, paramValue: boolean, paramType: string)=> {
     const paramsInner = new URLSearchParams(location.search);
+    paramsInner.set('page', `${currentPage}`);
     paramsInner.set(QueryParam.PaginationStart, `${currentStartNumber}`);
     paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
     if(paramValue) {
       paramsInner.append(paramType, paramName);
       dispatch(loadFilteredGuitars(paramsInner.toString()));
       history.push({
-        pathname: `page_${currentPage}`,
         search: paramsInner.toString(),
       });
     } else {

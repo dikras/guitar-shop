@@ -1,43 +1,27 @@
 /* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { loadSortedGuitars } from '../../store/api-action';
 import { QueryParam, SortingOrder, SortingType, PaginationNumber } from '../../const';
-import { getCurrentStartNumber, getCurrentPage } from '../../store/pagination-reducer/selectors';
+import { getCurrentStartNumber, getCurrentPageNumber } from '../../store/pagination-reducer/selectors';
 
 function Sort(): JSX.Element {
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation();
-  const currentPage = useSelector(getCurrentPage);
+  const currentPage = useSelector(getCurrentPageNumber);
 
   const currentStartNumber = useSelector(getCurrentStartNumber);
-
-  const params = new URLSearchParams(location.search);
 
   const [ isSortByPrice, setIsSortByPrice ] = useState(false);
   const [ isSortByRating, setIsSortByRating ] = useState(false);
   const [ isSortLowToHigh, setIsLowToHigh ] = useState(false);
   const [ isSortHighToLow, setIsSortHighToLow ] = useState(false);
 
-  useEffect(() => {
-    const startNumber = params.get(QueryParam.PaginationStart);
-    const isByPrice = params.get('_sort') === 'price';
-
-    isByPrice ? params.append('_sort', 'price') : params.delete('_sort');
-    startNumber ? params.set(QueryParam.PaginationStart, startNumber) : params.set(QueryParam.PaginationStart, '0');
-
-    const searchParams = params.toString();
-
-    if (isSortLowToHigh || isSortHighToLow) {
-      dispatch(loadSortedGuitars(searchParams));
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleParamsChange = (paramType: string, paramName: string)=> {
     const paramsInner = new URLSearchParams(location.search);
+    paramsInner.set('page', `${currentPage}`);
     paramsInner.set(QueryParam.PaginationStart, `${currentStartNumber}`);
     paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
     if (!isSortLowToHigh && !isSortHighToLow && !isSortByRating) {
@@ -46,7 +30,6 @@ function Sort(): JSX.Element {
     paramsInner.set(paramType, paramName);
     dispatch(loadSortedGuitars(paramsInner.toString()));
     history.push({
-      pathname: `page_${currentPage}`,
       search: paramsInner.toString(),
     });
 

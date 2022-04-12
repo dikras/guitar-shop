@@ -6,7 +6,7 @@ import { setStartNumber, setCurrentPageNumber } from '../action';
 const initialState: PaginationProcess = {
   currentStartNumber: PaginationNumber.InitialStart,
   isPaginationDone: false,
-  currentPage: 1,
+  currentPageNumber: 1,
 };
 
 const paginationReducer = createReducer(initialState, (builder) => {
@@ -16,7 +16,7 @@ const paginationReducer = createReducer(initialState, (builder) => {
       state.isPaginationDone = true;
     })
     .addCase(setCurrentPageNumber, (state, action) => {
-      state.currentPage = action.payload;
+      state.currentPageNumber = action.payload;
     });
 });
 

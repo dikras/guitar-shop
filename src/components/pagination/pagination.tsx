@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
-import { NUMBER_TO_ROUND, PaginationNumber, QueryParam, INITIAL_PAGE } from '../../const';
-import { setStartNumber, setCurrentPageNumber } from '../../store/action';
+import { NUMBER_TO_ROUND, PaginationNumber, QueryParam } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
+import { setCurrentPageNumber, setStartNumber } from '../../store/action';
+import { getCurrentPageNumber } from '../../store/pagination-reducer/selectors';
 
 function Pagination(): JSX.Element {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ function Pagination(): JSX.Element {
 
   const totalGuitars = useSelector(getAllGuitarsTotalCount);
   const pagesCount = Math.ceil(totalGuitars / PaginationNumber.Limit);
+  const currentPage = useSelector(getCurrentPageNumber);
 
   const pages = [];
   for (let i = 1; i <= pagesCount; i++) {
@@ -23,19 +25,20 @@ function Pagination(): JSX.Element {
   const [ firstElement, ...others ] = pages;
   const [ lastElement ] = others.reverse();
 
-  const [ currentPage, setCurrentPage ] = useState(INITIAL_PAGE);
-
   const params = new URLSearchParams(location.search);
 
   useEffect(() => {
-    const isPaginationParams = !!params.get(QueryParam.PaginationStart);
-    const pageNumber = location.pathname.slice(6);
-    isPaginationParams ? setCurrentPage(Number(pageNumber)) : setCurrentPage(INITIAL_PAGE);
+    const pageNumber = params.get('page');
+    if (pageNumber) {
+      dispatch(setCurrentPageNumber(Number(pageNumber)));
+    }
     /* eslint-disable react-hooks/exhaustive-deps */
   }, []);
 
-  const handleParamsChange = (paramStart: number) => {
-    const paramsInner = new URLSearchParams(location.search);
+  const paramsInner = new URLSearchParams(location.search);
+
+  const handleParamsChange = (paramStart: number, currentPageValue: number) => {
+    paramsInner.set('page', `${currentPageValue}`);
     paramsInner.set(QueryParam.PaginationStart, paramStart.toString());
     paramsInner.set(QueryParam.PaginationLimit, `${PaginationNumber.Limit}`);
     history.push({
@@ -51,45 +54,50 @@ function Pagination(): JSX.Element {
         <li
           className="pagination__page pagination__page--prev"
           id="prev"
-          onClick={(evt) => {
-            evt.preventDefault();
-            setCurrentPage((prev) => prev - 1);
-            dispatch(setCurrentPageNumber(currentPage + 1));
-            dispatch(setStartNumber((currentPage - (pages.length -1)) * PaginationNumber.Limit));
-            handleParamsChange((currentPage - (pages.length -1)) * PaginationNumber.Limit);
-          }}
         >
-          <Link to={`/page_${currentPage - 1}`} className="link pagination__page-link">Назад</Link>
+          <a
+            className="link pagination__page-link"
+            href="/#"
+            onClick={(evt) => {
+              evt.preventDefault();
+              handleParamsChange((currentPage - (pages.length -1)) * PaginationNumber.Limit, currentPage - 1);
+              dispatch(setCurrentPageNumber(currentPage - 1));
+              dispatch(setStartNumber((currentPage - (pages.length -1)) * PaginationNumber.Limit));
+            }}
+          >Назад
+          </a>
         </li>}
         {pages.map((page) => (
           <li
             key={nanoid(NUMBER_TO_ROUND)}
             className={`pagination__page ${currentPage === page && 'pagination__page--active'}`}
-            onClick={(evt) => {
-              evt.preventDefault();
-              setCurrentPage(page);
-              dispatch(setCurrentPageNumber(currentPage + 1));
-              dispatch(setStartNumber((page - 1) * PaginationNumber.Limit));
-              handleParamsChange((page - 1) * PaginationNumber.Limit);
-            }}
           >
-            <Link to={`/page_${page}`} className="link pagination__page-link" href={`${page}`}>{page}</Link>
+            <a
+              className="link pagination__page-link"
+              href="/#"
+              onClick={(evt) => {
+                evt.preventDefault();
+                handleParamsChange((page - 1) * PaginationNumber.Limit, page);
+                dispatch(setCurrentPageNumber(page));
+                dispatch(setStartNumber((page - 1) * PaginationNumber.Limit));
+              }}
+            >{page}
+            </a>
           </li>
         ))}
         {(currentPage !== lastElement && pagesCount !== 1) &&
-        <li
-          className="pagination__page pagination__page--next"
-          id="next"
-          onClick={(evt) => {
-            evt.preventDefault();
-            setCurrentPage((prev) => prev + 1);
-            dispatch(setCurrentPageNumber(currentPage + 1));
-            dispatch(setStartNumber(currentPage * PaginationNumber.Limit));
-            handleParamsChange(currentPage * PaginationNumber.Limit);
-          }}
-          data-testid="button-next"
-        >
-          <Link to={`/page_${currentPage + 1}`} className="link pagination__page-link">Далее</Link>
+        <li className="pagination__page pagination__page--next" id="next" data-testid="button-next" >
+          <a
+            className="link pagination__page-link"
+            href="/#"
+            onClick={(evt) => {
+              evt.preventDefault();
+              handleParamsChange(currentPage * PaginationNumber.Limit, currentPage + 1);
+              dispatch(setCurrentPageNumber(currentPage + 1));
+              dispatch(setStartNumber(currentPage * PaginationNumber.Limit));
+            }}
+          >Далее
+          </a>
         </li>}
       </ul>
     </div>

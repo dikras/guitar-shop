@@ -16,7 +16,7 @@ export type AppProcess = {
 export type PaginationProcess = {
   currentStartNumber: number,
   isPaginationDone: boolean,
-  currentPage: number,
+  currentPageNumber: number,
 };
 
 export type SearchGuitarByNameProcess = {

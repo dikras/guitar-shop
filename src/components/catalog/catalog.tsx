@@ -2,18 +2,14 @@ import Filter from '../filter/filter';
 import Sort from '../sort/sort';
 import Pagination from '../pagination/pagination';
 import GuitarsList from '../guitars-list/guitars-list';
+import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 function Catalog(): JSX.Element {
   return (
     <main className="page-content" data-testid="catalog-container">
       <div className="container">
         <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
-        <ul className="breadcrumbs page-content__breadcrumbs" data-testid="breadcrumbs-list">
-          <li className="breadcrumbs__item"><a className="link" href="./main.html">Главная</a>
-          </li>
-          <li className="breadcrumbs__item"><a className="link" href="/#">Каталог</a>
-          </li>
-        </ul>
+        <Breadcrumbs />
         <div className="catalog">
           <Filter />
           <Sort />

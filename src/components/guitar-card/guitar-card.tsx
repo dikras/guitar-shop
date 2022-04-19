@@ -2,6 +2,7 @@ import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { ImageSize, IMG_URL_BEGIN_INDEX, FULL_STARS_COUNT, NUMBER_TO_ROUND } from '../../const';
 import { nanoid } from 'nanoid';
+import { Link } from 'react-router-dom';
 
 type GuitarProps = {
   guitar: Guitar;
@@ -9,10 +10,10 @@ type GuitarProps = {
 
 function GuitarCard(props: GuitarProps): JSX.Element {
   const { guitar } = props;
-  const { previewImg, name, price, comments } = guitar;
+  const { previewImg, name, price, comments, id } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
 
-  const ratingStars = [];
+  const ratingStars: number[] = [];
   for (let i = 1; i <= FULL_STARS_COUNT; i++) {
     ratingStars.push(i);
   }
@@ -38,7 +39,13 @@ function GuitarCard(props: GuitarProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <a className="button button--mini" href="/#" data-testid="button-details">Подробнее</a>
+        <Link
+          to={`/${id}`}
+          className="button button--mini"
+          href="/#" data-testid="button-details"
+        >
+          Подробнее
+        </Link>
         <a className="button button--red button--mini button--add-to-cart" href="/#">Купить</a>
       </div>
     </div>

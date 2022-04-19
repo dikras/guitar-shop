@@ -11,6 +11,7 @@ export enum AppRoute {
   Main = '/',
   Catalog = '/page_:id',
   Guitar = '/guitars',
+  GuitarCard ='/:id'
 }
 
 export const ImageSize = {
@@ -21,6 +22,10 @@ export const ImageSize = {
   RatingStar: {
     Height: '11',
     Width: '12',
+  },
+  RatingStarProductCard: {
+    Height: '14',
+    Width: '14',
   },
 };
 

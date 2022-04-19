@@ -6,6 +6,8 @@ export type GuitarsData = {
   guitarsNoComments: GuitarNoComments[],
   guitars: Guitar[],
   guitarsTotalCount: number,
+  guitar: GuitarNoComments | null,
+  isGuitarError: boolean,
 };
 
 export type AppProcess = {

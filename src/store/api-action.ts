@@ -1,6 +1,13 @@
 import { ThunkActionResult } from '../types/actions';
 import { APIRoute, WarningMessage } from '../const';
-import { loadGuitars, loadGuitarsNoComments, getGuitarsTotalCount, loadGuitarsByName } from './action';
+import {
+  loadGuitars,
+  loadGuitarsNoComments,
+  getGuitarsTotalCount,
+  loadGuitarsByName,
+  loadGuitar,
+  loadGuitarError
+} from './action';
 import { Guitar, GuitarNoComments } from '../types/guitar';
 import { toast } from 'react-toastify';
 
@@ -11,6 +18,16 @@ export const fetchGuitarsByName = (url: string): ThunkActionResult =>
       dispatch(loadGuitarsByName(data));
     } catch {
       toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export const fetchGuitar = (id: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const { data } = await api.get<GuitarNoComments>(`/guitars/${id}`);
+      dispatch(loadGuitar(data));
+    } catch {
+      dispatch(loadGuitarError());
     }
   };
 

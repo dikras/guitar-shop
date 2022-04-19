@@ -107,3 +107,12 @@ export const setCurrentPageNumber = createAction(
     payload: currentPage,
   }),
 );
+
+export const loadGuitar = createAction(
+  ActionType.LoadGuitar,
+  (guitar: GuitarNoComments) => ({
+    payload: guitar,
+  }),
+);
+
+export const loadGuitarError = createAction(ActionType.LoadGuitarError);

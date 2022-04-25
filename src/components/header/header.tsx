@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
 import { Link } from 'react-router-dom';
-import { AppRoute, NUMBER_TO_ROUND, APIRoute, QueryParam } from '../../const';
+import { NUMBER_TO_ROUND, APIRoute, QueryParam } from '../../const';
 import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
@@ -83,7 +83,7 @@ function Header(): JSX.Element {
           <ul className={`form-search__select-list ${isFocus ? '' : 'hidden'}`} data-testid="search-list">
             {guitars.map((guitar) => (
               <li key={nanoid(NUMBER_TO_ROUND)} className="form-search__select-item">
-                <Link to={`${AppRoute.Guitar}/${guitar.id}`} className="form-search__select-item" tabIndex={0}>{guitar.name}</Link>
+                <Link to={`${guitar.id}`} className="form-search__select-item" tabIndex={0}>{guitar.name}</Link>
               </li>
             ))}
           </ul>

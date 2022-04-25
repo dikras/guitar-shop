@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getGuitar, getIsGuitarError } from '../../store/guitars-reducer/selectors';
@@ -7,9 +7,12 @@ import { FULL_STARS_COUNT, IMG_URL_BEGIN_INDEX, NUMBER_TO_ROUND, ImageSize } fro
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import NumberFormat from 'react-number-format';
 import { nanoid } from 'nanoid';
+import { fetchComments } from '../../store/api-action';
+import { getCommentsTotalCount } from '../../store/comments/selectors';
 
 function ProductContainer(): JSX.Element {
   const guitar = useSelector(getGuitar);
+  const commentsTotalCount = useSelector(getCommentsTotalCount);
   const isGuitarError = useSelector(getIsGuitarError);
   const dispatch = useDispatch();
 
@@ -21,7 +24,50 @@ function ProductContainer(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchGuitar(id));
+    dispatch(fetchComments(id));
   }, [dispatch, id]);
+
+  const [ isCharacteristics, setIsCharacteristics ] = useState(true);
+  const [ isDescription, setIsDescription ] = useState(false);
+  const [ isOverCharacteristics, setIsOverCharacteristics ] = useState(true);
+  const [ isOverDescription, setIsOverDescription ] = useState(false);
+
+  const handleCharacteristicsTab = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if (!isCharacteristics) {
+      setIsCharacteristics(true);
+    }
+    if(isDescription) {
+      setIsDescription(false);
+    }
+  };
+  const handleDescriptionTab = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if(isCharacteristics) {
+      setIsCharacteristics(false);
+    }
+    if (!isDescription) {
+      setIsDescription(true);
+    }
+  };
+  const handleCharacteristicsOver = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if(isOverCharacteristics) {
+      setIsOverCharacteristics(true);
+    }
+    if (isOverDescription) {
+      setIsOverDescription(false);
+    }
+  };
+  const handleDescriptionOver = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if(isOverCharacteristics) {
+      setIsOverCharacteristics(false);
+    }
+    if (isOverDescription) {
+      setIsOverDescription(true);
+    }
+  };
 
   const renderGuitar = () => {
 
@@ -50,11 +96,26 @@ function ProductContainer(): JSX.Element {
               ))}
               <svg width="14" height="14" aria-hidden="true">
                 <use xlinkHref="#icon-star"></use>
-              </svg><span className="rate__count"></span><span className="rate__message"></span>
+              </svg>
+              <span className="rate__count">{commentsTotalCount}</span>
+              <span className="rate__message"></span>
             </div>
-            <div className="tabs"><a className="button button--medium tabs__button" href="#characteristics">Характеристики</a><a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
+            <div className="tabs">
+              <a
+                className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`} href="#characteristics"
+                onClick={handleCharacteristicsTab}
+                onMouseOver={handleCharacteristicsOver}
+              >Характеристики
+              </a>
+              <a
+                className={`button button--medium tabs__button ${isOverDescription ? '' : 'button--black-border'}`}
+                href="#description"
+                onClick={handleDescriptionTab}
+                onMouseOver={handleDescriptionOver}
+              >Описание
+              </a>
               <div className="tabs__content" id="characteristics">
-                <table className="tabs__table">
+                <table className={`tabs__table ${isCharacteristics ? '' : 'hidden'}`}>
                   <tbody>
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Артикул:</td>
@@ -70,7 +131,7 @@ function ProductContainer(): JSX.Element {
                     </tr>
                   </tbody>
                 </table>
-                <p className="tabs__product-description hidden">{description}</p>
+                <p className={`tabs__product-description ${isDescription ? '' : 'hidden'}`}>{description}</p>
               </div>
             </div>
           </div>

@@ -1,92 +1,94 @@
+/* eslint-disable no-console */
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { getSortedCommentsByDate } from '../../store/comments/selectors';
+import { nanoid } from 'nanoid';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
+import { NUMBER_TO_ROUND, FULL_STARS_COUNT, ImageSize, REVIEWS_PER_STEP } from '../../const';
+import { Comment } from '../../types/comment';
+import ModalReview from '../modal-review/modal-review';
+import ModalSuccess from '../modal-success/modal-success';
+
+dayjs.locale('ru');
+
 function Reviews(): JSX.Element {
+  const reviews = useSelector(getSortedCommentsByDate);
+  const ratingStars: number[] = [];
+  for (let i = 1; i <= FULL_STARS_COUNT; i++) {
+    ratingStars.push(i);
+  }
+  const reviewsCount = reviews.length;
+  const [ reviewsCountToRender, setReviewsCountToRender ] = useState(REVIEWS_PER_STEP);
+  const renderedReviews = reviews.slice(0, Math.min(reviewsCount, reviewsCountToRender));
+  const isReviews = reviewsCount !== 0;
+  const isMoreButton = reviewsCount > renderedReviews.length;
+
+  const [ isModalReviewOpened, setIsModalReviewOpened ] = useState(false);
+  const [ isModalSuccessOpened, setIsModalSuccessOpened ] = useState(false);
+
+  const handleMoreButtonClick = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    setReviewsCountToRender((prev) => prev + REVIEWS_PER_STEP);
+  };
+
+  const handleEscButton = (evt: KeyboardEvent) => {
+    if(evt.key === 'Escape' || evt.key === 'Esc') {
+      setIsModalReviewOpened(false);
+      setIsModalSuccessOpened(false);
+      document.removeEventListener('keydown', handleEscButton);
+      document.body.style.overflow ='auto';
+    }
+  };
+
+  const onSubmitReviewButtonClick = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    setIsModalReviewOpened(true);
+    document.body.style.overflow ='hidden';
+    document.addEventListener('keydown', handleEscButton);
+  };
+
+  const renderReviews = (reviewsArr: Comment[]) => (
+    reviewsArr.map((review) => (
+      <div key={nanoid(NUMBER_TO_ROUND)} className="review">
+        <div className="review__wrapper">
+          <h4 className="review__title review__title--author title title--lesser">{review.userName}</h4>
+          <span className="review__date">{dayjs(review.createAt).format('D MMMM')}</span>
+        </div>
+        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
+          {ratingStars.map(() => (
+            <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
+              <use xlinkHref="#icon-full-star"></use>
+            </svg>
+          ))}
+          <svg width="16" height="16" aria-hidden="true">
+            <use xlinkHref="#icon-star"></use>
+          </svg><span className="rate__count"></span><span className="rate__message"></span>
+        </div>
+        <h4 className="review__title title title--lesser">Достоинства:</h4>
+        <p className="review__value">{review.advantage}</p>
+        <h4 className="review__title title title--lesser">Недостатки:</h4>
+        <p className="review__value">{review.disadvantage}</p>
+        <h4 className="review__title title title--lesser">Комментарий:</h4>
+        <p className="review__value">{review.comment}</p>
+      </div>
+    ))
+  );
+
   return (
     <section className="reviews">
-      <h3 className="reviews__title title title--bigger">Отзывы</h3><a className="button button--red-border button--big reviews__submit-button" href="/#">Оставить отзыв</a>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Иванов Максим</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня.</p>
-      </div>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Перова Ольга</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-      </div>
-      <div className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">Преображенская  Ксения</h4><span className="review__date">12 декабря</span>
-        </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-full-star"></use>
-          </svg>
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">Тугие колонки</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-      </div>
-      <button className="button button--medium reviews__more-button">Показать еще отзывы</button><a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
+      <h3 className="reviews__title title title--bigger">Отзывы</h3>
+      <a className="button button--red-border button--big reviews__submit-button" href="/#" onClick={onSubmitReviewButtonClick}>Оставить отзыв</a>
+      {isReviews ? renderReviews(renderedReviews) : <p>По данному товару пока нет отзывов</p>}
+      {isMoreButton &&
+        <button
+          className="button button--medium reviews__more-button"
+          onClick={handleMoreButtonClick}
+        >Показать еще отзывы
+        </button>}
+      <a className="button button--up button--red-border button--big reviews__up-button" href="#header" style={{zIndex: 10}}>Наверх</a>
+      {isModalReviewOpened && <ModalReview handleModalReviewCloseBtn={setIsModalReviewOpened} handleModalSuccessCloseBtn={setIsModalSuccessOpened} />}
+      {isModalSuccessOpened && <ModalSuccess handleModalSuccessCloseBtn={setIsModalSuccessOpened} />}
     </section>
   );
 }

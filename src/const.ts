@@ -27,6 +27,10 @@ export const ImageSize = {
     Height: '14',
     Width: '14',
   },
+  RatingStarReview: {
+    Height: '16',
+    Width: '16',
+  },
 };
 
 export enum QueryParam {
@@ -90,4 +94,32 @@ export const ENTER_KEY = 'Enter';
 
 export const FULL_STARS_COUNT = 4;
 
-export const INITIAL_PAGE = 1;
+export const REVIEWS_PER_STEP = 3;
+
+export const RATING_STARS = [
+  {
+    description: 'Отлично',
+    value: 5,
+    starId: 'star-5',
+  },
+  {
+    description: 'Хорошо',
+    value: 4,
+    starId: 'star-4',
+  },
+  {
+    description: 'Нормально',
+    value: 3,
+    starId: 'star-3',
+  },
+  {
+    description: 'Плохо',
+    value: 2,
+    starId: 'star-2',
+  },
+  {
+    description: 'Ужасно',
+    value: 1,
+    starId: 'star-1',
+  },
+];

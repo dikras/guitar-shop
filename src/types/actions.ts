@@ -8,6 +8,8 @@ export enum ActionType {
   LoadGuitars = 'guitars/loadGuitars',
   LoadGuitar = 'guitar/loadGuitar',
   LoadGuitarError = 'guitar/loadGuitarError',
+  LoadComments = 'comments/loadComments',
+  LoadCommentsError = 'comments/loadCommentsError',
   LoadGuitarsByName = 'guitars/loadGuitarsByName',
   GetGuitarsTotalCount = 'guitars/getGuitarsTotalCount',
   ChangeSortingType = 'app/changeSortingType',

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ThunkActionResult } from '../types/actions';
 import { APIRoute, WarningMessage } from '../const';
 import {
@@ -6,10 +7,13 @@ import {
   getGuitarsTotalCount,
   loadGuitarsByName,
   loadGuitar,
-  loadGuitarError
+  loadGuitarError,
+  loadComments,
+  loadCommentsError
 } from './action';
 import { Guitar, GuitarNoComments } from '../types/guitar';
 import { toast } from 'react-toastify';
+import { Comment, CommentPost } from '../types/comment';
 
 export const fetchGuitarsByName = (url: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -28,6 +32,16 @@ export const fetchGuitar = (id: string): ThunkActionResult =>
       dispatch(loadGuitar(data));
     } catch {
       dispatch(loadGuitarError());
+    }
+  };
+
+export const fetchComments = (id: string): ThunkActionResult =>
+  async (dispatch, _getState, api): Promise<void> => {
+    try {
+      const { data } = await api.get<Comment[]>(`/guitars/${id}/comments`);
+      dispatch(loadComments(data));
+    } catch {
+      dispatch(loadCommentsError());
     }
   };
 
@@ -50,6 +64,18 @@ export const loadSortedGuitars = (sortURL: string): ThunkActionResult =>
       const responseWithComments = await api.get<Guitar[]>(`${APIRoute.Guitars}&${sortURL}`);
       dispatch(loadGuitars(responseWithComments.data));
     } catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export  const uploadReview = (review: CommentPost, id: string): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    try {
+      await api.post<CommentPost>(APIRoute.Comments, review);
+      const { data } = await api.get<Comment[]>(`/guitars/${id}/comments`);
+      dispatch(loadComments(data));
+    }
+    catch {
       toast.warn(WarningMessage.FetchFail);
     }
   };

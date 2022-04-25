@@ -2,6 +2,7 @@ import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
 import { Guitar, GuitarNoComments } from '../types/guitar';
 import { SortingType, SortingOrder, GuitarType } from '../const';
+import { Comment } from '../types/comment';
 
 export const loadGuitarsNoComments = createAction(
   ActionType.LoadGuitarsNoComments,
@@ -116,3 +117,12 @@ export const loadGuitar = createAction(
 );
 
 export const loadGuitarError = createAction(ActionType.LoadGuitarError);
+
+export const loadComments = createAction(
+  ActionType.LoadComments,
+  (comments: Comment[]) => ({
+    payload: comments,
+  }),
+);
+
+export const loadCommentsError = createAction(ActionType.LoadCommentsError);

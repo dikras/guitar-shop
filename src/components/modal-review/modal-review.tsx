@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useSelector, useDispatch } from 'react-redux';
 import { getGuitar } from '../../store/guitars-reducer/selectors';
 import React, { useRef, useState } from 'react';
@@ -19,36 +18,34 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const ratingRef = useRef<HTMLInputElement | null>(null);
+  const advantageRef = useRef<HTMLInputElement | null>(null);
+  const disadvantageRef = useRef<HTMLInputElement | null>(null);
+  const commentRef = useRef<HTMLTextAreaElement | null>(null);
 
   const { id } = useParams<{ id: string }>();
 
   const [ review, setReview ] = useState({
     guitarId: Number(id),
     userName: '',
-    advantage: ' ',
-    disadvantage: ' ',
-    comment: ' ',
+    advantage: '',
+    disadvantage: '',
+    comment: '',
     rating: 0,
   });
 
-  const handleFormSubmit = (evt: React.FormEvent) => {
-    console.log(review);
-    dispatch(uploadReview(review, id));
-  };
-
   return (
-    <div className="modal is-active modal--review">
-      <div className="modal__wrapper">
-        <div
-          className="modal__overlay"
-          data-close-modal
-          onClick={() => {
-            handleModalReviewCloseBtn(false);
-            document.body.style.overflow ='auto';
-          }}
-        >
-        </div>
-        <FocusTrap>
+    <FocusTrap>
+      <div className="modal is-active modal--review" data-testid="review-modal">
+        <div className="modal__wrapper">
+          <div
+            className="modal__overlay"
+            data-close-modal
+            onClick={() => {
+              handleModalReviewCloseBtn(false);
+              document.body.style.overflow ='auto';
+            }}
+          >
+          </div>
           <div className="modal__content">
             <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
             <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar?.name}</h3>
@@ -56,7 +53,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               className="form-review"
               action="#"
               method="post"
-              onSubmit={handleFormSubmit}
             >
               <div className="form-review__wrapper">
                 <div className="form-review__name-wrapper">
@@ -74,13 +70,14 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                         userName: value,
                       });
                     }}
+                    data-testid="input-name"
                   />
                   <span className="form-review__warning">Заполните поле</span>
                 </div>
                 <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                   <div className="rate rate--reverse">
                     {RATING_STARS.map(({description, value, starId}) => {
-                      const isRequired = starId === 'star-1';
+                      const isRequired = starId === RATING_STARS[4].starId;
                       return (
                         <React.Fragment key={`${value}`}>
                           <input
@@ -112,11 +109,13 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   </div>
                 </div>
               </div>
-              <label className="form-review__label" htmlFor="user-name">Достоинства</label>
+              <label className="form-review__label" htmlFor="pros">Достоинства</label>
               <input
                 className="form-review__input"
                 id="pros" type="text"
                 autoComplete="off"
+                required
+                ref={advantageRef}
                 onChange={({target}) => {
                   const value = target.value;
                   setReview({
@@ -124,13 +123,16 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                     advantage: value,
                   });
                 }}
+                data-testid="input-pros"
               />
-              <label className="form-review__label" htmlFor="user-name">Недостатки</label>
+              <label className="form-review__label" htmlFor="contras">Недостатки</label>
               <input
                 className="form-review__input"
-                id="user-name"
+                id="contras"
                 type="text"
                 autoComplete="off"
+                required
+                ref={disadvantageRef}
                 onChange={({target}) => {
                   const value = target.value;
                   setReview({
@@ -139,12 +141,14 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   });
                 }}
               />
-              <label className="form-review__label" htmlFor="user-name">Комментарий</label>
+              <label className="form-review__label" htmlFor="comment-text">Комментарий</label>
               <textarea
                 className="form-review__input form-review__input--textarea"
-                id="user-name"
+                id="comment-text"
                 rows={10}
                 autoComplete="off"
+                required
+                ref={commentRef}
                 onChange={({target}) => {
                   const value = target.value;
                   setReview({
@@ -158,13 +162,19 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                 className="button button--medium-20 form-review__button"
                 type="submit"
                 onClick={() => {
-                  if (nameRef.current?.validity.valid && ratingRef.current?.validity.valid) {
+                  if (
+                    nameRef.current?.validity.valid
+                    && ratingRef.current?.validity.valid
+                    && advantageRef.current?.validity.valid
+                    && disadvantageRef.current?.validity.valid
+                    && commentRef.current?.validity.valid
+                  ) {
                     handleModalReviewCloseBtn(false);
                     handleModalSuccessCloseBtn(true);
                     dispatch(uploadReview(review, id));
-                    console.log(review);
                   }
                 }}
+                data-testid="button-send-review"
               >Отправить отзыв
               </button>
             </form>
@@ -180,9 +190,9 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               <span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
             </button>
           </div>
-        </FocusTrap>
+        </div>
       </div>
-    </div>
+    </FocusTrap>
   );
 }
 export default ModalReview;

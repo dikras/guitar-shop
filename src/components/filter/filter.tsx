@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -58,52 +59,20 @@ function Filter(): JSX.Element {
 
     let paramString = '';
 
-    if (isAcoustic) {
-      paramString += '&type=acoustic&';
-    }
-    if (isElectric) {
-      paramString += '&type=electric&';
-    }
-    if (isUkulele) {
-      paramString += '&type=ukulele&';
-    }
-    if (isFourStrings) {
-      paramString += '&stringCount=4&';
-    }
-    if (isSixStrings) {
-      paramString += '&stringCount=6&';
-    }
-    if (isSevenStrings) {
-      paramString += '&stringCount=7&';
-    }
-    if (isTwelveStrings) {
-      paramString += '&stringCount=12&';
-    }
-    if (startPrice) {
-      paramString += `&price_gte=${startPrice}&`;
-    }
-    if (endPrice) {
-      paramString += `&price_lte=${endPrice}&`;
-    }
-    if (sortType) {
-      paramString += `&_sort=${sortType}&`;
-    }
-    if (orderType) {
-      paramString += `&_order=${orderType}&`;
-    }
-    if (startNumber) {
-      paramString += `&page=${pageNumber}&`;
-    } else {
-      history.push({
-        search: 'page=1',
-      });
-    }
-    if (startNumber) {
-      paramString += `&_start=${startNumber}&`;
-    }
-    if (limitNumber) {
-      paramString += `&_limit=${limitNumber}&`;
-    }
+    isAcoustic && (paramString += '&type=acoustic&');
+    isElectric && (paramString += '&type=electric&');
+    isUkulele && (paramString += '&type=ukulele&');
+    isFourStrings && (paramString += '&stringCount=4&');
+    isSixStrings && (paramString += '&stringCount=6&');
+    isSevenStrings && (paramString += '&stringCount=7&');
+    isTwelveStrings && (paramString += '&stringCount=12&');
+    startPrice && (paramString += `&price_gte=${startPrice}&`);
+    endPrice && (paramString += `&price_lte=${endPrice}&`);
+    sortType && (paramString += `&_sort=${sortType}&`);
+    orderType && (paramString += `&_order=${orderType}&`);
+    startNumber ? (paramString += `&page=${pageNumber}&`) : history.push({search: 'page=1'});
+    startNumber && (paramString += `&_start=${startNumber}&`);
+    limitNumber && (paramString += `&_limit=${limitNumber}&`);
 
     setIsAcousticClicked(isAcoustic);
     setIsElectricClicked(isElectric);

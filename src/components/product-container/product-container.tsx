@@ -3,12 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getGuitar, getIsGuitarError } from '../../store/guitars-reducer/selectors';
 import { fetchGuitar } from '../../store/api-action';
-import { FULL_STARS_COUNT, IMG_URL_BEGIN_INDEX, NUMBER_TO_ROUND, ImageSize } from '../../const';
+import {
+  FULL_STARS_COUNT,
+  IMG_URL_BEGIN_INDEX,
+  NUMBER_TO_ROUND,
+  ImageSize,
+  INITIAL_TAB_HEIGHT,
+  GuitarType,
+  GuitarTypeRus,
+  UNDEFINED_GUITAR_TYPE
+} from '../../const';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import NumberFormat from 'react-number-format';
 import { nanoid } from 'nanoid';
 import { fetchComments } from '../../store/api-action';
-import { getCommentsTotalCount } from '../../store/comments/selectors';
+import { getCommentsTotalCount } from '../../store/comments-reducer/selectors';
 
 function ProductContainer(): JSX.Element {
   const guitar = useSelector(getGuitar);
@@ -69,12 +78,30 @@ function ProductContainer(): JSX.Element {
     }
   };
 
+  const getGuitarTypeRus = (type: string): string => {
+    switch (type) {
+      case GuitarType.Acoustic: {
+        return GuitarTypeRus.Acoustic;
+      }
+      case GuitarType.Electric: {
+        return GuitarTypeRus.Electric;
+      }
+      case GuitarType.Ukulele: {
+        return GuitarTypeRus.Ukulele;
+      }
+      default: {
+        return UNDEFINED_GUITAR_TYPE;
+      }
+    }
+  };
+
   const renderGuitar = () => {
 
     if (guitar) {
       const {
         name,
         vendorCode,
+        type,
         description,
         previewImg,
         stringCount,
@@ -105,6 +132,8 @@ function ProductContainer(): JSX.Element {
                 className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`} href="#characteristics"
                 onClick={handleCharacteristicsTab}
                 onMouseOver={handleCharacteristicsOver}
+                style={{height: INITIAL_TAB_HEIGHT}}
+                data-testid="tab-characteristics"
               >Характеристики
               </a>
               <a
@@ -112,6 +141,7 @@ function ProductContainer(): JSX.Element {
                 href="#description"
                 onClick={handleDescriptionTab}
                 onMouseOver={handleDescriptionOver}
+                style={{height: INITIAL_TAB_HEIGHT}}
               >Описание
               </a>
               <div className="tabs__content" id="characteristics">
@@ -123,7 +153,7 @@ function ProductContainer(): JSX.Element {
                     </tr>
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Тип:</td>
-                      <td className="tabs__value">Электрогитара</td>
+                      <td className="tabs__value">{getGuitarTypeRus(type)}</td>
                     </tr>
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Количество струн:</td>
@@ -140,7 +170,7 @@ function ProductContainer(): JSX.Element {
             <p className="product-container__price-info product-container__price-info--value">
               <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
             </p>
-            <a className="button button--red button--big product-container__button" href="/#">Добавить в корзину</a>
+            <a className="button button--red button--big product-container__button" href="/#" data-testid="button-add-to-cart">Добавить в корзину</a>
           </div>
         </div>
       );

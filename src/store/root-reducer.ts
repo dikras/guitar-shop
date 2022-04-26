@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { guitarsReducer } from './guitars-reducer/guitars-reducer';
-import { commentsReducer } from './comments/comments-reducer';
+import { commentsReducer } from './comments-reducer/comments-reducer';
 import { appReducer } from './app-reducer/app-reducer';
 import { paginationReducer } from './pagination-reducer/pagination-reducer';
 import { searchGuitarNameReducer } from '../store/search-reducer/search-reducer';

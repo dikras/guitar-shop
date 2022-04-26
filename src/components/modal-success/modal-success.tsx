@@ -29,6 +29,7 @@ function ModalSuccess(props: ModalSuccessProps): JSX.Element {
                 handleModalSuccessCloseBtn(false);
                 document.body.style.overflow ='auto';
               }}
+              data-testid="button-to-product"
             >К покупкам!
             </button>
           </div>
@@ -40,6 +41,7 @@ function ModalSuccess(props: ModalSuccessProps): JSX.Element {
               handleModalSuccessCloseBtn(false);
               document.body.style.overflow ='auto';
             }}
+            data-testid="button-success-close"
           >
             <span className="button-cross__icon"></span>
             <span className="modal__close-btn-interactive-area"></span>

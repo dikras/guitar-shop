@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getSortedCommentsByDate } from '../../store/comments/selectors';
+import { getSortedCommentsByDate } from '../../store/comments-reducer/selectors';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
@@ -77,7 +76,7 @@ function Reviews(): JSX.Element {
 
   return (
     <section className="reviews">
-      <h3 className="reviews__title title title--bigger">Отзывы</h3>
+      <h3 className="reviews__title title title--bigger" data-testid="reviews-title">Отзывы</h3>
       <a className="button button--red-border button--big reviews__submit-button" href="/#" onClick={onSubmitReviewButtonClick}>Оставить отзыв</a>
       {isReviews ? renderReviews(renderedReviews) : <p>По данному товару пока нет отзывов</p>}
       {isMoreButton &&

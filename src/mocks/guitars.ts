@@ -32,4 +32,10 @@ const createMockGuitarsCount = (): number => datatype.number(100);
 const createMockGuitars = (): Guitar[] => new Array(10).fill(null).map(() => createMockGuitar());
 const createMockGuitarsWithoutComments = (): GuitarNoComments[] => new Array(10).fill(null).map(() => createMockGuitarWithoutComments());
 
-export {createMockGuitar, createMockGuitars, createMockGuitarsWithoutComments, createMockGuitarsCount};
+export {
+  createMockGuitar,
+  createMockGuitars,
+  createMockGuitarsWithoutComments,
+  createMockGuitarsCount,
+  createMockGuitarWithoutComments
+};

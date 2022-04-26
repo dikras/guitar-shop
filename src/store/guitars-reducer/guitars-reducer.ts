@@ -19,6 +19,7 @@ const guitarsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
+      state.isGuitarError = false;
     })
     .addCase(loadGuitarsNoComments, (state, action) => {
       state.guitarsNoComments = action.payload;

@@ -51,6 +51,7 @@ const store = mockStore({
 
 describe('Component: ModalReview', () => {
   store.dispatch = jest.fn();
+
   it('should render correctly', () => {
     render(
       <Provider store={store}>
@@ -62,6 +63,7 @@ describe('Component: ModalReview', () => {
         </Router>
       </Provider>);
 
+    expect(screen.getByTestId('modal-container')).toBeInTheDocument();
     expect(screen.getByTestId('review-modal')).toBeInTheDocument();
     expect(screen.getByTestId('input-name')).toBeInTheDocument();
     expect(screen.getByTestId('input-pros')).toBeInTheDocument();
@@ -83,4 +85,5 @@ describe('Component: ModalReview', () => {
     userEvent.type(screen.getByTestId('input-name'), 'Dmitry');
     expect(screen.getByTestId('input-name')).toHaveValue('Dmitry');
   });
+
 });

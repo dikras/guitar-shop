@@ -29,18 +29,28 @@ import {
 } from '../store/api-action';
 import { lorem, datatype} from 'faker';
 
+let mockAPI: MockAdapter;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let store: any;
+const api = createAPI();
+const middlewares = [thunk.withExtraArgument(api)];
+
+const mockStore = configureMockStore<
+  State,
+  Action,
+  ThunkDispatch<State, typeof api, Action>
+>(middlewares);
+
+beforeEach(() => {
+  mockAPI = new MockAdapter(api);
+  store = mockStore({});
+});
+
+afterEach(() => {
+  mockAPI.reset();
+});
+
 describe('Async actions', () => {
-  const api = createAPI();
-  const mockAPI = new MockAdapter(api);
-  const middlewares = [thunk.withExtraArgument(api)];
-
-  const mockStore = configureMockStore<
-    State,
-    Action,
-    ThunkDispatch<State, typeof api, Action>
-  >(middlewares);
-
-  const store = mockStore();
   const mockGuitars = createMockGuitars();
   const mockGuitarsWithoutComments = createMockGuitarsWithoutComments();
   const mockGuitarWithoutComments = createMockGuitarWithoutComments();

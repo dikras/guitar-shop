@@ -23,13 +23,11 @@ export type AppProcess = {
 
 export type PaginationProcess = {
   currentStartNumber: number,
-  isPaginationDone: boolean,
   currentPageNumber: number,
 };
 
 export type SearchGuitarByNameProcess = {
   currentGuitarName: string,
-  isSearchDone: boolean,
   guitarsByName: GuitarNoComments[],
 };
 

@@ -88,6 +88,7 @@ export enum WarningMessage {
 export enum PaginationNumber {
   Limit = 9,
   InitialStart = 0,
+  FirstPage = 1,
 }
 
 export const ENTER_KEY = 'Enter';
@@ -123,3 +124,13 @@ export const RATING_STARS = [
     starId: 'star-1',
   },
 ];
+
+export const INITIAL_TAB_HEIGHT = 47;
+
+export enum GuitarTypeRus {
+  Electric = 'Электрогитара',
+  Acoustic = 'Акустическая гитара',
+  Ukulele = 'Укулеле',
+}
+
+export const UNDEFINED_GUITAR_TYPE = 'Гитара';

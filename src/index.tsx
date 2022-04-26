@@ -7,8 +7,9 @@ import { createAPI } from './api';
 import { rootReducer } from './store/root-reducer';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { fetchGuitars } from './store/api-action';
 
 const api = createAPI();
 
@@ -23,6 +24,8 @@ const store = configureStore({
 });
 
 const browserHistory = createBrowserHistory();
+
+store.dispatch(fetchGuitars());
 
 ReactDOM.render(
   <React.StrictMode>

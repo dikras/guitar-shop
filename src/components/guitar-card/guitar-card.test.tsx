@@ -28,12 +28,10 @@ const store = mockStore({
   },
   PAGINATION: {
     currentStartNumber: createMockStartNumber(),
-    isPaginationDone: false,
     currentPage: createMockStartNumber(),
   },
   SEARCH: {
     currentGuitarName: createMockGuitarName(),
-    isSearchDone: false,
     guitarsByName: createMockGuitarsWithoutComments(),
   },
 });

@@ -1,6 +1,6 @@
-import { createMockStartNumber } from '../../mocks/pagination';
+import { createMockStartNumber, createMockPageNumber } from '../../mocks/pagination';
 import { initialState, paginationReducer } from '../../store/pagination-reducer/pagination-reducer';
-import { setStartNumber } from '../action';
+import { setStartNumber, setCurrentPageNumber } from '../action';
 
 describe('Reducer: pagination-reducer', () => {
   const mockActionType = 'UNKNOWN_ACTION';
@@ -10,15 +10,23 @@ describe('Reducer: pagination-reducer', () => {
       .toEqual(initialState);
   });
 
-  it('set start number in pagination and \'true\' if pagination buttons was clicked', () => {
+  it('set start number in pagination', () => {
     const mockStartNumber = createMockStartNumber();
-    const mockIsPaginationDone = true;
 
     expect(paginationReducer(initialState, setStartNumber(mockStartNumber)))
       .toEqual({
         ...initialState,
         currentStartNumber: mockStartNumber,
-        isPaginationDone: mockIsPaginationDone,
+      });
+  });
+
+  it('set current page number', () => {
+    const mockCurrentPageNumber = createMockPageNumber();
+
+    expect(paginationReducer(initialState, setCurrentPageNumber(mockCurrentPageNumber)))
+      .toEqual({
+        ...initialState,
+        currentPageNumber: mockCurrentPageNumber,
       });
   });
 

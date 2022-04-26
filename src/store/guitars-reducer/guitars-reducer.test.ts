@@ -1,6 +1,11 @@
 import { initialState, guitarsReducer } from './guitars-reducer';
-import { createMockGuitars, createMockGuitarsCount } from '../../mocks/guitars';
-import { loadGuitars, getGuitarsTotalCount } from '../action';
+import {
+  createMockGuitars,
+  createMockGuitarsCount,
+  createMockGuitarsWithoutComments,
+  createMockGuitarWithoutComments
+} from '../../mocks/guitars';
+import { loadGuitars, getGuitarsTotalCount, loadGuitar, loadGuitarsNoComments } from '../action';
 
 describe('Reducer: guitars', () => {
   const mockActionType = 'UNKNOWN_ACTION';
@@ -20,6 +25,16 @@ describe('Reducer: guitars', () => {
       });
   });
 
+  it('should set guitars without comments by load guitars data', () => {
+    const mockGuitarsWithoutComments = createMockGuitarsWithoutComments();
+
+    expect(guitarsReducer(initialState, loadGuitarsNoComments(mockGuitarsWithoutComments)))
+      .toEqual({
+        ...initialState,
+        guitarsNoComments: mockGuitarsWithoutComments,
+      });
+  });
+
   it('should set guitars count by load response header \'x-total-count\'', () => {
     const mockGuitarsCount = createMockGuitarsCount();
 
@@ -27,6 +42,16 @@ describe('Reducer: guitars', () => {
       .toEqual({
         ...initialState,
         guitarsTotalCount: mockGuitarsCount,
+      });
+  });
+
+  it('should set guitar by load guitar data', () => {
+    const mockGuitar = createMockGuitarWithoutComments();
+
+    expect(guitarsReducer(initialState, loadGuitar(mockGuitar)))
+      .toEqual({
+        ...initialState,
+        guitar: mockGuitar,
       });
   });
 

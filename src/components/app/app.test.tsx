@@ -4,7 +4,12 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import App from './app';
-import { createMockGuitars, createMockGuitarsWithoutComments, createMockGuitarsCount } from '../../mocks/guitars';
+import {
+  createMockGuitars,
+  createMockGuitarsWithoutComments,
+  createMockGuitarsCount,
+  createMockGuitar
+} from '../../mocks/guitars';
 import {
   createMockSortingType,
   createMockSortingOrder
@@ -12,6 +17,7 @@ import {
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 import { AppRoute } from '../../const';
+import { createMockComments } from '../../mocks/comments';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -21,6 +27,7 @@ const store = mockStore({
     guitarsNoComments: createMockGuitarsWithoutComments(),
     guitars: createMockGuitars(),
     guitarsTotalCount: createMockGuitarsCount(),
+    guitar: createMockGuitar(),
   },
   APP: {
     currentSortingType: createMockSortingType(),
@@ -33,6 +40,9 @@ const store = mockStore({
   SEARCH: {
     currentGuitarName: createMockGuitarName(),
     guitarsByName: createMockGuitarsWithoutComments(),
+  },
+  COMMENTS: {
+    comments: createMockComments(),
   },
 });
 
@@ -54,12 +64,13 @@ describe('Application Routing', () => {
     expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
   });
 
-  it('should render "NotFoundScreen" when user navigate to non-existent route', () => {
-    history.push('/non-existent-route');
+  it('should render "ProductScreen" when user navigate to "/id"', () => {
+    history.push(AppRoute.GuitarCard);
 
     render(fakeApp);
 
-    expect(screen.getByText('404. Page not found')).toBeInTheDocument();
-    expect(screen.getByText('Вернуться на главную')).toBeInTheDocument();
+    expect(screen.getByText(/Товар/i)).toBeInTheDocument();
+    expect(screen.getByText(/Добавить в корзину/i)).toBeInTheDocument();
   });
+
 });

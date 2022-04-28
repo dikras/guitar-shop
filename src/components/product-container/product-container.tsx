@@ -59,6 +59,7 @@ function ProductContainer(): JSX.Element {
       setIsDescription(true);
     }
   };
+
   const handleCharacteristicsOver = (evt: React.MouseEvent) => {
     evt.preventDefault();
     if(isOverCharacteristics) {
@@ -74,6 +75,19 @@ function ProductContainer(): JSX.Element {
       setIsOverCharacteristics(false);
     }
     if (isOverDescription) {
+      setIsOverDescription(true);
+    }
+  };
+
+  const handleCharacteristicsLeave = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if(isCharacteristics) {
+      setIsOverCharacteristics(true);
+    }
+  };
+  const handleDescriptionLeave = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if(isDescription) {
       setIsOverDescription(true);
     }
   };
@@ -129,10 +143,12 @@ function ProductContainer(): JSX.Element {
             </div>
             <div className="tabs">
               <a
-                className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`} href="#characteristics"
+                className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`}
+                href="#characteristics"
                 onClick={handleCharacteristicsTab}
                 onMouseOver={handleCharacteristicsOver}
-                style={{height: INITIAL_TAB_HEIGHT}}
+                onMouseLeave={handleCharacteristicsLeave}
+                style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
                 data-testid="tab-characteristics"
               >Характеристики
               </a>
@@ -141,7 +157,8 @@ function ProductContainer(): JSX.Element {
                 href="#description"
                 onClick={handleDescriptionTab}
                 onMouseOver={handleDescriptionOver}
-                style={{height: INITIAL_TAB_HEIGHT}}
+                onMouseLeave={handleDescriptionLeave}
+                style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
               >Описание
               </a>
               <div className="tabs__content" id="characteristics">

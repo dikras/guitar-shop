@@ -16,7 +16,7 @@ function Breadcrumbs(): JSX.Element {
         </Link>
       </li>
       <li className="breadcrumbs__item">
-        <Link to={AppRoute.Main} className="link" href="/#">Каталог</Link>
+        <Link to={AppRoute.Main} className="link">Каталог</Link>
       </li>
       {id && <li className="breadcrumbs__item"><a className="link" href="/#">{guitar?.name}</a></li>}
     </ul>

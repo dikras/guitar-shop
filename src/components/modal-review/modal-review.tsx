@@ -20,7 +20,8 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
   const advantageRef = useRef<HTMLInputElement | null>(null);
   const disadvantageRef = useRef<HTMLInputElement | null>(null);
   const commentRef = useRef<HTMLTextAreaElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const buttonSubmitRef = useRef<HTMLButtonElement | null>(null);
+  const buttonCloseRef = useRef<HTMLButtonElement | null>(null);
 
   const { id } = useParams<{ id: string }>();
 
@@ -35,16 +36,45 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
 
   useEffect(() => {
     nameRef.current?.focus();
+  }, []);
+
+  const getFocus = () => {
+    const focusableElements = [
+      nameRef.current,
+      ratingRef.current,
+      advantageRef.current,
+      disadvantageRef.current,
+      commentRef.current,
+      buttonSubmitRef.current,
+      buttonCloseRef.current,
+    ];
+    const firstFocusableElement = focusableElements[0];
+    const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
     document.addEventListener('keydown', (evt: KeyboardEvent) => {
-      if (evt.key === 'Tab') {
-        if (document.activeElement === buttonRef.current) {
-          nameRef.current?.focus();
+      const isTabPressed = evt.key === 'Tab';
+
+      if (!isTabPressed) {
+        return;
+      }
+
+      if (evt.shiftKey) {
+        if (document.activeElement === firstFocusableElement) {
+          lastFocusableElement?.focus();
+          evt.preventDefault();
+        }
+      } else {
+        if (document.activeElement === lastFocusableElement) {
+          firstFocusableElement?.focus();
           evt.preventDefault();
         }
       }
     });
-  });
+  };
 
+  useEffect(() => {
+    getFocus();
+  });
 
   return (
     <div className="modal is-active modal--review" data-testid="review-modal">
@@ -141,7 +171,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               id="comment-text"
               rows={10}
               autoComplete="off"
-              required
               ref={commentRef}
               onChange={({target}) => {
                 const value = target.value;
@@ -169,7 +198,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                 }
               }}
               data-testid="button-send-review"
-              ref={buttonRef}
+              ref={buttonSubmitRef}
             >Отправить отзыв
             </button>
           </form>
@@ -181,6 +210,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               handleModalReviewCloseBtn(false);
               document.body.style.overflow ='auto';
             }}
+            ref={buttonCloseRef}
           >
             <span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
           </button>

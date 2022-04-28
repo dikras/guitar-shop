@@ -40,9 +40,9 @@ function GuitarCard(props: GuitarProps): JSX.Element {
       </div>
       <div className="product-card__buttons">
         <Link
-          to={`/${id}`}
+          to={`${id}`}
           className="button button--mini"
-          href="/#" data-testid="button-details"
+          data-testid="button-details"
         >
           Подробнее
         </Link>

@@ -1,9 +1,9 @@
-/* eslint-disable no-console */
 import { useSelector, useDispatch } from 'react-redux';
 import { getGuitar } from '../../store/guitars-reducer/selectors';
 import { useEffect, useRef, useState } from 'react';
 import { uploadReview } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
+import { RATING_STARS } from '../../const';
 
 type ModalReviewProps = {
   handleModalReviewCloseBtn: (opened: boolean) => void;
@@ -76,6 +76,21 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
     getFocus();
   });
 
+  const handleFormSubmit = (evt: React.FormEvent) => {
+    evt.preventDefault();
+    if (
+      nameRef.current?.validity.valid
+      && ratingRef.current?.validity.valid
+      && advantageRef.current?.validity.valid
+      && disadvantageRef.current?.validity.valid
+      && commentRef.current?.validity.valid
+    ) {
+      dispatch(uploadReview(review, id));
+      handleModalReviewCloseBtn(false);
+      handleModalSuccessCloseBtn(true);
+    }
+  };
+
   return (
     <div className="modal is-active modal--review" data-testid="review-modal">
       <div className="modal__wrapper">
@@ -95,6 +110,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
             className="form-review"
             action="#"
             method="post"
+            onSubmit={handleFormSubmit}
           >
             <div className="form-review__wrapper">
               <div className="form-review__name-wrapper">
@@ -118,16 +134,27 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               </div>
               <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                 <div className="rate rate--reverse">
-                  <input className="visually-hidden" type="radio" id="star-5" name="rate" value="5" />
-                  <label className="rate__label" htmlFor="star-5" title="Отлично" tabIndex={0}></label>
-                  <input className="visually-hidden" type="radio" id="star-4" name="rate" value="4" />
-                  <label className="rate__label" htmlFor="star-4" title="Хорошо" tabIndex={0}></label>
-                  <input className="visually-hidden" type="radio" id="star-3" name="rate" value="3" />
-                  <label className="rate__label" htmlFor="star-3" title="Нормально" tabIndex={0}></label>
-                  <input className="visually-hidden" type="radio" id="star-2" name="rate" value="2" />
-                  <label className="rate__label" htmlFor="star-2" title="Плохо" tabIndex={0}></label>
-                  <input className="visually-hidden" type="radio" id="star-1" name="rate" value="1" />
-                  <label className="rate__label" htmlFor="star-1" title="Ужасно" tabIndex={0}></label>
+                  {RATING_STARS.map(({description, value, starId}) => (
+                    <>
+                      <input
+                        className="visually-hidden"
+                        type="radio"
+                        id={`${starId}`}
+                        name="rate"
+                        value={`${value}`}
+                        onChange={({target}) => {
+                          const valueStar = target.value;
+                          setReview({
+                            ...review,
+                            rating: Number(valueStar),
+                          });
+                        }}
+                        ref={ratingRef}
+                        required
+                      />
+                      <label className="rate__label" htmlFor={`${starId}`} title={`${description}`} tabIndex={0}></label>
+                    </>
+                  ))}
                   <span className="rate__count"></span>
                   <span className="rate__message">Поставьте оценку</span>
                 </div>
@@ -179,24 +206,12 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   comment: value,
                 });
               }}
+              required
             >
             </textarea>
             <button
               className="button button--medium-20 form-review__button"
               type="submit"
-              onClick={() => {
-                if (
-                  nameRef.current?.validity.valid
-                  && ratingRef.current?.validity.valid
-                  && advantageRef.current?.validity.valid
-                  && disadvantageRef.current?.validity.valid
-                  && commentRef.current?.validity.valid
-                ) {
-                  handleModalReviewCloseBtn(false);
-                  handleModalSuccessCloseBtn(true);
-                  dispatch(uploadReview(review, id));
-                }
-              }}
               data-testid="button-send-review"
               ref={buttonSubmitRef}
             >Отправить отзыв

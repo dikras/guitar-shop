@@ -93,7 +93,7 @@ export enum PaginationNumber {
 
 export const ENTER_KEY = 'Enter';
 
-export const FULL_STARS_COUNT = 4;
+export const STARS_COUNT = 5;
 
 export const REVIEWS_PER_STEP = 3;
 

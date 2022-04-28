@@ -4,7 +4,7 @@ import { getSortedCommentsByDate } from '../../store/comments-reducer/selectors'
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { NUMBER_TO_ROUND, FULL_STARS_COUNT, ImageSize, REVIEWS_PER_STEP } from '../../const';
+import { NUMBER_TO_ROUND, STARS_COUNT, ImageSize, REVIEWS_PER_STEP } from '../../const';
 import { Comment } from '../../types/comment';
 import ModalReview from '../modal-review/modal-review';
 import ModalSuccess from '../modal-success/modal-success';
@@ -13,10 +13,6 @@ dayjs.locale('ru');
 
 function Reviews(): JSX.Element {
   const reviews = useSelector(getSortedCommentsByDate);
-  const ratingStars: number[] = [];
-  for (let i = 1; i <= FULL_STARS_COUNT; i++) {
-    ratingStars.push(i);
-  }
   const reviewsCount = reviews.length;
   const [ reviewsCountToRender, setReviewsCountToRender ] = useState(REVIEWS_PER_STEP);
   const renderedReviews = reviews.slice(0, Math.min(reviewsCount, reviewsCountToRender));
@@ -48,30 +44,45 @@ function Reviews(): JSX.Element {
   };
 
   const renderReviews = (reviewsArr: Comment[]) => (
-    reviewsArr.map((review) => (
-      <div key={nanoid(NUMBER_TO_ROUND)} className="review">
-        <div className="review__wrapper">
-          <h4 className="review__title review__title--author title title--lesser">{review.userName}</h4>
-          <span className="review__date">{dayjs(review.createAt).format('D MMMM')}</span>
+    reviewsArr.map(({userName, advantage, disadvantage, comment, rating, createAt}) => {
+      const iconFullStars: number[] = [];
+      const ratingToStar = Math.floor(rating);
+
+      for (let i = 1; i <= ratingToStar; i++) {
+        iconFullStars.push(i);
+      }
+      const iconStars: number[] = [];
+      for (let i = 1; i <= STARS_COUNT - ratingToStar; i++) {
+        iconStars.push(i);
+      }
+      return (
+        <div key={nanoid(NUMBER_TO_ROUND)} className="review">
+          <div className="review__wrapper">
+            <h4 className="review__title review__title--author title title--lesser">{userName}</h4>
+            <span className="review__date">{dayjs(createAt).format('D MMMM')}</span>
+          </div>
+          <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
+            {iconFullStars.map(() => (
+              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
+                <use xlinkHref="#icon-full-star"></use>
+              </svg>
+            ))}
+            {iconStars.map(() => (
+              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
+                <use xlinkHref="#icon-star"></use>
+              </svg>
+            ))}
+            <span className="rate__count"></span><span className="rate__message"></span>
+          </div>
+          <h4 className="review__title title title--lesser">Достоинства:</h4>
+          <p className="review__value">{advantage}</p>
+          <h4 className="review__title title title--lesser">Недостатки:</h4>
+          <p className="review__value">{disadvantage}</p>
+          <h4 className="review__title title title--lesser">Комментарий:</h4>
+          <p className="review__value">{comment}</p>
         </div>
-        <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-          {ratingStars.map(() => (
-            <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
-              <use xlinkHref="#icon-full-star"></use>
-            </svg>
-          ))}
-          <svg width="16" height="16" aria-hidden="true">
-            <use xlinkHref="#icon-star"></use>
-          </svg><span className="rate__count"></span><span className="rate__message"></span>
-        </div>
-        <h4 className="review__title title title--lesser">Достоинства:</h4>
-        <p className="review__value">{review.advantage}</p>
-        <h4 className="review__title title title--lesser">Недостатки:</h4>
-        <p className="review__value">{review.disadvantage}</p>
-        <h4 className="review__title title title--lesser">Комментарий:</h4>
-        <p className="review__value">{review.comment}</p>
-      </div>
-    ))
+      );
+    })
   );
 
   return (

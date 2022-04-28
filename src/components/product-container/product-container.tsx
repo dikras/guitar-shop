@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { getGuitar, getIsGuitarError } from '../../store/guitars-reducer/selectors';
 import { fetchGuitar } from '../../store/api-action';
 import {
-  FULL_STARS_COUNT,
+  STARS_COUNT,
   IMG_URL_BEGIN_INDEX,
   NUMBER_TO_ROUND,
   ImageSize,
@@ -26,10 +26,6 @@ function ProductContainer(): JSX.Element {
   const dispatch = useDispatch();
 
   const { id } = useParams<{ id: string }>();
-  const ratingStars: number[] = [];
-  for (let i = 1; i <= FULL_STARS_COUNT; i++) {
-    ratingStars.push(i);
-  }
 
   useEffect(() => {
     dispatch(fetchGuitar(id));
@@ -120,9 +116,21 @@ function ProductContainer(): JSX.Element {
         previewImg,
         stringCount,
         price,
+        rating,
       } = guitar;
 
       const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
+      const ratingToStar = Math.floor(rating);
+
+      const iconFullStars: number[] = [];
+      for (let i = 1; i <= ratingToStar; i++) {
+        iconFullStars.push(i);
+      }
+
+      const iconStars: number[] = [];
+      for (let i = 1; i <= STARS_COUNT - ratingToStar; i++) {
+        iconStars.push(i);
+      }
 
       return (
         <div className="product-container">
@@ -130,14 +138,16 @@ function ProductContainer(): JSX.Element {
           <div className="product-container__info-wrapper">
             <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
             <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-              {ratingStars.map(() => (
+              {iconFullStars.map(() => (
                 <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
                   <use xlinkHref="#icon-full-star"></use>
                 </svg>
               ))}
-              <svg width="14" height="14" aria-hidden="true">
-                <use xlinkHref="#icon-star"></use>
-              </svg>
+              {iconStars.map(() => (
+                <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
+                  <use xlinkHref="#icon-star"></use>
+                </svg>
+              ))}
               <span className="rate__count">{commentsTotalCount}</span>
               <span className="rate__message"></span>
             </div>

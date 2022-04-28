@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { Link } from 'react-router-dom';
-import { NUMBER_TO_ROUND, APIRoute, QueryParam } from '../../const';
+import { Link, useParams } from 'react-router-dom';
+import { NUMBER_TO_ROUND, APIRoute, QueryParam, AppRoute } from '../../const';
 import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
@@ -15,6 +16,9 @@ function Header(): JSX.Element {
   const dispatch = useDispatch();
 
   const refElement = useRef<HTMLInputElement | null>(null);
+  const { id } = useParams<{ id: string }>();
+
+  const isCatalogPage = id === undefined;
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setWord(evt.currentTarget.value);
@@ -54,11 +58,14 @@ function Header(): JSX.Element {
         </a>
         <nav className="main-nav">
           <ul className="main-nav__list">
-            <li><a className="link main-nav__link link--current" href="/#">Каталог</a>
+            <li>
+              <Link to={AppRoute.Main} className={`link main-nav__link ${isCatalogPage? 'link--current' : ''}`}>Каталог</Link>
             </li>
-            <li><a className="link main-nav__link" href="/#">Где купить?</a>
+            <li>
+              <a className="link main-nav__link" href="/#">Где купить?</a>
             </li>
-            <li><a className="link main-nav__link" href="/#">О компании</a>
+            <li>
+              <a className="link main-nav__link" href="/#">О компании</a>
             </li>
           </ul>
         </nav>

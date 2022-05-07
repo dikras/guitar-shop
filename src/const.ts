@@ -11,7 +11,8 @@ export enum AppRoute {
   Main = '/',
   Catalog = '/page_:id',
   Guitar = '/guitars',
-  GuitarCard ='/:id'
+  GuitarCard ='/:id',
+  Cart = '/cart',
 }
 
 export const ImageSize = {

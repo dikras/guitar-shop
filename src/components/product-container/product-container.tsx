@@ -8,16 +8,14 @@ import {
   IMG_URL_BEGIN_INDEX,
   NUMBER_TO_ROUND,
   ImageSize,
-  INITIAL_TAB_HEIGHT,
-  GuitarType,
-  GuitarTypeRus,
-  UNDEFINED_GUITAR_TYPE
+  INITIAL_TAB_HEIGHT
 } from '../../const';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import NumberFormat from 'react-number-format';
 import { nanoid } from 'nanoid';
 import { fetchComments } from '../../store/api-action';
 import { getCommentsTotalCount } from '../../store/comments-reducer/selectors';
+import { getGuitarTypeRus } from '../../utils';
 
 function ProductContainer(): JSX.Element {
   const guitar = useSelector(getGuitar);
@@ -85,23 +83,6 @@ function ProductContainer(): JSX.Element {
     evt.preventDefault();
     if(isDescription) {
       setIsOverDescription(true);
-    }
-  };
-
-  const getGuitarTypeRus = (type: string): string => {
-    switch (type) {
-      case GuitarType.Acoustic: {
-        return GuitarTypeRus.Acoustic;
-      }
-      case GuitarType.Electric: {
-        return GuitarTypeRus.Electric;
-      }
-      case GuitarType.Ukulele: {
-        return GuitarTypeRus.Ukulele;
-      }
-      default: {
-        return UNDEFINED_GUITAR_TYPE;
-      }
     }
   };
 

@@ -4,6 +4,7 @@ import { commentsReducer } from './comments-reducer/comments-reducer';
 import { appReducer } from './app-reducer/app-reducer';
 import { paginationReducer } from './pagination-reducer/pagination-reducer';
 import { searchGuitarNameReducer } from '../store/search-reducer/search-reducer';
+import { cartReducer } from './cart-reducer/cart-reducer';
 
 export enum NameSpace {
   data = 'DATA',
@@ -11,6 +12,7 @@ export enum NameSpace {
   pagination = 'PAGINATION',
   search = 'SEARCH',
   comments ='COMMENTS',
+  cart = 'CART',
 }
 
 export const rootReducer = combineReducers({
@@ -19,6 +21,7 @@ export const rootReducer = combineReducers({
   [NameSpace.app]: appReducer,
   [NameSpace.pagination]: paginationReducer,
   [NameSpace.search]: searchGuitarNameReducer,
+  [NameSpace.cart]: cartReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

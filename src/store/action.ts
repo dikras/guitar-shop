@@ -126,3 +126,17 @@ export const loadComments = createAction(
 );
 
 export const loadCommentsError = createAction(ActionType.LoadCommentsError);
+
+export const addGuitarToCart = createAction(
+  ActionType.AddGuitarToCart,
+  (guitar: GuitarNoComments) => ({
+    payload: guitar,
+  }),
+);
+
+export const removeGuitarFromCart = createAction(
+  ActionType.RemoveGuitarFromCart,
+  (guitar: GuitarNoComments) => ({
+    payload: guitar,
+  }),
+);

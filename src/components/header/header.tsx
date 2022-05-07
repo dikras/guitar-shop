@@ -2,11 +2,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { NUMBER_TO_ROUND, APIRoute, QueryParam, AppRoute } from '../../const';
 import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
+import { useLocation } from 'react-router-dom';
 
 function Header(): JSX.Element {
   const guitars = useSelector(getGuitarsByName);
@@ -14,11 +15,10 @@ function Header(): JSX.Element {
   const [ isFocus, setIsFocus ] = useState(false);
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const refElement = useRef<HTMLInputElement | null>(null);
-  const { id } = useParams<{ id: string }>();
-
-  const isCatalogPage = id === undefined;
+  const isCatalogPage = location.pathname === AppRoute.Main;
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setWord(evt.currentTarget.value);
@@ -59,7 +59,7 @@ function Header(): JSX.Element {
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li>
-              <Link to={AppRoute.Main} className={`link main-nav__link ${isCatalogPage? 'link--current' : ''}`}>Каталог</Link>
+              <Link to={AppRoute.Main} className={`link main-nav__link ${isCatalogPage ? 'link--current' : ''}`}>Каталог</Link>
             </li>
             <li>
               <a className="link main-nav__link" href="/#">Где купить?</a>

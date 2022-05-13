@@ -3,12 +3,13 @@ import { AppRoute } from '../../const';
 
 type ModalSuccessAddCartProps = {
   isActive: boolean;
+  isMainScreen: boolean;
   handleModalSuccessAddCartCloseBtn: (opened: boolean) => void;
   handleEscModalSuccessAddButton: (e: KeyboardEvent) => void;
 }
 
 function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
-  const { isActive, handleModalSuccessAddCartCloseBtn, handleEscModalSuccessAddButton } = props;
+  const { isActive, handleModalSuccessAddCartCloseBtn, handleEscModalSuccessAddButton, isMainScreen } = props;
 
   return (
     <div className={`modal ${isActive ? 'is-active' : ''} modal--success`}>
@@ -37,15 +38,23 @@ function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
               }}
             >Перейти в корзину
             </Link>
-            <button
-              className="button button--black-border button--small modal__button modal__button--right"
-              onClick={() => {
-                handleModalSuccessAddCartCloseBtn(false);
-                document.body.style.overflow ='auto';
-                document.removeEventListener('keydown', handleEscModalSuccessAddButton);
-              }}
-            >Продолжить покупки
-            </button>
+            {isMainScreen ?
+              <button
+                className="button button--black-border button--small modal__button modal__button--right"
+                onClick={() => {
+                  handleModalSuccessAddCartCloseBtn(false);
+                  document.body.style.overflow ='auto';
+                  document.removeEventListener('keydown', handleEscModalSuccessAddButton);
+                }}
+              >Продолжить покупки
+              </button> :
+              <Link to={AppRoute.Main}
+                className="button button--black-border button--small modal__button modal__button--right"
+                onClick={() => {
+                  document.body.style.overflow ='auto';
+                }}
+              >Продолжить покупки
+              </Link>}
           </div>
           <button
             className="modal__close-btn button-cross"

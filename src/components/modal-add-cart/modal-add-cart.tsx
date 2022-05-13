@@ -13,10 +13,11 @@ type ModalAddCartProps = {
   handleModalAddCartCloseBtn: (opened: boolean) => void;
   handleEscButton: (e: KeyboardEvent) => void;
   guitar: GuitarNoComments;
+  isMainScreen: boolean;
 }
 
 function ModalAddCart(props: ModalAddCartProps): JSX.Element {
-  const { isActive, handleModalAddCartCloseBtn, handleEscButton, guitar } = props;
+  const { isActive, handleModalAddCartCloseBtn, handleEscButton, guitar, isMainScreen } = props;
   const { name, previewImg, vendorCode, stringCount, price, type } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
 
@@ -98,6 +99,7 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
         isActive={isModalSuccessAddCart}
         handleModalSuccessAddCartCloseBtn={setIsModalSuccessAddCart}
         handleEscModalSuccessAddButton={handleEscModalSuccessAddButton}
+        isMainScreen={isMainScreen}
       />
     </>
   );

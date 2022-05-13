@@ -8,9 +8,11 @@ import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
 import { useLocation } from 'react-router-dom';
+import { getGuitarsInCartQuantity } from '../../store/cart-reducer/selectors';
 
 function Header(): JSX.Element {
   const guitars = useSelector(getGuitarsByName);
+  const guitarsInCartQuantity = useSelector(getGuitarsInCartQuantity);
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 
@@ -95,11 +97,13 @@ function Header(): JSX.Element {
             ))}
           </ul>
         </div>
-        <a className="header__cart-link" href="/#" aria-label="Корзина">
+        <Link to={AppRoute.Cart} className="header__cart-link" aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
-          </svg><span className="visually-hidden">Перейти в корзину</span><span className="header__cart-count">2</span>
-        </a>
+          </svg>
+          <span className="visually-hidden">Перейти в корзину</span>
+          {guitarsInCartQuantity === 0 ? '' : <span className="header__cart-count">{guitarsInCartQuantity}</span>}
+        </Link>
       </div>
     </header>
   );

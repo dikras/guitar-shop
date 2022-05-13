@@ -4,3 +4,5 @@ import { GuitarNoComments } from '../../types/guitar';
 
 export const getGuitarsInCart = (state: State): GuitarNoComments[] => state[NameSpace.cart].guitarsInCart;
 export const getTotalSum = (state: State): number => state[NameSpace.cart].totalSum;
+export const getGuitarsInCartQuantity = (state: State): number => state[NameSpace.cart].guitarsInCart.length;
+export const getGuitarsInCartIDs = (state: State): number[] => state[NameSpace.cart].guitarsInCart.map((guitar) => guitar.id);

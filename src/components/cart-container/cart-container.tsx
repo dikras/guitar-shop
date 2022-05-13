@@ -1,68 +1,21 @@
 /* eslint-disable no-console */
-import React from 'react';
-import NumberFormat from 'react-number-format';
-import { useSelector, useDispatch } from 'react-redux';
-import { getGuitarsInCart, getTotalSum } from '../../store/cart-reducer/selectors';
-import { removeGuitarFromCart } from '../../store/action';
 import { nanoid } from 'nanoid';
-import { NUMBER_TO_ROUND, IMG_URL_BEGIN_INDEX } from '../../const';
-import { getGuitarTypeRus } from '../../utils';
+import NumberFormat from 'react-number-format';
+import { useSelector } from 'react-redux';
+import { getGuitarsInCart, getTotalSum } from '../../store/cart-reducer/selectors';
+import CartItem from '../cart-item/cart-item';
+import { NUMBER_TO_ROUND } from '../../const';
 
 function CartContainer(): JSX.Element {
   const guitarsInCart = useSelector(getGuitarsInCart);
-  const dispatch = useDispatch();
 
   const totalSum = useSelector(getTotalSum);
 
+  // RegExp for Input 0-99: /\b([1-9]|[1-9][0-9])\b/gm
+
   return (
     <div className="cart">
-      {guitarsInCart.map((guitarInCart) => {
-        const { price, vendorCode, stringCount, type, name, previewImg } = guitarInCart;
-        const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
-        return (
-          <div key={nanoid(NUMBER_TO_ROUND)} className="cart-item">
-            <button
-              className="cart-item__close-button button-cross"
-              type="button"
-              aria-label="Удалить"
-              onClick={(evt: React.MouseEvent) => {
-                evt.preventDefault();
-                dispatch(removeGuitarFromCart(guitarInCart));
-              }}
-            >
-              <span className="button-cross__icon"></span>
-              <span className="cart-item__close-button-interactive-area"></span>
-            </button>
-            <div className="cart-item__image">
-              <img src={`/img/content/${urlImg}`} width="55" height="130" alt={`${getGuitarTypeRus(type)} ${name}`} />
-            </div>
-            <div className="product-info cart-item__info">
-              <p className="product-info__title">{getGuitarTypeRus(type)} {name}</p>
-              <p className="product-info__info">Артикул: {vendorCode}</p>
-              <p className="product-info__info">Электрогитара, {stringCount} струнная</p>
-            </div>
-            <div className="cart-item__price">
-              <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
-            </div>
-            <div className="quantity cart-item__quantity">
-              <button className="quantity__button" aria-label="Уменьшить количество">
-                <svg width="8" height="8" aria-hidden="true">
-                  <use xlinkHref="#icon-minus"></use>
-                </svg>
-              </button>
-              <input className="quantity__input" type="number" placeholder="1" id="2-count" name="2-count" max="99" />
-              <button className="quantity__button" aria-label="Увеличить количество">
-                <svg width="8" height="8" aria-hidden="true">
-                  <use xlinkHref="#icon-plus"></use>
-                </svg>
-              </button>
-            </div>
-            <div className="cart-item__price-total">
-              <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
-            </div>
-          </div>
-        );
-      })}
+      {guitarsInCart.map((guitarInCart) => <CartItem key={nanoid(NUMBER_TO_ROUND)} guitarInCart={guitarInCart} />)}
       <div className="cart__footer">
         <div className="cart__coupon coupon">
           <h2 className="title title--little coupon__title">Промокод на скидку</h2>

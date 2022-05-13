@@ -135,3 +135,8 @@ export enum GuitarTypeRus {
 }
 
 export const UNDEFINED_GUITAR_TYPE = 'Гитара';
+
+export const GuitarQuantityRange = {
+  Min: 1,
+  Max: 99,
+};

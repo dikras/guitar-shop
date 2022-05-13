@@ -13,6 +13,7 @@ function GuitarsList(): JSX.Element {
         <GuitarCard
           key={nanoid(NUMBER_TO_ROUND)}
           guitar={guitar}
+          isMainScreen
         />
       ))}
     </div>

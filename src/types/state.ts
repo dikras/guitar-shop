@@ -34,8 +34,6 @@ export type SearchGuitarByNameProcess = {
 export type CartProcess = {
   guitarsInCart: GuitarNoComments[],
   totalSum: number,
-  isGuitarAddedToCart: boolean,
-  isGuitarRemovedFromCart: boolean,
 }
 
 export type State = RootState;

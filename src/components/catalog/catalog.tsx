@@ -5,6 +5,7 @@ import GuitarsList from '../guitars-list/guitars-list';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 function Catalog(): JSX.Element {
+
   return (
     <main className="page-content" data-testid="catalog-container">
       <div className="container">

@@ -7,20 +7,21 @@ import { Link } from 'react-router-dom';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getGuitarsInCart } from '../../store/cart-reducer/selectors';
+import { getGuitarsInCartIDs } from '../../store/cart-reducer/selectors';
 
-type GuitarProps = {
+type GuitarCardProps = {
   guitar: Guitar;
+  isMainScreen: boolean;
 };
 
-function GuitarCard(props: GuitarProps): JSX.Element {
-  const { guitar } = props;
+function GuitarCard(props: GuitarCardProps): JSX.Element {
+  const { guitar, isMainScreen } = props;
   const { previewImg, name, price, comments, id, rating } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
 
-  const guitarsInCart = useSelector(getGuitarsInCart);
+  const guitarsInCartIDs = useSelector(getGuitarsInCartIDs);
 
-  const isGuitarInCart = guitarsInCart.includes(guitar);
+  const isGuitarInCart = guitarsInCartIDs.includes(guitar.id);
 
   const ratingToStar = Math.floor(rating);
 
@@ -86,7 +87,6 @@ function GuitarCard(props: GuitarProps): JSX.Element {
             <Link
               to={AppRoute.Cart}
               className="button button--red-border button--mini button--in-cart"
-              href="/#"
             >В корзине
             </Link> :
             <a
@@ -102,6 +102,7 @@ function GuitarCard(props: GuitarProps): JSX.Element {
         handleModalAddCartCloseBtn={setIsModalAddCart}
         handleEscButton={handleEscButton}
         guitar={guitar}
+        isMainScreen={isMainScreen}
       />
     </>
   );

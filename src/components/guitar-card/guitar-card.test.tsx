@@ -43,7 +43,7 @@ describe('Component: GuitarCard', () => {
     render(
       <Provider store={store}>
         <Router history={history}>
-          <GuitarCard guitar={mockGuitar} />
+          <GuitarCard guitar={mockGuitar} isMainScreen />
         </Router>
       </Provider>);
 

@@ -16,6 +16,7 @@ import { nanoid } from 'nanoid';
 import { fetchComments } from '../../store/api-action';
 import { getCommentsTotalCount } from '../../store/comments-reducer/selectors';
 import { getGuitarTypeRus } from '../../utils';
+import ModalAddCart from '../modal-add-cart/modal-add-cart';
 
 function ProductContainer(): JSX.Element {
   const guitar = useSelector(getGuitar);
@@ -34,6 +35,8 @@ function ProductContainer(): JSX.Element {
   const [ isDescription, setIsDescription ] = useState(false);
   const [ isOverCharacteristics, setIsOverCharacteristics ] = useState(true);
   const [ isOverDescription, setIsOverDescription ] = useState(false);
+
+  const [ isModalAddCart, setIsModalAddCart ] = useState(false);
 
   const handleCharacteristicsTab = (evt: React.MouseEvent) => {
     evt.preventDefault();
@@ -86,6 +89,21 @@ function ProductContainer(): JSX.Element {
     }
   };
 
+  const handleEscButton = (evt: KeyboardEvent) => {
+    if(evt.key === 'Escape' || evt.key === 'Esc') {
+      setIsModalAddCart(false);
+      document.removeEventListener('keydown', handleEscButton);
+      document.body.style.overflow ='auto';
+    }
+  };
+
+  const handleAddToCartClick = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    setIsModalAddCart(true);
+    document.body.style.overflow ='hidden';
+    document.addEventListener('keydown', handleEscButton);
+  };
+
   const renderGuitar = () => {
 
     if (guitar) {
@@ -114,73 +132,88 @@ function ProductContainer(): JSX.Element {
       }
 
       return (
-        <div className="product-container">
-          <img className="product-container__img" src={`/img/content/${urlImg}`} width="90" height="235" alt="" />
-          <div className="product-container__info-wrapper">
-            <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
-            <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-              {iconFullStars.map(() => (
-                <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
-                  <use xlinkHref="#icon-full-star"></use>
-                </svg>
-              ))}
-              {iconStars.map(() => (
-                <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
-                  <use xlinkHref="#icon-star"></use>
-                </svg>
-              ))}
-              <span className="rate__count">{commentsTotalCount}</span>
-              <span className="rate__message"></span>
-            </div>
-            <div className="tabs">
-              <a
-                className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`}
-                href="#characteristics"
-                onClick={handleCharacteristicsTab}
-                onMouseOver={handleCharacteristicsOver}
-                onMouseLeave={handleCharacteristicsLeave}
-                style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
-                data-testid="tab-characteristics"
-              >Характеристики
-              </a>
-              <a
-                className={`button button--medium tabs__button ${isOverDescription ? '' : 'button--black-border'}`}
-                href="#description"
-                onClick={handleDescriptionTab}
-                onMouseOver={handleDescriptionOver}
-                onMouseLeave={handleDescriptionLeave}
-                style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
-              >Описание
-              </a>
-              <div className="tabs__content" id="characteristics">
-                <table className={`tabs__table ${isCharacteristics ? '' : 'hidden'}`}>
-                  <tbody>
-                    <tr className="tabs__table-row">
-                      <td className="tabs__title">Артикул:</td>
-                      <td className="tabs__value">{vendorCode}</td>
-                    </tr>
-                    <tr className="tabs__table-row">
-                      <td className="tabs__title">Тип:</td>
-                      <td className="tabs__value">{getGuitarTypeRus(type)}</td>
-                    </tr>
-                    <tr className="tabs__table-row">
-                      <td className="tabs__title">Количество струн:</td>
-                      <td className="tabs__value">{stringCount} струнная</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p className={`tabs__product-description ${isDescription ? '' : 'hidden'}`}>{description}</p>
+        <>
+          <div className="product-container">
+            <img className="product-container__img" src={`/img/content/${urlImg}`} width="90" height="235" alt="" />
+            <div className="product-container__info-wrapper">
+              <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
+              <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
+                {iconFullStars.map(() => (
+                  <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
+                    <use xlinkHref="#icon-full-star"></use>
+                  </svg>
+                ))}
+                {iconStars.map(() => (
+                  <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
+                    <use xlinkHref="#icon-star"></use>
+                  </svg>
+                ))}
+                <span className="rate__count">{commentsTotalCount}</span>
+                <span className="rate__message"></span>
+              </div>
+              <div className="tabs">
+                <a
+                  className={`button button--medium tabs__button ${isOverCharacteristics ? '' : 'button--black-border'}`}
+                  href="#characteristics"
+                  onClick={handleCharacteristicsTab}
+                  onMouseOver={handleCharacteristicsOver}
+                  onMouseLeave={handleCharacteristicsLeave}
+                  style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
+                  data-testid="tab-characteristics"
+                >Характеристики
+                </a>
+                <a
+                  className={`button button--medium tabs__button ${isOverDescription ? '' : 'button--black-border'}`}
+                  href="#description"
+                  onClick={handleDescriptionTab}
+                  onMouseOver={handleDescriptionOver}
+                  onMouseLeave={handleDescriptionLeave}
+                  style={{height: INITIAL_TAB_HEIGHT, borderWidth: 1}}
+                >Описание
+                </a>
+                <div className="tabs__content" id="characteristics">
+                  <table className={`tabs__table ${isCharacteristics ? '' : 'hidden'}`}>
+                    <tbody>
+                      <tr className="tabs__table-row">
+                        <td className="tabs__title">Артикул:</td>
+                        <td className="tabs__value">{vendorCode}</td>
+                      </tr>
+                      <tr className="tabs__table-row">
+                        <td className="tabs__title">Тип:</td>
+                        <td className="tabs__value">{getGuitarTypeRus(type)}</td>
+                      </tr>
+                      <tr className="tabs__table-row">
+                        <td className="tabs__title">Количество струн:</td>
+                        <td className="tabs__value">{stringCount} струнная</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <p className={`tabs__product-description ${isDescription ? '' : 'hidden'}`}>{description}</p>
+                </div>
               </div>
             </div>
+            <div className="product-container__price-wrapper">
+              <p className="product-container__price-info product-container__price-info--title">Цена:</p>
+              <p className="product-container__price-info product-container__price-info--value">
+                <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
+              </p>
+              <a
+                className="button button--red button--big product-container__button"
+                href="/#"
+                data-testid="button-add-to-cart"
+                onClick={handleAddToCartClick}
+              >Добавить в корзину
+              </a>
+            </div>
           </div>
-          <div className="product-container__price-wrapper">
-            <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-            <p className="product-container__price-info product-container__price-info--value">
-              <NumberFormat value={price} displayType="text" thousandSeparator=" " /> ₽
-            </p>
-            <a className="button button--red button--big product-container__button" href="/#" data-testid="button-add-to-cart">Добавить в корзину</a>
-          </div>
-        </div>
+          <ModalAddCart
+            isActive={isModalAddCart}
+            handleModalAddCartCloseBtn={setIsModalAddCart}
+            handleEscButton={handleEscButton}
+            guitar={guitar}
+            isMainScreen={false}
+          />
+        </>
       );
     }
   };

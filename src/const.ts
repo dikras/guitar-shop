@@ -140,3 +140,5 @@ export const GuitarQuantityRange = {
   Min: 1,
   Max: 99,
 };
+
+export const COUPON_VALUES = ['light-333', 'medium-444', 'height-555'];

@@ -1,4 +1,9 @@
-import { GuitarType, GuitarTypeRus, UNDEFINED_GUITAR_TYPE } from './const';
+import {
+  GuitarType,
+  GuitarTypeRus,
+  UNDEFINED_GUITAR_TYPE
+  // COUPON_VALUES
+} from './const';
 
 export const getGuitarTypeRus = (typeGuitar: string): string => {
   switch (typeGuitar) {

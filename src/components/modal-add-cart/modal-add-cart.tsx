@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ModalSuccessAddCart from '../modal-success-add-cart/modal-success-add-cart';
 import { getGuitarTypeRus } from '../../utils';
+import { nanoid } from 'nanoid';
 
 type ModalAddCartProps = {
   isActive: boolean;
@@ -35,7 +36,8 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
 
   const handleAddToCartBtnClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    dispatch(addGuitarToCart(guitar));
+    const guitarToCart = {...guitar, uniqID: nanoid()};
+    dispatch(addGuitarToCart(guitarToCart));
     setIsModalSuccessAddCart(true);
     handleModalAddCartCloseBtn(false);
     document.body.style.overflow ='hidden';

@@ -140,3 +140,17 @@ export const removeGuitarFromCart = createAction(
     payload: guitar,
   }),
 );
+
+export const addSumToCart = createAction(
+  ActionType.AddSumToCart,
+  (sumToAdd: number) => ({
+    payload: sumToAdd,
+  }),
+);
+
+export const loadDiscount = createAction(
+  ActionType.LoadDiscount,
+  (discount: number) => ({
+    payload: discount,
+  }),
+);

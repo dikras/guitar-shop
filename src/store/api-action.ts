@@ -8,11 +8,13 @@ import {
   loadGuitarError,
   loadComments,
   loadCommentsError,
-  getGuitarsTotalCount
+  getGuitarsTotalCount,
+  loadDiscount
 } from './action';
 import { Guitar, GuitarNoComments } from '../types/guitar';
 import { toast } from 'react-toastify';
 import { Comment, CommentPost } from '../types/comment';
+import { CouponPost } from '../types/post';
 
 export const fetchGuitarsByName = (url: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
@@ -81,6 +83,17 @@ export  const uploadReview = (review: CommentPost, id: string): ThunkActionResul
       await api.post<CommentPost>(APIRoute.Comments, review);
       const { data } = await api.get<Comment[]>(`${APIRoute.GuitarsNoComments}/${id}${APIRoute.Comments}`);
       dispatch(loadComments(data));
+    }
+    catch {
+      toast.warn(WarningMessage.FetchFail);
+    }
+  };
+
+export  const fetchDiscount = ({coupon}: CouponPost): ThunkActionResult =>
+  async (dispatch, _getState, api) => {
+    try {
+      const { data } = await api.post<number>(APIRoute.Coupon, {coupon});
+      dispatch(loadDiscount(data));
     }
     catch {
       toast.warn(WarningMessage.FetchFail);

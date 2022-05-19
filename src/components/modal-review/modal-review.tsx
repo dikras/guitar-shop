@@ -76,18 +76,31 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
     getFocus();
   });
 
+  const [ isName, setIsName ] = useState(true);
+  const [ isRating, setIsRating ] = useState(true);
+
   const handleFormSubmit = (evt: React.FormEvent) => {
     evt.preventDefault();
     if (
-      nameRef.current?.validity.valid
-      && ratingRef.current?.validity.valid
-      && advantageRef.current?.validity.valid
-      && disadvantageRef.current?.validity.valid
-      && commentRef.current?.validity.valid
+      review.userName
+      && (review.rating !== 0)
+      && review.advantage
+      && review.disadvantage
+      && review.comment
     ) {
       dispatch(uploadReview(review, id));
       handleModalReviewCloseBtn(false);
       handleModalSuccessCloseBtn(true);
+    }
+    if (!review.userName) {
+      setIsName(false);
+    } else {
+      setIsName(true);
+    }
+    if (review.rating === 0) {
+      setIsRating(false);
+    } else {
+      setIsRating(true);
     }
   };
 
@@ -119,7 +132,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   id="user-name"
                   type="text"
                   autoComplete="off"
-                  required
                   ref={nameRef}
                   onChange={({target}) => {
                     const value = target.value;
@@ -130,7 +142,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   }}
                   data-testid="input-name"
                 />
-                <span className="form-review__warning">Заполните поле</span>
+                <span className="form-review__warning" style={{height: '15px'}}>{isName ? '' : 'Заполните поле'}</span>
               </div>
               <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                 <div className="rate rate--reverse">
@@ -150,13 +162,12 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                           });
                         }}
                         ref={ratingRef}
-                        required
                       />
                       <label className="rate__label" htmlFor={`${starId}`} title={`${description}`} tabIndex={0}></label>
                     </>
                   ))}
                   <span className="rate__count"></span>
-                  <span className="rate__message">Поставьте оценку</span>
+                  <span className="rate__message">{isRating ? '' : 'Поставьте оценку'}</span>
                 </div>
               </div>
             </div>
@@ -165,7 +176,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               className="form-review__input"
               id="pros" type="text"
               autoComplete="off"
-              required
               ref={advantageRef}
               onChange={({target}) => {
                 const value = target.value;
@@ -182,7 +192,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               id="contras"
               type="text"
               autoComplete="off"
-              required
               ref={disadvantageRef}
               onChange={({target}) => {
                 const value = target.value;
@@ -206,7 +215,6 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                   comment: value,
                 });
               }}
-              required
             >
             </textarea>
             <button

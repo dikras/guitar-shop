@@ -2,6 +2,7 @@ import { Comment } from './comment';
 
 export type GuitarNoComments = {
   id: number;
+  uniqID?: string,
   name: string;
   vendorCode: string;
   type: string;

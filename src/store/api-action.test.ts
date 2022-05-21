@@ -4,7 +4,7 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { State } from '../types/state';
 import {Action} from 'redux';
-import { APIRoute, QueryParam } from '../const';
+import { APIRoute, QueryParam, COUPON_VALUES } from '../const';
 import {
   createMockGuitarsWithoutComments,
   createMockGuitarWithoutComments,
@@ -16,7 +16,8 @@ import {
   loadGuitar,
   loadComments,
   loadGuitarsNoComments,
-  loadGuitars
+  loadGuitars,
+  loadDiscount
 } from '../store/action';
 import {
   fetchGuitarsByName,
@@ -25,7 +26,8 @@ import {
   loadFilteredGuitars,
   loadSortedGuitars,
   fetchGuitars,
-  uploadReview
+  uploadReview,
+  fetchDiscount
 } from '../store/api-action';
 import { lorem, datatype} from 'faker';
 
@@ -58,6 +60,7 @@ describe('Async actions', () => {
   const mockGuitarComment = createMockComment();
   const mockPost = createMockPost();
   const mockId = createMockId();
+  const mockDiscount = datatype.number();
 
   it('should dispatch loadGuitarsByName when GET /guitars?name_like=word', async () => {
     mockAPI
@@ -145,6 +148,18 @@ describe('Async actions', () => {
 
     expect(store.getActions()).toEqual([
       loadComments(mockGuitarComments),
+    ]);
+  });
+
+  it('should dispatch loadDiscount with coupon-object when POST /coupons', async () => {
+    mockAPI
+      .onPost(APIRoute.Coupon)
+      .reply(200, mockDiscount);
+
+    await store.dispatch(fetchDiscount({coupon: COUPON_VALUES[0]}));
+
+    expect(store.getActions()).toEqual([
+      loadDiscount(mockDiscount),
     ]);
   });
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { getGuitarTypeRus } from '../../utils';
@@ -20,6 +20,9 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
   const dispatch = useDispatch();
 
+  const [ isOverButtonRemoveFromCart, setIsOverButtonRemoveFromCart ] = useState(true);
+  const [ isOverButtonToCart, setIsOverButtonToCart ] = useState(false);
+
   const handleModalRemoveCloseElement = () => {
     handleModalRemoveCartCloseBtn(false);
     document.body.style.overflow ='auto';
@@ -29,6 +32,26 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
   const handleRemoveFromCartButton =(evt: React.MouseEvent) => {
     evt.preventDefault();
     dispatch(removeGuitarFromCart(guitar));
+  };
+
+  const handleOverButtonRemoveFromCart = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if (isOverButtonRemoveFromCart) {
+      setIsOverButtonRemoveFromCart(true);
+    }
+    if (isOverButtonToCart) {
+      setIsOverButtonToCart(false);
+    }
+  };
+
+  const handleOverButtonToCart = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if (isOverButtonRemoveFromCart) {
+      setIsOverButtonRemoveFromCart(false);
+    }
+    if (isOverButtonToCart) {
+      setIsOverButtonToCart(true);
+    }
   };
 
   return (
@@ -58,13 +81,16 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
           </div>
           <div className="modal__button-container">
             <button
-              className="button button--small modal__button"
+              className={`button button--small modal__button ${isOverButtonRemoveFromCart ? '' : 'button--black-border'}`}
               onClick={handleRemoveFromCartButton}
+              onMouseOver={handleOverButtonRemoveFromCart}
+              data-testid="button-remove-cart-item"
             >Удалить товар
             </button>
             <button
-              className="button button--black-border button--small modal__button modal__button--right"
+              className={`button button--small modal__button modal__button--right ${isOverButtonToCart ? '' : 'button--black-border'}`}
               onClick={handleModalRemoveCloseElement}
+              onMouseOver={handleOverButtonToCart}
             >Продолжить покупки
             </button>
           </div>

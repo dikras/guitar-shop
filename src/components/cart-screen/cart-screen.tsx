@@ -9,7 +9,7 @@ function CartScreen(): JSX.Element {
       <Header />
       <main className="page-content">
         <div className="container">
-          <h1 className="title title--bigger page-content__title">Корзина</h1>
+          <h1 className="title title--bigger page-content__title" data-testid="cart-title">Корзина</h1>
           <Breadcrumbs />
           <CartContainer />
         </div>

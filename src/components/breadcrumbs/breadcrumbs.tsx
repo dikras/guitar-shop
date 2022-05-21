@@ -14,7 +14,7 @@ function Breadcrumbs(): JSX.Element {
   return (
     <ul className="breadcrumbs page-content__breadcrumbs">
       <li className="breadcrumbs__item">
-        <Link to={AppRoute.Main} className="link">
+        <Link to={AppRoute.Main} className="link" data-testid="main-link-breadcrumbs">
           Главная
         </Link>
       </li>

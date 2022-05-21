@@ -1,5 +1,5 @@
 import { SortingType, SortingOrder } from '../const';
-import { Guitar, GuitarNoComments } from './guitar';
+import { Guitar, GuitarNoComments, GuitarToCount } from './guitar';
 import { RootState } from '../store/root-reducer';
 import { Comment } from './comment';
 
@@ -33,6 +33,7 @@ export type SearchGuitarByNameProcess = {
 
 export type CartProcess = {
   guitarsInCart: GuitarNoComments[],
+  guitarsToCount: GuitarToCount[],
   totalSum: number,
   discount: number,
 }

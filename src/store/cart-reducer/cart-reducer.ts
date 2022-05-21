@@ -4,13 +4,15 @@ import {
   addGuitarToCart,
   removeGuitarFromCart,
   loadDiscount,
-  addSumToCart
+  addSumToCart,
+  addGuitarToCount
 } from '../action';
 
 const initialState: CartProcess = {
   guitarsInCart: [],
   totalSum: 0,
   discount: 0,
+  guitarsToCount: [],
 };
 
 const cartReducer = createReducer(initialState, (builder) => {
@@ -26,6 +28,9 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(addSumToCart, (state, action) => {
       state.totalSum += action.payload;
+    })
+    .addCase(addGuitarToCount, (state, action) => {
+      state.guitarsToCount.push(action.payload);
     })
     .addCase(loadDiscount, (state, action) => {
       state.discount = action.payload;

@@ -1,6 +1,6 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import { Guitar, GuitarNoComments } from '../types/guitar';
+import { Guitar, GuitarNoComments, GuitarToCount } from '../types/guitar';
 import { SortingType, SortingOrder, GuitarType } from '../const';
 import { Comment } from '../types/comment';
 
@@ -145,6 +145,13 @@ export const addSumToCart = createAction(
   ActionType.AddSumToCart,
   (sumToAdd: number) => ({
     payload: sumToAdd,
+  }),
+);
+
+export const addGuitarToCount = createAction(
+  ActionType.AddGuitarToCount,
+  (guitar: GuitarToCount) => ({
+    payload: guitar,
   }),
 );
 

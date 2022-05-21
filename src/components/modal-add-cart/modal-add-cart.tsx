@@ -2,7 +2,7 @@
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { IMG_URL_BEGIN_INDEX } from '../../const';
-import { addGuitarToCart } from '../../store/action';
+import { addGuitarToCart, addGuitarToCount } from '../../store/action';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ModalSuccessAddCart from '../modal-success-add-cart/modal-success-add-cart';
@@ -34,10 +34,17 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
     }
   };
 
+  const guitarToCount = {
+    name,
+    price,
+    quantity: 1,
+  };
+
   const handleAddToCartBtnClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
     const guitarToCart = {...guitar, uniqID: nanoid()};
     dispatch(addGuitarToCart(guitarToCart));
+    dispatch(addGuitarToCount(guitarToCount));
     setIsModalSuccessAddCart(true);
     handleModalAddCartCloseBtn(false);
     document.body.style.overflow ='hidden';

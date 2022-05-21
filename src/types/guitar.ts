@@ -2,7 +2,7 @@ import { Comment } from './comment';
 
 export type GuitarNoComments = {
   id: number;
-  uniqID?: string,
+  uniqID?: string;
   name: string;
   vendorCode: string;
   type: string;
@@ -24,4 +24,10 @@ export type Guitar = {
   rating: number;
   price: number;
   comments: Comment[],
+};
+
+export type GuitarToCount = {
+  name: string,
+  price: number,
+  quantity: number,
 };

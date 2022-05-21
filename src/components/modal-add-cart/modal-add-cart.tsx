@@ -30,7 +30,7 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
       setIsModalSuccessAddCart(false);
       document.body.style.overflow ='auto';
-      document.removeEventListener('keydown', handleEscButton);
+      document.removeEventListener('keydown', handleEscModalSuccessAddButton);
     }
   };
 
@@ -78,6 +78,7 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
               <button
                 className="button button--red button--big modal__button modal__button--add"
                 onClick={handleAddToCartBtnClick}
+                data-testid="button-add-to-cart"
               >Добавить в корзину
               </button>
             </div>

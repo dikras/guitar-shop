@@ -60,6 +60,7 @@ function CartContainer(): JSX.Element {
                 onChange={(evt) => {
                   !evt.target.value && setCouponMessage(<p></p>);
                 }}
+                data-testid="coupon-input"
               />
               {couponMessage}
             </div>
@@ -88,7 +89,7 @@ function CartContainer(): JSX.Element {
               <NumberFormat value={totalSum - discountSum} displayType="text" thousandSeparator=" " /> ₽
             </span>
           </p>
-          <button className="button button--red button--big cart__order-button">Оформить заказ</button>
+          <button className="button button--red button--big cart__order-button" data-testid="button-cart-order">Оформить заказ</button>
         </div>
       </div>
     </div>

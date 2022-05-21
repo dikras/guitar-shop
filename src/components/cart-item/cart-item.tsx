@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { IMG_URL_BEGIN_INDEX, GuitarQuantityRange  } from '../../const';
 import { getGuitarTypeRus } from '../../utils';
 import ModalRemoveCart from '../modal-remove-cart/modal-remove-cart';
-import { addSumToCart } from '../../store/action';
+// import { addSumToCart } from '../../store/action';
 
 type CartItemProps = {
   guitarInCart: GuitarNoComments;
@@ -17,13 +17,18 @@ function CartItem(props: CartItemProps): JSX.Element {
   const { price, vendorCode, stringCount, type, name, previewImg } = guitarInCart;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
   const [ itemQuantity, setItemQuantity ] = useState(1);
   const [ isModalRemoveCart, setIsModalRemoveCart ] = useState(false);
 
   const totalItemSum = itemQuantity * price;
+
+  /* const cartItemGuitar = {
+    quantity: itemQuantity + 1,
+    price: price,
+  }; */
 
   const handleEscButton = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
@@ -50,7 +55,7 @@ function CartItem(props: CartItemProps): JSX.Element {
   const handleIncreaseButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
     setItemQuantity((prev) => (prev <= GuitarQuantityRange.Max - 1) ? prev + 1 : prev);
-    dispatch(addSumToCart(price));
+    // dispatch(addSumToCart(price));
   };
 
   return (
@@ -61,6 +66,7 @@ function CartItem(props: CartItemProps): JSX.Element {
           type="button"
           aria-label="Удалить"
           onClick={handleRemoveButton}
+          data-testid="button-close-cart-item"
         >
           <span className="button-cross__icon"></span>
           <span className="cart-item__close-button-interactive-area"></span>
@@ -106,6 +112,7 @@ function CartItem(props: CartItemProps): JSX.Element {
             className="quantity__button"
             aria-label="Увеличить количество"
             onClick={handleIncreaseButton}
+            data-testid="button-increase-quantity"
           >
             <svg width="8" height="8" aria-hidden="true">
               <use xlinkHref="#icon-plus"></use>

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 
@@ -10,6 +11,29 @@ type ModalSuccessAddCartProps = {
 
 function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
   const { isActive, handleModalSuccessAddCartCloseBtn, handleEscModalSuccessAddButton, isMainScreen } = props;
+
+  const [ isOverButtonToCart, setIsOverButtonToCart ] = useState(true);
+  const [ isOverButtonToCatalog, setIsOverButtonToCatalog ] = useState(false);
+
+  const handleButtonToCart = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if (isOverButtonToCart) {
+      setIsOverButtonToCart(true);
+    }
+    if (isOverButtonToCatalog) {
+      setIsOverButtonToCatalog(false);
+    }
+  };
+
+  const handleButtonToCatalog = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    if (isOverButtonToCart) {
+      setIsOverButtonToCart(false);
+    }
+    if (isOverButtonToCatalog) {
+      setIsOverButtonToCatalog(true);
+    }
+  };
 
   return (
     <div className={`modal ${isActive ? 'is-active' : ''} modal--success`}>
@@ -32,20 +56,23 @@ function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
           <div className="modal__button-container modal__button-container--add">
             <Link
               to={AppRoute.Cart}
-              className="button button--small modal__button"
+              className={`button button--small modal__button ${isOverButtonToCart ? '' : 'button--black-border'}`}
               onClick={() => {
                 document.body.style.overflow ='auto';
               }}
+              onMouseOver={handleButtonToCart}
+              data-testid="button-go-to-cart"
             >Перейти в корзину
             </Link>
             {isMainScreen ?
               <button
-                className="button button--black-border button--small modal__button modal__button--right"
+                className={`button button--small modal__button modal__button--right ${isOverButtonToCart ? '' : 'button--black-border'}`}
                 onClick={() => {
                   handleModalSuccessAddCartCloseBtn(false);
                   document.body.style.overflow ='auto';
                   document.removeEventListener('keydown', handleEscModalSuccessAddButton);
                 }}
+                onMouseOver={handleButtonToCatalog}
               >Продолжить покупки
               </button> :
               <Link to={AppRoute.Main}

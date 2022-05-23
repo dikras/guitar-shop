@@ -7,7 +7,8 @@ import ModalSuccessAddCart from './modal-success-add-cart';
 import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
-  createMockGuitarsCount
+  createMockGuitarsCount,
+  createMockGuitarsToCount
 } from '../../mocks/guitars';
 import {
   createMockSortingType,
@@ -48,8 +49,8 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    totalSum: datatype.number(),
     discount: datatype.number(),
+    guitarsToCount: createMockGuitarsToCount(),
   },
 });
 

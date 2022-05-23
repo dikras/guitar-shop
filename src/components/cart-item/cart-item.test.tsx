@@ -8,7 +8,8 @@ import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
   createMockGuitarsCount,
-  createMockGuitarWithoutComments
+  createMockGuitarWithoutComments,
+  createMockGuitarsToCount
 } from '../../mocks/guitars';
 import {
   createMockSortingType,
@@ -42,8 +43,8 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    totalSum: datatype.number(),
     discount: datatype.number(),
+    guitarsToCount: createMockGuitarsToCount(),
   },
 });
 

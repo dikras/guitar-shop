@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useLocation, useParams } from 'react-router-dom';

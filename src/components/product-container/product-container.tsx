@@ -137,7 +137,7 @@ function ProductContainer(): JSX.Element {
             <img className="product-container__img" src={`/img/content/${urlImg}`} width="90" height="235" alt="" />
             <div className="product-container__info-wrapper">
               <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
-              <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
+              <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden" data-testid="rating-stars">Рейтинг:</span>
                 {iconFullStars.map(() => (
                   <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
                     <use xlinkHref="#icon-full-star"></use>
@@ -200,7 +200,6 @@ function ProductContainer(): JSX.Element {
               <a
                 className="button button--red button--big product-container__button"
                 href="/#"
-                data-testid="button-add-to-cart"
                 onClick={handleAddToCartClick}
               >Добавить в корзину
               </a>

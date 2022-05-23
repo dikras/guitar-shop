@@ -3,7 +3,8 @@ import { getGuitar } from '../../store/guitars-reducer/selectors';
 import { useEffect, useRef, useState } from 'react';
 import { uploadReview } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
-import { RATING_STARS } from '../../const';
+import { RATING_STARS, NUMBER_TO_ROUND } from '../../const';
+import { nanoid } from 'nanoid';
 
 type ModalReviewProps = {
   handleModalReviewCloseBtn: (opened: boolean) => void;
@@ -150,6 +151,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                     <>
                       <input
                         className="visually-hidden"
+                        key={nanoid(NUMBER_TO_ROUND)}
                         type="radio"
                         id={`${starId}`}
                         name="rate"
@@ -163,7 +165,14 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                         }}
                         ref={ratingRef}
                       />
-                      <label className="rate__label" htmlFor={`${starId}`} title={`${description}`} tabIndex={0}></label>
+                      <label
+                        className="rate__label"
+                        key={nanoid(NUMBER_TO_ROUND)}
+                        htmlFor={`${starId}`}
+                        title={`${description}`}
+                        tabIndex={0}
+                      >
+                      </label>
                     </>
                   ))}
                   <span className="rate__count"></span>

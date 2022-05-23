@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory } from 'react-router';
 import { useState } from 'react';

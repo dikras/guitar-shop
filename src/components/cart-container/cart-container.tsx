@@ -1,10 +1,10 @@
-/* eslint-disable no-console */
 import { nanoid } from 'nanoid';
 import React, { useRef, useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useSelector, useDispatch } from 'react-redux';
-import { getGuitarsInCart,
-  getTotalSum
+import {
+  getGuitarsInCart,
+  getTotalSumByCartItem
 } from '../../store/cart-reducer/selectors';
 import { getDiscount } from '../../store/cart-reducer/selectors';
 import CartItem from '../cart-item/cart-item';
@@ -13,10 +13,9 @@ import { fetchDiscount } from '../../store/api-action';
 
 function CartContainer(): JSX.Element {
   const guitarsInCart = useSelector(getGuitarsInCart);
-  const totalSum = useSelector(getTotalSum);
+  const totalSum = useSelector(getTotalSumByCartItem);
   const inputCouponRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
-  // RegExp for Input 0-99: /\b([1-9]|[1-9][0-9])\b/gm
 
   const discountNumber = useSelector(getDiscount);
   const discountSum = discountNumber / 100 * totalSum;

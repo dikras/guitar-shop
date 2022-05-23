@@ -34,7 +34,6 @@ export type SearchGuitarByNameProcess = {
 export type CartProcess = {
   guitarsInCart: GuitarNoComments[],
   guitarsToCount: GuitarToCount[],
-  totalSum: number,
   discount: number,
 }
 

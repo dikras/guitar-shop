@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { IMG_URL_BEGIN_INDEX } from '../../const';
@@ -34,15 +34,17 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
     }
   };
 
+  const uniqID = nanoid();
+
   const guitarToCount = {
-    name,
+    uniqID: uniqID,
     price,
     quantity: 1,
   };
 
   const handleAddToCartBtnClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    const guitarToCart = {...guitar, uniqID: nanoid()};
+    const guitarToCart = {...guitar, uniqID: uniqID};
     dispatch(addGuitarToCart(guitarToCart));
     dispatch(addGuitarToCount(guitarToCount));
     setIsModalSuccessAddCart(true);

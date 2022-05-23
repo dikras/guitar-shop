@@ -1,7 +1,6 @@
-/* eslint-disable no-console */
 import { initialState, cartReducer } from './cart-reducer';
 import { createMockGuitarWithoutComments } from '../../mocks/guitars';
-import { addGuitarToCart, loadDiscount, addSumToCart } from '../action';
+import { addGuitarToCart, loadDiscount } from '../action';
 import { datatype } from 'faker';
 import { GuitarNoComments } from '../../types/guitar';
 
@@ -13,27 +12,15 @@ describe('Reducer: cart', () => {
       .toEqual(initialState);
   });
 
-  it('should add guitar and it\'s price to cart', () => {
+  it('should add guitar to cart', () => {
     const mockGuitar = createMockGuitarWithoutComments();
     const guitarsInCart: GuitarNoComments[] = [];
     guitarsInCart.push(mockGuitar);
-    const totalSum = 0;
 
     expect(cartReducer(initialState, addGuitarToCart(mockGuitar)))
       .toEqual({
         ...initialState,
         guitarsInCart: guitarsInCart,
-        totalSum: totalSum + mockGuitar.price,
-      });
-  });
-
-  it('should add guitar price to total sum', () => {
-    const mockTotalSum = datatype.number();
-
-    expect(cartReducer(initialState, addSumToCart(mockTotalSum)))
-      .toEqual({
-        ...initialState,
-        totalSum: mockTotalSum,
       });
   });
 

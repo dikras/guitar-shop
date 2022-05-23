@@ -25,8 +25,10 @@ export enum ActionType {
   SetGuitarName = 'search/setGuitarName',
   AddGuitarToCart = 'cart/addGuitarToCart',
   RemoveGuitarFromCart = 'cart/removeGuitarFromCart',
-  AddSumToCart = 'cart/addSumToCart',
   AddGuitarToCount = 'cart/addGuitarToCount',
+  IncreaseGuitarCount = 'cart/increaseGuitarCount',
+  DecreaseGuitarCount = 'cart/decreaseGuitarCount',
+  SetGuitarCount = 'cart/setGuitarCount',
   LoadDiscount = 'cart/loadDiscount',
 }
 

@@ -56,6 +56,6 @@ describe('Component: ProductContainer', () => {
       </Provider>);
 
     expect(screen.getByTestId('tab-characteristics')).toBeInTheDocument();
-    expect(screen.getByTestId('button-add-to-cart')).toBeInTheDocument();
+    expect(screen.getByTestId('rating-stars')).toBeInTheDocument();
   });
 });

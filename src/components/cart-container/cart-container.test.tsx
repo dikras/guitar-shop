@@ -4,7 +4,12 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import CartContainer from './cart-container';
-import { createMockGuitars, createMockGuitarsWithoutComments, createMockGuitarsCount } from '../../mocks/guitars';
+import {
+  createMockGuitars,
+  createMockGuitarsWithoutComments,
+  createMockGuitarsCount,
+  createMockGuitarsToCount
+} from '../../mocks/guitars';
 import {
   createMockSortingType,
   createMockSortingOrder
@@ -37,10 +42,11 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    totalSum: datatype.number(),
     discount: datatype.number(),
+    guitarsToCount: createMockGuitarsToCount(),
   },
 });
+
 describe('Component: CartContainer', () => {
   store.dispatch = jest.fn();
   it('should render correctly', () => {

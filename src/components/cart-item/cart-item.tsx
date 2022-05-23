@@ -1,12 +1,12 @@
-/* eslint-disable no-console */
 import React, { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { IMG_URL_BEGIN_INDEX, GuitarQuantityRange  } from '../../const';
 import { getGuitarTypeRus } from '../../utils';
 import ModalRemoveCart from '../modal-remove-cart/modal-remove-cart';
-import { addSumToCart } from '../../store/action';
+import { increaseGuitarQuantity, decreaseGuitarQuantity, setGuitarQuantity } from '../../store/action';
+import { getGuitarsToCount } from '../../store/cart-reducer/selectors';
 
 type CartItemProps = {
   guitarInCart: GuitarNoComments;
@@ -14,16 +14,18 @@ type CartItemProps = {
 
 function CartItem(props: CartItemProps): JSX.Element {
   const { guitarInCart } = props;
-  const { price, vendorCode, stringCount, type, name, previewImg } = guitarInCart;
+  const { price, vendorCode, stringCount, type, name, previewImg, uniqID } = guitarInCart;
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const guitarsToCount = useSelector(getGuitarsToCount);
+  const currentGuitarToCountQuantity = guitarsToCount.find((guitar) => guitar.uniqID === uniqID)?.quantity;
 
   const dispatch = useDispatch();
 
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
-  const [ itemQuantity, setItemQuantity ] = useState(1);
   const [ isModalRemoveCart, setIsModalRemoveCart ] = useState(false);
 
-  const totalItemSum = itemQuantity * price;
+  const totalItemSum = currentGuitarToCountQuantity && currentGuitarToCountQuantity * price;
 
   const handleEscButton = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
@@ -41,7 +43,9 @@ function CartItem(props: CartItemProps): JSX.Element {
 
   const handleDecreaseButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    setItemQuantity((prev) => (prev >= GuitarQuantityRange.Min + 1) ? prev - 1 : prev);
+    if (Number(inputRef.current?.value) >= GuitarQuantityRange.Min + 1) {
+      dispatch(decreaseGuitarQuantity(uniqID));
+    }
     if (Number(inputRef.current?.value) === GuitarQuantityRange.Min) {
       handleRemoveButton(evt);
     }
@@ -49,8 +53,9 @@ function CartItem(props: CartItemProps): JSX.Element {
 
   const handleIncreaseButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    setItemQuantity((prev) => (prev <= GuitarQuantityRange.Max - 1) ? prev + 1 : prev);
-    dispatch(addSumToCart(price));
+    if (Number(inputRef.current?.value) <= GuitarQuantityRange.Max - 1) {
+      dispatch(increaseGuitarQuantity(uniqID));
+    }
   };
 
   return (
@@ -61,6 +66,7 @@ function CartItem(props: CartItemProps): JSX.Element {
           type="button"
           aria-label="Удалить"
           onClick={handleRemoveButton}
+          data-testid="button-close-cart-item"
         >
           <span className="button-cross__icon"></span>
           <span className="cart-item__close-button-interactive-area"></span>
@@ -97,15 +103,16 @@ function CartItem(props: CartItemProps): JSX.Element {
             onChange={(evt) => {
               const currentValue = Number(evt.target.value);
               if (currentValue >= GuitarQuantityRange.Min || currentValue <= GuitarQuantityRange.Max) {
-                setItemQuantity(currentValue);
+                dispatch(setGuitarQuantity({uniqID, quantity: currentValue}));
               }
             }}
-            value={itemQuantity}
+            value={currentGuitarToCountQuantity}
           />
           <button
             className="quantity__button"
             aria-label="Увеличить количество"
             onClick={handleIncreaseButton}
+            data-testid="button-increase-quantity"
           >
             <svg width="8" height="8" aria-hidden="true">
               <use xlinkHref="#icon-plus"></use>

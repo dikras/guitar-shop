@@ -1,6 +1,6 @@
 import {createAction} from '@reduxjs/toolkit';
 import { ActionType } from '../types/actions';
-import { Guitar, GuitarNoComments, GuitarToCount } from '../types/guitar';
+import { Guitar, GuitarNoComments, GuitarToCount, DataToSetGuitarCount } from '../types/guitar';
 import { SortingType, SortingOrder, GuitarType } from '../const';
 import { Comment } from '../types/comment';
 
@@ -141,17 +141,31 @@ export const removeGuitarFromCart = createAction(
   }),
 );
 
-export const addSumToCart = createAction(
-  ActionType.AddSumToCart,
-  (sumToAdd: number) => ({
-    payload: sumToAdd,
-  }),
-);
-
 export const addGuitarToCount = createAction(
   ActionType.AddGuitarToCount,
   (guitar: GuitarToCount) => ({
     payload: guitar,
+  }),
+);
+
+export const increaseGuitarQuantity = createAction(
+  ActionType.IncreaseGuitarCount,
+  (uniqID: string | undefined) => ({
+    payload: uniqID,
+  }),
+);
+
+export const decreaseGuitarQuantity = createAction(
+  ActionType.DecreaseGuitarCount,
+  (uniqID: string | undefined) => ({
+    payload: uniqID,
+  }),
+);
+
+export const setGuitarQuantity = createAction(
+  ActionType.SetGuitarCount,
+  (dataToSetCount: DataToSetGuitarCount | undefined) => ({
+    payload: dataToSetCount,
   }),
 );
 

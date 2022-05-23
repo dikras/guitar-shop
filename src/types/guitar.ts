@@ -27,7 +27,12 @@ export type Guitar = {
 };
 
 export type GuitarToCount = {
-  name: string,
+  uniqID: string | undefined,
   price: number,
   quantity: number,
 };
+
+export type DataToSetGuitarCount = {
+  uniqID: string | undefined,
+  quantity: number,
+}

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';

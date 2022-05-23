@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Header from '../header/header';
 import Catalog from '../catalog/catalog';
 import Footer from '../footer/footer';

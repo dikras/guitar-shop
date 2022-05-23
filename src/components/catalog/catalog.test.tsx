@@ -8,7 +8,8 @@ import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
   createMockGuitarsCount,
-  createMockGuitar
+  createMockGuitar,
+  createMockGuitarsToCount
 } from '../../mocks/guitars';
 import {
   createMockSortingType,
@@ -17,6 +18,7 @@ import {
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 import { createMockComments } from '../../mocks/comments';
+import { datatype } from 'faker';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -42,6 +44,11 @@ const store = mockStore({
   },
   COMMENTS: {
     comments: createMockComments(),
+  },
+  CART: {
+    guitarsInCart: createMockGuitarsWithoutComments(),
+    discount: datatype.number(),
+    guitarsToCount: createMockGuitarsToCount(),
   },
 });
 

@@ -24,6 +24,8 @@ const cartReducer = createReducer(initialState, (builder) => {
     .addCase(removeGuitarFromCart, (state, action) => {
       const newGuitarsInCart = [...state.guitarsInCart].filter((guitar) => guitar.uniqID !== action.payload.uniqID);
       state.guitarsInCart = newGuitarsInCart;
+      const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.uniqID !== action.payload.uniqID);
+      state.guitarsToCount = newGuitarsToCount;
       if (state.guitarsInCart.length === 0) {
         state.guitarsInCart = [];
         state.discount = 0;

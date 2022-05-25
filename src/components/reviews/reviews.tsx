@@ -4,7 +4,7 @@ import { getSortedCommentsByDate } from '../../store/comments-reducer/selectors'
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ru';
-import { NUMBER_TO_ROUND, STARS_COUNT, ImageSize, REVIEWS_PER_STEP } from '../../const';
+import { STARS_COUNT, ImageSize, REVIEWS_PER_STEP } from '../../const';
 import { Comment } from '../../types/comment';
 import ModalReview from '../modal-review/modal-review';
 import ModalSuccess from '../modal-success/modal-success';
@@ -56,19 +56,19 @@ function Reviews(): JSX.Element {
         iconStars.push(i);
       }
       return (
-        <div key={nanoid(NUMBER_TO_ROUND)} className="review">
+        <div key={nanoid()} className="review">
           <div className="review__wrapper">
             <h4 className="review__title review__title--author title title--lesser">{userName}</h4>
             <span className="review__date">{dayjs(createAt).format('D MMMM')}</span>
           </div>
           <div className="rate review__rating-panel" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
             {iconFullStars.map(() => (
-              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
+              <svg key={nanoid()} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
                 <use xlinkHref="#icon-full-star"></use>
               </svg>
             ))}
             {iconStars.map(() => (
-              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
+              <svg key={nanoid()} width={ImageSize.RatingStarReview.Width} height={ImageSize.RatingStarReview.Height} aria-hidden="true">
                 <use xlinkHref="#icon-star"></use>
               </svg>
             ))}

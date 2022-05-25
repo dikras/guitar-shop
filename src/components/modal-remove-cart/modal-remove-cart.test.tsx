@@ -23,12 +23,6 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 const setIsModalRemoveCart = () => true;
-const handleEscButton = (evt: KeyboardEvent) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc') {
-    document.removeEventListener('keydown', handleEscButton);
-    document.body.style.overflow ='auto';
-  }
-};
 
 const store = mockStore({
   DATA: {
@@ -66,7 +60,6 @@ describe('Component: ModalRemoveCart', () => {
             guitar={guitar}
             isActive
             handleModalRemoveCartCloseBtn={setIsModalRemoveCart}
-            handleEscButton={handleEscButton}
           />
         </Router>
       </Provider>);

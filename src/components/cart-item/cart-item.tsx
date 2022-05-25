@@ -6,7 +6,8 @@ import { IMG_URL_BEGIN_INDEX, GuitarQuantityRange  } from '../../const';
 import { getGuitarTypeRus } from '../../utils';
 import ModalRemoveCart from '../modal-remove-cart/modal-remove-cart';
 import { increaseGuitarQuantity, decreaseGuitarQuantity, setGuitarQuantity } from '../../store/action';
-import { getGuitarsToCount } from '../../store/cart-reducer/selectors';
+import { getGuitarToCountQuantity } from '../../store/cart-reducer/selectors';
+import { State } from '../../types/state';
 
 type CartItemProps = {
   guitarInCart: GuitarNoComments;
@@ -17,8 +18,7 @@ function CartItem(props: CartItemProps): JSX.Element {
   const { price, vendorCode, stringCount, type, name, previewImg, uniqID } = guitarInCart;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const guitarsToCount = useSelector(getGuitarsToCount);
-  const currentGuitarToCountQuantity = guitarsToCount.find((guitar) => guitar.uniqID === uniqID)?.quantity;
+  const currentGuitarToCountQuantity = useSelector((state: State) => getGuitarToCountQuantity(state, uniqID));
 
   const dispatch = useDispatch();
 
@@ -38,6 +38,7 @@ function CartItem(props: CartItemProps): JSX.Element {
   const handleRemoveButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
     setIsModalRemoveCart(true);
+    document.body.style.overflow ='hidden';
     document.addEventListener('keydown', handleEscButton);
   };
 
@@ -127,7 +128,6 @@ function CartItem(props: CartItemProps): JSX.Element {
         isActive={isModalRemoveCart}
         guitar={guitarInCart}
         handleModalRemoveCartCloseBtn={setIsModalRemoveCart}
-        handleEscButton={handleEscButton}
       />
     </>
   );

@@ -5,6 +5,7 @@ import { Guitar, GuitarNoComments } from '../../types/guitar';
 export const getGuitarsNoComments = (state: State): GuitarNoComments[] => state[NameSpace.data].guitarsNoComments;
 export const getGuitars = (state: State): Guitar[] => state[NameSpace.data].guitars;
 export const getGuitar = (state: State): GuitarNoComments | null => state[NameSpace.data].guitar;
+export const getIsGuitarLoading = (state: State): boolean => state[NameSpace.data].isGuitarLoading;
 
 export const getIsGuitarError = (state: State): boolean => state[NameSpace.data].isGuitarError;
 export const getAllGuitarsTotalCount = (state: State): number => state[NameSpace.data].guitarsTotalCount;

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getGuitar } from '../../store/guitars-reducer/selectors';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { uploadReview } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
 import { RATING_STARS, NUMBER_TO_ROUND } from '../../const';
@@ -148,10 +148,9 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                 <div className="rate rate--reverse">
                   {RATING_STARS.map(({description, value, starId}) => (
-                    <>
+                    <React.Fragment key={nanoid(NUMBER_TO_ROUND)}>
                       <input
                         className="visually-hidden"
-                        key={nanoid(NUMBER_TO_ROUND)}
                         type="radio"
                         id={`${starId}`}
                         name="rate"
@@ -167,13 +166,12 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
                       />
                       <label
                         className="rate__label"
-                        key={nanoid(NUMBER_TO_ROUND)}
                         htmlFor={`${starId}`}
                         title={`${description}`}
                         tabIndex={0}
                       >
                       </label>
-                    </>
+                    </React.Fragment>
                   ))}
                   <span className="rate__count"></span>
                   <span className="rate__message">{isRating ? '' : 'Поставьте оценку'}</span>

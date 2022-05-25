@@ -4,6 +4,7 @@ import {
   loadGuitars,
   loadGuitarsNoComments,
   loadGuitarsByName,
+  fetchGuitarInitial,
   loadGuitar,
   loadGuitarError,
   loadComments,
@@ -38,6 +39,7 @@ export const fetchGuitars = (): ThunkActionResult =>
 
 export const fetchGuitar = (id: string): ThunkActionResult =>
   async (dispatch, _getState, api): Promise<void> => {
+    dispatch(fetchGuitarInitial());
     try {
       const { data } = await api.get<GuitarNoComments>(`${APIRoute.GuitarsNoComments}/${id}`);
       dispatch(loadGuitar(data));

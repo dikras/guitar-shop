@@ -4,7 +4,8 @@ import {
   loadGuitarsNoComments,
   loadGuitars, getGuitarsTotalCount,
   loadGuitar,
-  loadGuitarError
+  loadGuitarError,
+  fetchGuitarInitial
 } from '../action';
 
 const initialState: GuitarsData = {
@@ -13,10 +14,14 @@ const initialState: GuitarsData = {
   guitarsTotalCount: 0,
   guitar: null,
   isGuitarError: false,
+  isGuitarLoading: false,
 };
 
 const guitarsReducer = createReducer(initialState, (builder) => {
   builder
+    .addCase(fetchGuitarInitial, (state, action) => {
+      // state.isGuitarLoading = true;
+    })
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
       state.isGuitarError = false;

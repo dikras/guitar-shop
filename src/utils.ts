@@ -20,5 +20,3 @@ export const getGuitarTypeRus = (typeGuitar: string): string => {
     }
   }
 };
-
-export const getRandomIntegerInRange = (min: number, max: number) => Math.random() * (max - min) + min;

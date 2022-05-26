@@ -8,7 +8,7 @@ import {
 } from '../../store/cart-reducer/selectors';
 import { getDiscount } from '../../store/cart-reducer/selectors';
 import CartItem from '../cart-item/cart-item';
-import { NUMBER_TO_ROUND, COUPON_VALUES } from '../../const';
+import { COUPON_VALUES } from '../../const';
 import { fetchDiscount } from '../../store/api-action';
 
 function CartContainer(): JSX.Element {
@@ -43,7 +43,7 @@ function CartContainer(): JSX.Element {
 
   return (
     <div className="cart">
-      {guitarsInCart.map((guitarInCart) => <CartItem key={nanoid(NUMBER_TO_ROUND)} guitarInCart={guitarInCart} />)}
+      {guitarsInCart.map((guitarInCart) => <CartItem key={nanoid()} guitarInCart={guitarInCart} />)}
       <div className="cart__footer">
         <div className="cart__coupon coupon">
           <h2 className="title title--little coupon__title">Промокод на скидку</h2>

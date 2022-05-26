@@ -6,7 +6,6 @@ import { fetchGuitar } from '../../store/api-action';
 import {
   STARS_COUNT,
   IMG_URL_BEGIN_INDEX,
-  NUMBER_TO_ROUND,
   ImageSize,
   INITIAL_TAB_HEIGHT
 } from '../../const';
@@ -17,11 +16,15 @@ import { fetchComments } from '../../store/api-action';
 import { getCommentsTotalCount } from '../../store/comments-reducer/selectors';
 import { getGuitarTypeRus } from '../../utils';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { getIsGuitarLoading } from '../../store/guitars-reducer/selectors';
 
 function ProductContainer(): JSX.Element {
   const guitar = useSelector(getGuitar);
   const commentsTotalCount = useSelector(getCommentsTotalCount);
   const isGuitarError = useSelector(getIsGuitarError);
+  const isGuitarLoading = useSelector(getIsGuitarLoading);
+
   const dispatch = useDispatch();
 
   const { id } = useParams<{ id: string }>();
@@ -105,6 +108,9 @@ function ProductContainer(): JSX.Element {
   };
 
   const renderGuitar = () => {
+    if (isGuitarLoading) {
+      return <LoadingScreen />;
+    }
 
     if (guitar) {
       const {
@@ -139,12 +145,12 @@ function ProductContainer(): JSX.Element {
               <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
               <div className="rate product-container__rating" aria-hidden="true"><span className="visually-hidden" data-testid="rating-stars">Рейтинг:</span>
                 {iconFullStars.map(() => (
-                  <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
+                  <svg key={nanoid()} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
                     <use xlinkHref="#icon-full-star"></use>
                   </svg>
                 ))}
                 {iconStars.map(() => (
-                  <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
+                  <svg key={nanoid()} width={ImageSize.RatingStarProductCard.Width} height={ImageSize.RatingStarProductCard.Height} aria-hidden="true">
                     <use xlinkHref="#icon-star"></use>
                   </svg>
                 ))}

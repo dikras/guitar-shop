@@ -6,8 +6,8 @@ function LoadingScreen(): JSX.Element {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 150,
-      height: '100%'}}
+      marginTop: 250,
+      height: '100%'}} data-testid="loading"
     >
       <Loader
         type="Watch"

@@ -10,24 +10,17 @@ type ModalRemoveCartProps = {
   isActive: boolean;
   guitar: GuitarNoComments;
   handleModalRemoveCartCloseBtn: (opened: boolean) => void;
+  handleEscButton: (e: KeyboardEvent) => void;
 }
 
 function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
-  const { isActive, guitar, handleModalRemoveCartCloseBtn } = props;
+  const { isActive, guitar, handleModalRemoveCartCloseBtn, handleEscButton } = props;
   const { name, previewImg, vendorCode, stringCount, price, type } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
   const dispatch = useDispatch();
 
   const [ isOverButtonRemoveFromCart, setIsOverButtonRemoveFromCart ] = useState(true);
   const [ isOverButtonToCart, setIsOverButtonToCart ] = useState(false);
-
-  const handleEscButton = (evt: KeyboardEvent) => {
-    if(evt.key === 'Escape' || evt.key === 'Esc') {
-      handleModalRemoveCartCloseBtn(false);
-      document.removeEventListener('keydown', handleEscButton);
-      document.body.style.overflow ='auto';
-    }
-  };
 
   const handleModalRemoveCloseElement = () => {
     handleModalRemoveCartCloseBtn(false);

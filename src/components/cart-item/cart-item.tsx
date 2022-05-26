@@ -128,6 +128,7 @@ function CartItem(props: CartItemProps): JSX.Element {
         isActive={isModalRemoveCart}
         guitar={guitarInCart}
         handleModalRemoveCartCloseBtn={setIsModalRemoveCart}
+        handleEscButton={handleEscButton}
       />
     </>
   );

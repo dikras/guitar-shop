@@ -17,8 +17,8 @@ import {
   loadComments,
   loadGuitarsNoComments,
   loadGuitars,
-  loadDiscount
-  // fetchGuitarInitial
+  loadDiscount,
+  fetchGuitarInitial
 } from '../store/action';
 import {
   fetchGuitarsByName,
@@ -94,9 +94,8 @@ describe('Async actions', () => {
 
     await store.dispatch(fetchGuitar(`${datatype.number}`));
 
-    // fetchGuitarInitial();
-
     expect(store.getActions()).toEqual([
+      fetchGuitarInitial(),
       loadGuitar(mockGuitarWithoutComments),
     ]);
   });

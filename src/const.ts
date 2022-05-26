@@ -80,8 +80,6 @@ export enum StringNumber {
 
 export const IMG_URL_BEGIN_INDEX = 4;
 
-export const NUMBER_TO_ROUND = 6;
-
 export enum WarningMessage {
   FetchFail = 'Server is not available',
 }

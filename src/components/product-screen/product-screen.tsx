@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import ProductContainer from '../product-container/product-container';

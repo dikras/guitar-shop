@@ -20,7 +20,7 @@ const initialState: GuitarsData = {
 const guitarsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(fetchGuitarInitial, (state, action) => {
-      // state.isGuitarLoading = true;
+      state.isGuitarLoading = true;
     })
     .addCase(loadGuitars, (state, action) => {
       state.guitars = action.payload;
@@ -34,9 +34,11 @@ const guitarsReducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadGuitar, (state, action) => {
       state.guitar = action.payload;
+      state.isGuitarLoading = false;
     })
     .addCase(loadGuitarError, (state) => {
       state.isGuitarError = true;
+      state.isGuitarLoading = false;
     });
 });
 

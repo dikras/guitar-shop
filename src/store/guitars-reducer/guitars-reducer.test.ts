@@ -5,7 +5,13 @@ import {
   createMockGuitarsWithoutComments,
   createMockGuitarWithoutComments
 } from '../../mocks/guitars';
-import { loadGuitars, getGuitarsTotalCount, loadGuitar, loadGuitarsNoComments } from '../action';
+import {
+  loadGuitars,
+  getGuitarsTotalCount,
+  loadGuitar,
+  loadGuitarsNoComments,
+  fetchGuitarInitial
+} from '../action';
 
 describe('Reducer: guitars', () => {
   const mockActionType = 'UNKNOWN_ACTION';
@@ -13,6 +19,14 @@ describe('Reducer: guitars', () => {
   it('without additional parameters should return initial state', () => {
     expect(guitarsReducer(void 0, {type: mockActionType}))
       .toEqual(initialState);
+  });
+
+  it('should set guitar\'s loading status to true', () => {
+    expect(guitarsReducer(initialState, fetchGuitarInitial()))
+      .toEqual({
+        ...initialState,
+        isGuitarLoading: true,
+      });
   });
 
   it('should set guitars by load guitars data', () => {
@@ -52,6 +66,7 @@ describe('Reducer: guitars', () => {
       .toEqual({
         ...initialState,
         guitar: mockGuitar,
+        isGuitarLoading: false,
       });
   });
 

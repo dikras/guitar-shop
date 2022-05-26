@@ -3,7 +3,7 @@ import { getGuitar } from '../../store/guitars-reducer/selectors';
 import React, { useEffect, useRef, useState } from 'react';
 import { uploadReview } from '../../store/api-action';
 import { useParams } from 'react-router-dom';
-import { RATING_STARS, NUMBER_TO_ROUND } from '../../const';
+import { RATING_STARS } from '../../const';
 import { nanoid } from 'nanoid';
 
 type ModalReviewProps = {
@@ -148,7 +148,7 @@ function ModalReview(props: ModalReviewProps): JSX.Element {
               <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                 <div className="rate rate--reverse">
                   {RATING_STARS.map(({description, value, starId}) => (
-                    <React.Fragment key={nanoid(NUMBER_TO_ROUND)}>
+                    <React.Fragment key={nanoid()}>
                       <input
                         className="visually-hidden"
                         type="radio"

@@ -23,6 +23,7 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 const setIsModalRemoveCart = () => true;
+const handleEscButton = () => true;
 
 const store = mockStore({
   DATA: {
@@ -60,6 +61,7 @@ describe('Component: ModalRemoveCart', () => {
             guitar={guitar}
             isActive
             handleModalRemoveCartCloseBtn={setIsModalRemoveCart}
+            handleEscButton={handleEscButton}
           />
         </Router>
       </Provider>);

@@ -4,7 +4,9 @@ import ProductContainer from '../product-container/product-container';
 import Reviews from '../reviews/reviews';
 import Footer from '../footer/footer';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
-import { getIsGuitarError } from '../../store/guitars-reducer/selectors';
+import {
+  getIsGuitarError
+} from '../../store/guitars-reducer/selectors';
 import { useSelector } from 'react-redux';
 
 function ProductScreen(): JSX.Element {

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { getAllGuitarsTotalCount } from '../../store/guitars-reducer/selectors';
-import { NUMBER_TO_ROUND, PaginationNumber, QueryParam } from '../../const';
+import { PaginationNumber, QueryParam } from '../../const';
 import { loadFilteredGuitars } from '../../store/api-action';
 import { setCurrentPageNumber, setStartNumber } from '../../store/action';
 import { getCurrentPageNumber } from '../../store/pagination-reducer/selectors';
@@ -69,7 +69,7 @@ function Pagination(): JSX.Element {
         </li>}
         {pages.map((page) => (
           <li
-            key={nanoid(NUMBER_TO_ROUND)}
+            key={nanoid()}
             className={`pagination__page ${currentPage === page && 'pagination__page--active'}`}
           >
             <a

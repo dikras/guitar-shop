@@ -80,8 +80,6 @@ export enum StringNumber {
 
 export const IMG_URL_BEGIN_INDEX = 4;
 
-export const NUMBER_TO_ROUND = 6;
-
 export enum WarningMessage {
   FetchFail = 'Server is not available',
 }
@@ -95,6 +93,8 @@ export enum PaginationNumber {
 export const ENTER_KEY = 'Enter';
 
 export const STARS_COUNT = 5;
+
+export const FULL_STARS_COUNT = 4;
 
 export const REVIEWS_PER_STEP = 3;
 
@@ -142,3 +142,11 @@ export const GuitarQuantityRange = {
 };
 
 export const COUPON_VALUES = ['light-333', 'medium-444', 'height-555'];
+
+export enum Rating {
+  One = 1,
+  Two = 2,
+  Three = 3,
+  Four = 4,
+  Five = 5,
+}

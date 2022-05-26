@@ -1,7 +1,6 @@
 import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
-import { ImageSize, IMG_URL_BEGIN_INDEX, NUMBER_TO_ROUND, STARS_COUNT, AppRoute } from '../../const';
-import { nanoid } from 'nanoid';
+import { ImageSize, IMG_URL_BEGIN_INDEX, Rating, AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
 import { useState } from 'react';
@@ -22,17 +21,7 @@ function GuitarCard(props: GuitarCardProps): JSX.Element {
 
   const isGuitarInCart = guitarsInCartIDs.includes(guitar.id);
 
-  const ratingToStar = Math.floor(rating);
-
-  const iconFullStars: number[] = [];
-  for (let i = 1; i <= ratingToStar; i++) {
-    iconFullStars.push(i);
-  }
-
-  const iconStars: number[] = [];
-  for (let i = 1; i <= STARS_COUNT - ratingToStar; i++) {
-    iconStars.push(i);
-  }
+  const roundedRating = Math.round(rating);
 
   const [ isModalAddCart, setIsModalAddCart ] = useState(false);
 
@@ -56,18 +45,35 @@ function GuitarCard(props: GuitarCardProps): JSX.Element {
       <div className="product-card" data-testid="guitar-card">
         <img src={`/img/content/${urlImg}`} width={ImageSize.GuitarCard.Width} height={ImageSize.GuitarCard.Height} alt={name} />
         <div className="product-card__info">
-          <div className="rate product-card__rate" aria-hidden="true"><span className="visually-hidden">Рейтинг:</span>
-            {iconFullStars.map(() => (
-              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStar.Width} height={ImageSize.RatingStar.Height} aria-hidden="true">
-                <use xlinkHref="#icon-full-star"></use>
-              </svg>
-            ))}
-            {iconStars.map(() => (
-              <svg key={nanoid(NUMBER_TO_ROUND)} width={ImageSize.RatingStar.Width} height={ImageSize.RatingStar.Height} aria-hidden="true">
-                <use xlinkHref="#icon-star"></use>
-              </svg>
-            ))}
-            <span className="rate__count">{comments.length}</span><span className="rate__message"></span>
+          <div className="rate product-card__rate" aria-hidden="true">
+            <span className="visually-hidden">Рейтинг:</span>
+            <svg width="12" height="11" aria-hidden="true">
+              <use
+                xlinkHref={roundedRating >= Rating.One ? '#icon-full-star' : '#icon-star'}
+              />
+            </svg>
+            <svg width="12" height="11" aria-hidden="true">
+              <use
+                xlinkHref={roundedRating >= Rating.Two ? '#icon-full-star' : '#icon-star'}
+              />
+            </svg>
+            <svg width="12" height="11" aria-hidden="true">
+              <use
+                xlinkHref={roundedRating >= Rating.Three ? '#icon-full-star' : '#icon-star'}
+              />
+            </svg>
+            <svg width="12" height="11" aria-hidden="true">
+              <use
+                xlinkHref={roundedRating >= Rating.Four ? '#icon-full-star' : '#icon-star'}
+              />
+            </svg>
+            <svg width="12" height="11" aria-hidden="true">
+              <use
+                xlinkHref={roundedRating >= Rating.Five ? '#icon-full-star' : '#icon-star'}
+              />
+            </svg>
+            <span className="rate__count">{comments?.length}</span>
+            <span className="rate__message" />
           </div>
           <p className="product-card__title">{name}</p>
           <p className="product-card__price"><span className="visually-hidden">Цена:</span>

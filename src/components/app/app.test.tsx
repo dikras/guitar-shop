@@ -19,7 +19,6 @@ import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 import { AppRoute } from '../../const';
 import { createMockComments } from '../../mocks/comments';
-import { datatype } from 'faker';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -48,7 +47,7 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: datatype.number(),
+    discount: 20,
     guitarsToCount: createMockGuitarsToCount(),
   },
 });
@@ -76,8 +75,15 @@ describe('Application Routing', () => {
 
     render(fakeApp);
 
-    expect(screen.getByText(/Товар/i)).toBeInTheDocument();
-    expect(screen.getByText(/Добавить в корзину/i)).toBeInTheDocument();
+    expect(screen.getByTestId('show-more-reviews-button')).toBeInTheDocument();
+  });
+
+  it('should render "CartScreen" when user navigate to "/cart"', () => {
+    history.push(AppRoute.Cart);
+
+    render(fakeApp);
+
+    expect(screen.getByTestId('button-cart-order')).toBeInTheDocument();
   });
 
 });

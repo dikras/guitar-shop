@@ -23,12 +23,7 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 const setIsModalRemoveCart = () => true;
-const handleEscButton = (evt: KeyboardEvent) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc') {
-    document.removeEventListener('keydown', handleEscButton);
-    document.body.style.overflow ='auto';
-  }
-};
+const handleEscButton = () => true;
 
 const store = mockStore({
   DATA: {

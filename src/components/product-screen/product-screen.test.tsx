@@ -18,7 +18,6 @@ import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 import { createMockComments } from '../../mocks/comments';
 import ProductScreen from './product-screen';
-import { datatype } from 'faker';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -47,7 +46,7 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: datatype.number(),
+    discount: 20,
     guitarsToCount: createMockGuitarsToCount(),
   },
 });

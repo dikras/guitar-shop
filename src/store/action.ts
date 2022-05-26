@@ -109,6 +109,8 @@ export const setCurrentPageNumber = createAction(
   }),
 );
 
+export const fetchGuitarInitial = createAction(ActionType.FetchGuitarInitial);
+
 export const loadGuitar = createAction(
   ActionType.LoadGuitar,
   (guitar: GuitarNoComments) => ({

@@ -6,8 +6,7 @@ import { Provider } from 'react-redux';
 import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
-  createMockGuitarsCount,
-  createMockGuitarsToCount
+  createMockGuitarsCount
 } from '../../mocks/guitars';
 import {
   createMockSortingType,
@@ -16,7 +15,6 @@ import {
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
 import { createMockComments } from '../../mocks/comments';
-import { datatype } from 'faker';
 import Reviews from './reviews';
 
 const mockStore = configureMockStore();
@@ -42,11 +40,6 @@ const store = mockStore({
   },
   COMMENTS: {
     comments: createMockComments(),
-  },
-  CART: {
-    guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: datatype.number(),
-    guitarsToCount: createMockGuitarsToCount(),
   },
 });
 

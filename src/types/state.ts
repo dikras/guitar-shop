@@ -9,6 +9,7 @@ export type GuitarsData = {
   guitarsTotalCount: number,
   guitar: GuitarNoComments | null,
   isGuitarError: boolean,
+  isGuitarLoading: boolean;
 };
 
 export type CommentsData = {

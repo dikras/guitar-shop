@@ -30,6 +30,7 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
 
   const handleRemoveFromCartButton =(evt: React.MouseEvent) => {
     evt.preventDefault();
+    document.body.style.overflow ='auto';
     dispatch(removeGuitarFromCart(guitar));
   };
 

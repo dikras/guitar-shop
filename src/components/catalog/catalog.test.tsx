@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import App from './app';
+import Catalog from './catalog';
 import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
@@ -17,8 +17,8 @@ import {
 } from '../../mocks/sort-filter-data';
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
-import { AppRoute } from '../../const';
 import { createMockComments } from '../../mocks/comments';
+import { datatype } from 'faker';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -47,43 +47,21 @@ const store = mockStore({
   },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: 20,
+    discount: datatype.number(),
     guitarsToCount: createMockGuitarsToCount(),
   },
 });
 
-const fakeApp = (
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>
-);
-
-describe('Application Routing', () => {
+describe('Component: Catalog', () => {
   store.dispatch = jest.fn();
-  it('should render "MainScreen" when user navigate to "/"', () => {
-    history.push(AppRoute.Main);
+  it('should render correctly', () => {
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <Catalog />
+        </Router>
+      </Provider>);
 
-    render(fakeApp);
-
-    expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
+    expect(screen.getByTestId('catalog-title')).toBeInTheDocument();
   });
-
-  it('should render "ProductScreen" when user navigate to "/id"', () => {
-    history.push(AppRoute.GuitarCard);
-
-    render(fakeApp);
-
-    expect(screen.getByTestId('show-more-reviews-button')).toBeInTheDocument();
-  });
-
-  it('should render "CartScreen" when user navigate to "/cart"', () => {
-    history.push(AppRoute.Cart);
-
-    render(fakeApp);
-
-    expect(screen.getByTestId('button-cart-order')).toBeInTheDocument();
-  });
-
 });

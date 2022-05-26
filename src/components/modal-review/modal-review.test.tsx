@@ -3,13 +3,11 @@ import { render, screen } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import App from './app';
 import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
   createMockGuitarsCount,
-  createMockGuitar,
-  createMockGuitarsToCount
+  createMockGuitar
 } from '../../mocks/guitars';
 import {
   createMockSortingType,
@@ -17,11 +15,15 @@ import {
 } from '../../mocks/sort-filter-data';
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
-import { AppRoute } from '../../const';
 import { createMockComments } from '../../mocks/comments';
+import ModalReview from './modal-review';
+import userEvent from '@testing-library/user-event';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
+
+const setIsModalReviewOpened = () => true;
+const setIsModalSuccessOpened = () => true;
 
 const store = mockStore({
   DATA: {
@@ -45,45 +47,43 @@ const store = mockStore({
   COMMENTS: {
     comments: createMockComments(),
   },
-  CART: {
-    guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: 20,
-    guitarsToCount: createMockGuitarsToCount(),
-  },
 });
 
-const fakeApp = (
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>
-);
-
-describe('Application Routing', () => {
+describe('Component: ModalReview', () => {
   store.dispatch = jest.fn();
-  it('should render "MainScreen" when user navigate to "/"', () => {
-    history.push(AppRoute.Main);
 
-    render(fakeApp);
+  it('should render correctly', () => {
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <ModalReview
+            handleModalReviewCloseBtn={setIsModalReviewOpened}
+            handleModalSuccessCloseBtn={setIsModalSuccessOpened}
+          />
+        </Router>
+      </Provider>);
 
-    expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
+    expect(screen.getByTestId('modal-container')).toBeInTheDocument();
+    expect(screen.getByTestId('review-modal')).toBeInTheDocument();
+    expect(screen.getByTestId('input-name')).toBeInTheDocument();
+    expect(screen.getByTestId('input-pros')).toBeInTheDocument();
+    expect(screen.getByTestId('button-send-review')).toBeInTheDocument();
   });
 
-  it('should render "ProductScreen" when user navigate to "/id"', () => {
-    history.push(AppRoute.GuitarCard);
+  it('should input name in form-input', () => {
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <ModalReview
+            handleModalReviewCloseBtn={setIsModalReviewOpened}
+            handleModalSuccessCloseBtn={setIsModalSuccessOpened}
+          />
+        </Router>
+      </Provider>,
+    );
 
-    render(fakeApp);
-
-    expect(screen.getByTestId('show-more-reviews-button')).toBeInTheDocument();
-  });
-
-  it('should render "CartScreen" when user navigate to "/cart"', () => {
-    history.push(AppRoute.Cart);
-
-    render(fakeApp);
-
-    expect(screen.getByTestId('button-cart-order')).toBeInTheDocument();
+    userEvent.type(screen.getByTestId('input-name'), 'Dmitry');
+    expect(screen.getByTestId('input-name')).toHaveValue('Dmitry');
   });
 
 });

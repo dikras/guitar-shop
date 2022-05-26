@@ -3,22 +3,21 @@ import { render, screen } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
-import App from './app';
+import GuitarCard from './guitar-card';
 import {
   createMockGuitars,
   createMockGuitarsWithoutComments,
   createMockGuitarsCount,
-  createMockGuitar,
   createMockGuitarsToCount
 } from '../../mocks/guitars';
+import { createMockGuitar } from '../../mocks/guitars';
 import {
   createMockSortingType,
   createMockSortingOrder
 } from '../../mocks/sort-filter-data';
 import { createMockGuitarName } from '../../mocks/search';
 import { createMockStartNumber } from '../../mocks/pagination';
-import { AppRoute } from '../../const';
-import { createMockComments } from '../../mocks/comments';
+import { datatype } from 'faker';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -28,7 +27,6 @@ const store = mockStore({
     guitarsNoComments: createMockGuitarsWithoutComments(),
     guitars: createMockGuitars(),
     guitarsTotalCount: createMockGuitarsCount(),
-    guitar: createMockGuitar(),
   },
   APP: {
     currentSortingType: createMockSortingType(),
@@ -42,48 +40,24 @@ const store = mockStore({
     currentGuitarName: createMockGuitarName(),
     guitarsByName: createMockGuitarsWithoutComments(),
   },
-  COMMENTS: {
-    comments: createMockComments(),
-  },
   CART: {
     guitarsInCart: createMockGuitarsWithoutComments(),
-    discount: 20,
+    discount: datatype.number(),
     guitarsToCount: createMockGuitarsToCount(),
   },
 });
 
-const fakeApp = (
-  <Provider store={store}>
-    <Router history={history}>
-      <App />
-    </Router>
-  </Provider>
-);
+const mockGuitar = createMockGuitar();
 
-describe('Application Routing', () => {
-  store.dispatch = jest.fn();
-  it('should render "MainScreen" when user navigate to "/"', () => {
-    history.push(AppRoute.Main);
+describe('Component: GuitarCard', () => {
+  it('should render correctly', () => {
+    render(
+      <Provider store={store}>
+        <Router history={history}>
+          <GuitarCard guitar={mockGuitar} isMainScreen />
+        </Router>
+      </Provider>);
 
-    render(fakeApp);
-
-    expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
+    expect(screen.getByTestId('button-details')).toBeInTheDocument();
   });
-
-  it('should render "ProductScreen" when user navigate to "/id"', () => {
-    history.push(AppRoute.GuitarCard);
-
-    render(fakeApp);
-
-    expect(screen.getByTestId('show-more-reviews-button')).toBeInTheDocument();
-  });
-
-  it('should render "CartScreen" when user navigate to "/cart"', () => {
-    history.push(AppRoute.Cart);
-
-    render(fakeApp);
-
-    expect(screen.getByTestId('button-cart-order')).toBeInTheDocument();
-  });
-
 });

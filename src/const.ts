@@ -96,6 +96,8 @@ export const ENTER_KEY = 'Enter';
 
 export const STARS_COUNT = 5;
 
+export const FULL_STARS_COUNT = 4;
+
 export const REVIEWS_PER_STEP = 3;
 
 export const RATING_STARS = [
@@ -142,3 +144,11 @@ export const GuitarQuantityRange = {
 };
 
 export const COUPON_VALUES = ['light-333', 'medium-444', 'height-555'];
+
+export enum Rating {
+  One = 1,
+  Two = 2,
+  Three = 3,
+  Four = 4,
+  Five = 5,
+}

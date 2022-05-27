@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
@@ -7,14 +8,12 @@ import { useDispatch } from 'react-redux';
 import { removeGuitarFromCart } from '../../store/action';
 
 type ModalRemoveCartProps = {
-  isActive: boolean;
   guitar: GuitarNoComments;
-  handleModalRemoveCartCloseBtn: (opened: boolean) => void;
-  handleEscButton: (e: KeyboardEvent) => void;
+  handleModalRemove: (opened: boolean) => void;
 }
 
 function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
-  const { isActive, guitar, handleModalRemoveCartCloseBtn, handleEscButton } = props;
+  const { guitar, handleModalRemove } = props;
   const { name, previewImg, vendorCode, stringCount, price, type } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
   const dispatch = useDispatch();
@@ -22,10 +21,9 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
   const [ isOverButtonRemoveFromCart, setIsOverButtonRemoveFromCart ] = useState(true);
   const [ isOverButtonToCart, setIsOverButtonToCart ] = useState(false);
 
-  const handleModalRemoveCloseElement = () => {
-    handleModalRemoveCartCloseBtn(false);
-    document.body.style.overflow ='auto';
-    document.removeEventListener('keydown', handleEscButton);
+  const handleModalRemoveCartClose = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    handleModalRemove(false);
   };
 
   const handleRemoveFromCartButton =(evt: React.MouseEvent) => {
@@ -55,12 +53,12 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
   };
 
   return (
-    <div className={`modal ${isActive ? 'is-active' : ''}`}>
+    <div className="modal is-active">
       <div className="modal__wrapper">
         <div
           className="modal__overlay"
           data-close-modal
-          onClick={handleModalRemoveCloseElement}
+          onClick={handleModalRemoveCartClose}
         >
         </div>
         <div className="modal__content">
@@ -89,7 +87,7 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
             </button>
             <button
               className={`button button--small modal__button modal__button--right ${isOverButtonToCart ? '' : 'button--black-border'}`}
-              onClick={handleModalRemoveCloseElement}
+              onClick={handleModalRemoveCartClose}
               onMouseOver={handleOverButtonToCart}
             >Продолжить покупки
             </button>
@@ -98,7 +96,7 @@ function ModalRemoveCart(props: ModalRemoveCartProps): JSX.Element {
             className="modal__close-btn button-cross"
             type="button"
             aria-label="Закрыть"
-            onClick={handleModalRemoveCloseElement}
+            onClick={handleModalRemoveCartClose}
           >
             <span className="button-cross__icon"></span>
             <span className="modal__close-btn-interactive-area"></span>

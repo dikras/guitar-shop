@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
@@ -27,19 +27,15 @@ function CartItem(props: CartItemProps): JSX.Element {
 
   const totalItemSum = currentGuitarToCountQuantity && currentGuitarToCountQuantity * price;
 
-  const handleEscButton = (evt: KeyboardEvent) => {
+  const handleModalRemoveEsc = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
       setIsModalRemoveCart(false);
-      document.removeEventListener('keydown', handleEscButton);
-      document.body.style.overflow ='auto';
     }
   };
 
   const handleRemoveButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
     setIsModalRemoveCart(true);
-    document.body.style.overflow ='hidden';
-    document.addEventListener('keydown', handleEscButton);
   };
 
   const handleDecreaseButton = (evt: React.MouseEvent) => {
@@ -58,6 +54,17 @@ function CartItem(props: CartItemProps): JSX.Element {
       dispatch(increaseGuitarQuantity(uniqID));
     }
   };
+
+  useEffect(() => {
+    if(isModalRemoveCart){
+      window.addEventListener('keydown', handleModalRemoveEsc);
+      document.body.style.overflow ='hidden';
+      return function () {
+        window.removeEventListener('keydown', handleModalRemoveEsc);
+        document.body.style.overflow ='auto';
+      };
+    }
+  });
 
   return (
     <>
@@ -124,12 +131,11 @@ function CartItem(props: CartItemProps): JSX.Element {
           <NumberFormat value={totalItemSum} displayType="text" thousandSeparator=" " /> ₽
         </div>
       </div>
+      {isModalRemoveCart &&
       <ModalRemoveCart
-        isActive={isModalRemoveCart}
         guitar={guitarInCart}
-        handleModalRemoveCartCloseBtn={setIsModalRemoveCart}
-        handleEscButton={handleEscButton}
-      />
+        handleModalRemove={setIsModalRemoveCart}
+      />}
     </>
   );
 }

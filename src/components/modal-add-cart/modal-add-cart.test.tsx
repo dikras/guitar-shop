@@ -22,8 +22,8 @@ import { datatype } from 'faker';
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
+const setIsModalSuccessAddCart = () => true;
 const setIsModalAddCart = () => true;
-const handleEscButton = () => true;
 
 const store = mockStore({
   DATA: {
@@ -59,10 +59,10 @@ describe('Component: ModalAddCart', () => {
         <Router history={history}>
           <ModalAddCart
             guitar={guitar}
-            isActive
-            isMainScreen
-            handleModalAddCartCloseBtn={setIsModalAddCart}
-            handleEscButton={handleEscButton}
+            handleModalAdd={setIsModalAddCart}
+            handleModalSuccessAdd={setIsModalSuccessAddCart}
+            // handleModalAddCartCloseBtn={setIsModalAddCart}
+            // handleAddToCartEscButton={handleAddToCartEscButton}
           />
         </Router>
       </Provider>);

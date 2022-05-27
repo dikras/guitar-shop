@@ -16,6 +16,7 @@ import { fetchComments } from '../../store/api-action';
 import { getCommentsTotalCount } from '../../store/comments-reducer/selectors';
 import { getGuitarTypeRus } from '../../utils';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
+import ModalSuccessAddCart from '../modal-success-add-cart/modal-success-add-cart';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { getIsGuitarLoading } from '../../store/guitars-reducer/selectors';
 
@@ -39,7 +40,8 @@ function ProductContainer(): JSX.Element {
   const [ isOverCharacteristics, setIsOverCharacteristics ] = useState(true);
   const [ isOverDescription, setIsOverDescription ] = useState(false);
 
-  const [ isModalAddCart, setIsModalAddCart ] = useState(false);
+  const [ isProductModalAddCart, setIsProductModalAdd ] = useState(false);
+  const [ isModalSuccessAddCart, setIsModalSuccessAddCart ] = useState(false);
 
   const handleCharacteristicsTab = (evt: React.MouseEvent) => {
     evt.preventDefault();
@@ -92,19 +94,19 @@ function ProductContainer(): JSX.Element {
     }
   };
 
-  const handleEscButton = (evt: KeyboardEvent) => {
+  const handleProductEscButton = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
-      setIsModalAddCart(false);
-      document.removeEventListener('keydown', handleEscButton);
+      setIsProductModalAdd(false);
+      document.removeEventListener('keydown', handleProductEscButton);
       document.body.style.overflow ='auto';
     }
   };
 
-  const handleAddToCartClick = (evt: React.MouseEvent) => {
+  const handleProductAddToCartClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    setIsModalAddCart(true);
+    setIsProductModalAdd(true);
     document.body.style.overflow ='hidden';
-    document.addEventListener('keydown', handleEscButton);
+    document.addEventListener('keydown', handleProductEscButton);
   };
 
   const renderGuitar = () => {
@@ -206,18 +208,23 @@ function ProductContainer(): JSX.Element {
               <a
                 className="button button--red button--big product-container__button"
                 href="/#"
-                onClick={handleAddToCartClick}
+                onClick={handleProductAddToCartClick}
               >Добавить в корзину
               </a>
             </div>
           </div>
+          {isProductModalAddCart &&
           <ModalAddCart
-            isActive={isModalAddCart}
-            handleModalAddCartCloseBtn={setIsModalAddCart}
-            handleEscButton={handleEscButton}
             guitar={guitar}
+            handleModalAdd={setIsProductModalAdd}
+            handleModalSuccessAdd={setIsModalSuccessAddCart}
+          />}
+          {isModalSuccessAddCart &&
+          <ModalSuccessAddCart
             isMainScreen={false}
-          />
+            handleModalSuccessAdd={setIsModalSuccessAddCart}
+            isModalSuccessOpened={isModalSuccessAddCart}
+          />}
         </>
       );
     }

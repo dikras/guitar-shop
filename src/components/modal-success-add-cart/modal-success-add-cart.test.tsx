@@ -22,12 +22,6 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 const setIsModalSuccessAddCart = () => true;
-const handleEscModalSuccessAddButton = (evt: KeyboardEvent) => {
-  if(evt.key === 'Escape' || evt.key === 'Esc') {
-    document.removeEventListener('keydown', handleEscModalSuccessAddButton);
-    document.body.style.overflow ='auto';
-  }
-};
 
 const store = mockStore({
   DATA: {
@@ -61,10 +55,9 @@ describe('Component: ModalSuccessAddCart', () => {
       <Provider store={store}>
         <Router history={history}>
           <ModalSuccessAddCart
-            isActive
             isMainScreen
-            handleModalSuccessAddCartCloseBtn={setIsModalSuccessAddCart}
-            handleEscModalSuccessAddButton={handleEscModalSuccessAddButton}
+            handleModalSuccessAdd={setIsModalSuccessAddCart}
+            isModalSuccessOpened
           />
         </Router>
       </Provider>);

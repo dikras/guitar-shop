@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 
 type ModalSuccessAddCartProps = {
-  isActive: boolean;
   isMainScreen: boolean;
-  handleModalSuccessAddCartCloseBtn: (opened: boolean) => void;
-  handleEscModalSuccessAddButton: (e: KeyboardEvent) => void;
+  // handleModalSuccessAddCartCloseBtn: (opened: boolean) => void;
+  // handleEscModalSuccessAddButton: (e: KeyboardEvent) => void;
+  handleModalSuccessAdd: (opened: boolean) => void;
+  isModalSuccessOpened: boolean;
 }
 
 function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
-  const { isActive, handleModalSuccessAddCartCloseBtn, handleEscModalSuccessAddButton, isMainScreen } = props;
+  const {
+    // handleModalSuccessAddCartCloseBtn,
+    // handleEscModalSuccessAddButton,
+    handleModalSuccessAdd,
+    isModalSuccessOpened,
+    isMainScreen,
+  } = props;
 
   const [ isOverButtonToCart, setIsOverButtonToCart ] = useState(true);
   const [ isOverButtonToCatalog, setIsOverButtonToCatalog ] = useState(false);
@@ -35,17 +42,35 @@ function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
     }
   };
 
+  const handleModalAddSuccessEsc = (evt: KeyboardEvent) => {
+    if(evt.key === 'Escape' || evt.key === 'Esc') {
+      handleModalSuccessAdd(false);
+    }
+  };
+
+  const handleModalAddSuccessClose = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    handleModalSuccessAdd(false);
+  };
+
+  useEffect(() => {
+    if(isModalSuccessOpened){
+      window.addEventListener('keydown', handleModalAddSuccessEsc);
+      document.body.style.overflow ='hidden';
+      return function () {
+        window.removeEventListener('keydown', handleModalAddSuccessEsc);
+        document.body.style.overflow ='auto';
+      };
+    }
+  });
+
   return (
-    <div className={`modal ${isActive ? 'is-active' : ''} modal--success`}>
+    <div className="modal is-active modal--success">
       <div className="modal__wrapper">
         <div
           className="modal__overlay"
           data-close-modal
-          onClick={() => {
-            handleModalSuccessAddCartCloseBtn(false);
-            document.body.style.overflow ='auto';
-            document.removeEventListener('keydown', handleEscModalSuccessAddButton);
-          }}
+          onClick={handleModalAddSuccessClose}
         >
         </div>
         <div className="modal__content">
@@ -67,11 +92,7 @@ function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
             {isMainScreen ?
               <button
                 className={`button button--small modal__button modal__button--right ${isOverButtonToCart ? '' : 'button--black-border'}`}
-                onClick={() => {
-                  handleModalSuccessAddCartCloseBtn(false);
-                  document.body.style.overflow ='auto';
-                  document.removeEventListener('keydown', handleEscModalSuccessAddButton);
-                }}
+                onClick={handleModalAddSuccessClose}
                 onMouseOver={handleButtonToCatalog}
               >Продолжить покупки
               </button> :
@@ -87,11 +108,7 @@ function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
             className="modal__close-btn button-cross"
             type="button"
             aria-label="Закрыть"
-            onClick={() => {
-              handleModalSuccessAddCartCloseBtn(false);
-              document.body.style.overflow ='auto';
-              document.removeEventListener('keydown', handleEscModalSuccessAddButton);
-            }}
+            onClick={handleModalAddSuccessClose}
           >
             <span className="button-cross__icon"></span>
             <span className="modal__close-btn-interactive-area"></span>

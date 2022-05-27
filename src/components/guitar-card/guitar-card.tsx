@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import NumberFormat from 'react-number-format';
 import { Guitar } from '../../types/guitar';
 import { ImageSize, IMG_URL_BEGIN_INDEX, Rating, AppRoute } from '../../const';
 import { Link } from 'react-router-dom';
 import ModalAddCart from '../modal-add-cart/modal-add-cart';
-import { useState } from 'react';
+import ModalSuccessAddCart from '../modal-success-add-cart/modal-success-add-cart';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getGuitarsInCartIDs } from '../../store/cart-reducer/selectors';
 
@@ -24,21 +26,29 @@ function GuitarCard(props: GuitarCardProps): JSX.Element {
   const roundedRating = Math.round(rating);
 
   const [ isModalAddCart, setIsModalAddCart ] = useState(false);
+  const [ isModalSuccessAddCart, setIsModalSuccessAddCart ] = useState(false);
 
-  const handleEscButton = (evt: KeyboardEvent) => {
+  const handleModalAddEsc = (evt: KeyboardEvent) => {
     if(evt.key === 'Escape' || evt.key === 'Esc') {
       setIsModalAddCart(false);
-      document.removeEventListener('keydown', handleEscButton);
-      document.body.style.overflow ='auto';
     }
   };
 
   const handleAddToCartClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
     setIsModalAddCart(true);
-    document.body.style.overflow ='hidden';
-    document.addEventListener('keydown', handleEscButton);
   };
+
+  useEffect(() => {
+    if(isModalAddCart){
+      window.addEventListener('keydown', handleModalAddEsc);
+      document.body.style.overflow ='hidden';
+      return function () {
+        window.removeEventListener('keydown', handleModalAddEsc);
+        document.body.style.overflow ='auto';
+      };
+    }
+  });
 
   return (
     <>
@@ -102,13 +112,18 @@ function GuitarCard(props: GuitarCardProps): JSX.Element {
             </a>}
         </div>
       </div>
+      {isModalAddCart &&
       <ModalAddCart
-        isActive={isModalAddCart}
-        handleModalAddCartCloseBtn={setIsModalAddCart}
-        handleEscButton={handleEscButton}
         guitar={guitar}
+        handleModalAdd={setIsModalAddCart}
+        handleModalSuccessAdd={setIsModalSuccessAddCart}
+      />}
+      {isModalSuccessAddCart &&
+      <ModalSuccessAddCart
         isMainScreen={isMainScreen}
-      />
+        handleModalSuccessAdd={setIsModalSuccessAddCart}
+        isModalSuccessOpened={isModalSuccessAddCart}
+      />}
     </>
   );
 }

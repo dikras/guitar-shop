@@ -4,16 +4,12 @@ import { AppRoute } from '../../const';
 
 type ModalSuccessAddCartProps = {
   isMainScreen: boolean;
-  // handleModalSuccessAddCartCloseBtn: (opened: boolean) => void;
-  // handleEscModalSuccessAddButton: (e: KeyboardEvent) => void;
   handleModalSuccessAdd: (opened: boolean) => void;
   isModalSuccessOpened: boolean;
 }
 
 function ModalSuccessAddCart(props: ModalSuccessAddCartProps): JSX.Element {
   const {
-    // handleModalSuccessAddCartCloseBtn,
-    // handleEscModalSuccessAddButton,
     handleModalSuccessAdd,
     isModalSuccessOpened,
     isMainScreen,

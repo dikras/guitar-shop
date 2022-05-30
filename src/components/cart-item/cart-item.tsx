@@ -15,10 +15,10 @@ type CartItemProps = {
 
 function CartItem(props: CartItemProps): JSX.Element {
   const { guitarInCart } = props;
-  const { price, vendorCode, stringCount, type, name, previewImg, uniqID } = guitarInCart;
+  const { price, vendorCode, stringCount, type, name, previewImg, id } = guitarInCart;
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const currentGuitarToCountQuantity = useSelector((state: State) => getGuitarToCountQuantity(state, uniqID));
+  const currentGuitarToCountQuantity = useSelector((state: State) => getGuitarToCountQuantity(state, id));
 
   const dispatch = useDispatch();
 
@@ -41,7 +41,7 @@ function CartItem(props: CartItemProps): JSX.Element {
   const handleDecreaseButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
     if (Number(inputRef.current?.value) >= GuitarQuantityRange.Min + 1) {
-      dispatch(decreaseGuitarQuantity(uniqID));
+      dispatch(decreaseGuitarQuantity(id));
     }
     if (Number(inputRef.current?.value) === GuitarQuantityRange.Min) {
       handleRemoveButton(evt);
@@ -51,7 +51,7 @@ function CartItem(props: CartItemProps): JSX.Element {
   const handleIncreaseButton = (evt: React.MouseEvent) => {
     evt.preventDefault();
     if (Number(inputRef.current?.value) <= GuitarQuantityRange.Max - 1) {
-      dispatch(increaseGuitarQuantity(uniqID));
+      dispatch(increaseGuitarQuantity(id));
     }
   };
 
@@ -111,7 +111,7 @@ function CartItem(props: CartItemProps): JSX.Element {
             onChange={(evt) => {
               const currentValue = Number(evt.target.value);
               if (currentValue >= GuitarQuantityRange.Min || currentValue <= GuitarQuantityRange.Max) {
-                dispatch(setGuitarQuantity({uniqID, quantity: currentValue}));
+                dispatch(setGuitarQuantity({id, quantity: currentValue}));
               }
             }}
             value={currentGuitarToCountQuantity}

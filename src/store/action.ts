@@ -152,21 +152,21 @@ export const addGuitarToCount = createAction(
 
 export const increaseGuitarQuantity = createAction(
   ActionType.IncreaseGuitarCount,
-  (uniqID: string | undefined) => ({
-    payload: uniqID,
+  (id: number) => ({
+    payload: id,
   }),
 );
 
 export const decreaseGuitarQuantity = createAction(
   ActionType.DecreaseGuitarCount,
-  (uniqID: string | undefined) => ({
-    payload: uniqID,
+  (id: number) => ({
+    payload: id,
   }),
 );
 
 export const setGuitarQuantity = createAction(
   ActionType.SetGuitarCount,
-  (dataToSetCount: DataToSetGuitarCount | undefined) => ({
+  (dataToSetCount: DataToSetGuitarCount) => ({
     payload: dataToSetCount,
   }),
 );
@@ -175,5 +175,12 @@ export const loadDiscount = createAction(
   ActionType.LoadDiscount,
   (discount: number) => ({
     payload: discount,
+  }),
+);
+
+export const setCouponValue = createAction(
+  ActionType.setCouponValue,
+  (coupon: string) => ({
+    payload: coupon,
   }),
 );

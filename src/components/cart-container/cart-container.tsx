@@ -1,42 +1,50 @@
+/* eslint-disable no-console */
 import { nanoid } from 'nanoid';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getGuitarsInCart,
   getTotalSumByCartItem
 } from '../../store/cart-reducer/selectors';
-import { getDiscount } from '../../store/cart-reducer/selectors';
+import { getDiscount, getCouponValue } from '../../store/cart-reducer/selectors';
 import CartItem from '../cart-item/cart-item';
 import { COUPON_VALUES } from '../../const';
 import { fetchDiscount } from '../../store/api-action';
+import { setCouponValue } from '../../store/action';
 
 function CartContainer(): JSX.Element {
   const guitarsInCart = useSelector(getGuitarsInCart);
   const totalSum = useSelector(getTotalSumByCartItem);
-  const inputCouponRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useDispatch();
 
   const discountNumber = useSelector(getDiscount);
+  const promocodeValue = useSelector(getCouponValue);
   const discountSum = discountNumber / 100 * totalSum;
 
   const [ couponMessage, setCouponMessage ] = useState(<p></p>);
-  const [ isDiscountGet, setIsDiscountGet ] = useState(false);
 
-  const handleApplyPromocode = (evt?: React.MouseEvent) => {
-    evt && evt.preventDefault();
-    const inputValue = inputCouponRef.current?.value;
+  const [ couponValue, setCouponvalue ] = useState(promocodeValue);
+
+  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const currentInputValue = evt.target.value;
+    if (!currentInputValue.includes(' ')) {
+      setCouponvalue(evt.currentTarget.value);
+    }
+  };
+
+  const handleApplyPromocode = (evt: React.MouseEvent) => {
+    evt.preventDefault();
     const validMessageElement = <p className="form-input__message form-input__message--success">Промокод принят</p>;
     const notValidMessageElement = <p className="form-input__message form-input__message--error">Неверный промокод</p>;
 
-    if (inputValue) {
-      inputValue.includes('') && setCouponMessage(notValidMessageElement);
-      COUPON_VALUES.includes(inputValue) ?
+    if (couponValue) {
+      COUPON_VALUES.includes(couponValue) ?
         setCouponMessage(validMessageElement) :
         setCouponMessage(notValidMessageElement);
-      if (COUPON_VALUES.includes(inputValue)) {
-        dispatch(fetchDiscount({coupon: inputValue}));
-        setIsDiscountGet(true);
+      if (COUPON_VALUES.includes(couponValue)) {
+        dispatch(fetchDiscount({coupon: couponValue}));
+        dispatch(setCouponValue(couponValue));
       }
     }
   };
@@ -55,10 +63,8 @@ function CartContainer(): JSX.Element {
                 type="text"
                 placeholder="Введите промокод"
                 id="coupon" name="coupon"
-                ref={inputCouponRef}
-                onChange={(evt) => {
-                  !evt.target.value && setCouponMessage(<p></p>);
-                }}
+                value={couponValue}
+                onChange={handleInputChange}
                 data-testid="coupon-input"
               />
               {couponMessage}
@@ -78,8 +84,8 @@ function CartContainer(): JSX.Element {
           </p>
           <p className="cart__total-item">
             <span className="cart__total-value-name">Скидка:</span>
-            <span className={`cart__total-value ${isDiscountGet ? 'cart__total-value--bonus' : ''}`}>
-              - <NumberFormat value={discountSum} displayType="text" thousandSeparator=" " /> ₽
+            <span className={`cart__total-value ${discountNumber ? 'cart__total-value--bonus' : ''}`}>
+              <NumberFormat value={discountSum} displayType="text" thousandSeparator=" " /> ₽
             </span>
           </p>
           <p className="cart__total-item">

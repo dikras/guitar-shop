@@ -36,6 +36,7 @@ export type CartProcess = {
   guitarsInCart: GuitarNoComments[],
   guitarsToCount: GuitarToCount[],
   discount: number,
+  coupon: string,
 }
 
 export type State = RootState;

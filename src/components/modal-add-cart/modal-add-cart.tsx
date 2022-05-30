@@ -1,11 +1,11 @@
 import NumberFormat from 'react-number-format';
 import { GuitarNoComments } from '../../types/guitar';
 import { IMG_URL_BEGIN_INDEX } from '../../const';
-import { addGuitarToCart, addGuitarToCount } from '../../store/action';
+import { addGuitarToCart, addGuitarToCount, increaseGuitarQuantity } from '../../store/action';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getGuitarTypeRus } from '../../utils';
-import { nanoid } from 'nanoid';
+import { getGuitarsInCartIDs } from '../../store/cart-reducer/selectors';
 
 type ModalAddCartProps = {
   guitar: GuitarNoComments;
@@ -15,23 +15,36 @@ type ModalAddCartProps = {
 
 function ModalAddCart(props: ModalAddCartProps): JSX.Element {
   const { handleModalSuccessAdd, handleModalAdd, guitar } = props;
-  const { name, previewImg, vendorCode, stringCount, price, type } = guitar;
+  const { name, previewImg, vendorCode, stringCount, price, type, id } = guitar;
   const urlImg = previewImg.slice(IMG_URL_BEGIN_INDEX);
+
+  const guitarsInCartIDs = useSelector(getGuitarsInCartIDs);
 
   const dispatch = useDispatch();
 
-  const uniqID = nanoid();
   const guitarToCount = {
-    uniqID: uniqID,
+    id,
     price,
     quantity: 1,
   };
 
   const handleAddToCartBtnClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
-    const guitarToCart = {...guitar, uniqID: uniqID};
-    dispatch(addGuitarToCart(guitarToCart));
-    dispatch(addGuitarToCount(guitarToCount));
+    const guitarToCart = {...guitar};
+    /* if (guitarsInCartIDs.length === 0) {
+      dispatch(increaseGuitarQuantity(guitarToCount.uniqID));
+      dispatch(addGuitarToCart(guitarToCart));
+    } */
+    /* if (guitarsInCartIDs.length === 0) {
+      dispatch(addGuitarToCart(guitarToCart));
+      dispatch(addGuitarToCount(guitarToCount));
+    } */
+    if (guitarsInCartIDs.length !== 0 && guitarsInCartIDs.includes(id)) {
+      dispatch(increaseGuitarQuantity(guitarToCount.id));
+    } else {
+      dispatch(addGuitarToCart(guitarToCart));
+      dispatch(addGuitarToCount(guitarToCount));
+    }
     handleModalSuccessAdd(true);
     handleModalAdd(false);
   };

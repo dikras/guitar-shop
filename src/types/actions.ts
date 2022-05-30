@@ -31,6 +31,7 @@ export enum ActionType {
   DecreaseGuitarCount = 'cart/decreaseGuitarCount',
   SetGuitarCount = 'cart/setGuitarCount',
   LoadDiscount = 'cart/loadDiscount',
+  setCouponValue='cart/setCouponValue',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

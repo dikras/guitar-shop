@@ -7,13 +7,15 @@ import {
   addGuitarToCount,
   increaseGuitarQuantity,
   decreaseGuitarQuantity,
-  setGuitarQuantity
+  setGuitarQuantity,
+  setCouponValue
 } from '../action';
 
 const initialState: CartProcess = {
   guitarsInCart: [],
   discount: 0,
   guitarsToCount: [],
+  coupon: '',
 };
 
 const cartReducer = createReducer(initialState, (builder) => {
@@ -22,9 +24,9 @@ const cartReducer = createReducer(initialState, (builder) => {
       state.guitarsInCart.push(action.payload);
     })
     .addCase(removeGuitarFromCart, (state, action) => {
-      const newGuitarsInCart = [...state.guitarsInCart].filter((guitar) => guitar.uniqID !== action.payload.uniqID);
+      const newGuitarsInCart = [...state.guitarsInCart].filter((guitar) => guitar.id !== action.payload.id);
       state.guitarsInCart = newGuitarsInCart;
-      const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.uniqID !== action.payload.uniqID);
+      const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.id !== action.payload.id);
       state.guitarsToCount = newGuitarsToCount;
       if (state.guitarsInCart.length === 0) {
         state.guitarsInCart = [];
@@ -37,8 +39,8 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(increaseGuitarQuantity, (state, action) => {
       if (state.guitarsToCount.length !== 0) {
-        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.uniqID === action.payload);
-        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.uniqID !== action.payload);
+        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.id === action.payload);
+        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.id !== action.payload);
         state.guitarsToCount = newGuitarsToCount;
         currentGuitar && (currentGuitar.quantity += 1);
         currentGuitar && state.guitarsToCount.push(currentGuitar);
@@ -46,8 +48,8 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(decreaseGuitarQuantity, (state, action) => {
       if (state.guitarsToCount.length !== 0) {
-        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.uniqID === action.payload);
-        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.uniqID !== action.payload);
+        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.id === action.payload);
+        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.id !== action.payload);
         state.guitarsToCount = newGuitarsToCount;
         currentGuitar && (currentGuitar.quantity -= 1);
         currentGuitar && state.guitarsToCount.push(currentGuitar);
@@ -55,8 +57,8 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(setGuitarQuantity, (state, action) => {
       if (state.guitarsToCount.length !== 0) {
-        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.uniqID === action.payload?.uniqID);
-        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.uniqID !== action.payload?.uniqID);
+        const currentGuitar = state.guitarsToCount.find((guitar) => guitar.id === action.payload?.id);
+        const newGuitarsToCount = [...state.guitarsToCount].filter((guitar) => guitar.id !== action.payload?.id);
         state.guitarsToCount = newGuitarsToCount;
         (action.payload && currentGuitar) && (currentGuitar.quantity = action.payload?.quantity);
         currentGuitar && state.guitarsToCount.push(currentGuitar);
@@ -64,6 +66,9 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadDiscount, (state, action) => {
       state.discount = action.payload;
+    })
+    .addCase(setCouponValue, (state, action) => {
+      state.coupon = action.payload;
     });
 });
 

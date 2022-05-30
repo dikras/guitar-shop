@@ -28,7 +28,7 @@ const createMockGuitarWithoutComments = (): GuitarNoComments => ({
 });
 
 const createMockGuitarToCount = (): GuitarToCount => ({
-  uniqID: datatype.string(),
+  id: datatype.number(),
   price: datatype.number(),
   quantity: datatype.number(),
 });

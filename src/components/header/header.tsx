@@ -7,11 +7,11 @@ import { setGuitarName } from '../../store/action';
 import { fetchGuitarsByName } from '../../store/api-action';
 import { getGuitarsByName } from '../../store/search-reducer/selectors';
 import { useLocation } from 'react-router-dom';
-import { getGuitarsInCartQuantity } from '../../store/cart-reducer/selectors';
+import { getTotalQuantityIncart } from '../../store/cart-reducer/selectors';
 
 function Header(): JSX.Element {
   const guitars = useSelector(getGuitarsByName);
-  const guitarsInCartQuantity = useSelector(getGuitarsInCartQuantity);
+  const guitarsInCartQuantity = useSelector(getTotalQuantityIncart);
   const [ word, setWord ] = useState('');
   const [ isFocus, setIsFocus ] = useState(false);
 

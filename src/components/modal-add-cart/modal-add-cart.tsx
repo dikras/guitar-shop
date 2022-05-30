@@ -31,14 +31,6 @@ function ModalAddCart(props: ModalAddCartProps): JSX.Element {
   const handleAddToCartBtnClick = (evt: React.MouseEvent) => {
     evt.preventDefault();
     const guitarToCart = {...guitar};
-    /* if (guitarsInCartIDs.length === 0) {
-      dispatch(increaseGuitarQuantity(guitarToCount.uniqID));
-      dispatch(addGuitarToCart(guitarToCart));
-    } */
-    /* if (guitarsInCartIDs.length === 0) {
-      dispatch(addGuitarToCart(guitarToCart));
-      dispatch(addGuitarToCount(guitarToCount));
-    } */
     if (guitarsInCartIDs.length !== 0 && guitarsInCartIDs.includes(id)) {
       dispatch(increaseGuitarQuantity(guitarToCount.id));
     } else {

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { nanoid } from 'nanoid';
 import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';

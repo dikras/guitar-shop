@@ -27,9 +27,7 @@ function CartContainer(): JSX.Element {
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const currentInputValue = evt.target.value;
-    if (!currentInputValue.includes(' ')) {
-      setCouponvalue(evt.currentTarget.value);
-    }
+    setCouponvalue(currentInputValue.split(' ').join(''));
   };
 
   const handleApplyPromocode = (evt: React.MouseEvent) => {
@@ -84,7 +82,7 @@ function CartContainer(): JSX.Element {
           <p className="cart__total-item">
             <span className="cart__total-value-name">Скидка:</span>
             <span className={`cart__total-value ${discountNumber ? 'cart__total-value--bonus' : ''}`}>
-              <NumberFormat value={discountSum} displayType="text" thousandSeparator=" " /> ₽
+              {discountNumber !== 0 ? '-' : ''} <NumberFormat value={discountSum} displayType="text" thousandSeparator=" " /> ₽
             </span>
           </p>
           <p className="cart__total-item">
